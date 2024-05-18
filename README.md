@@ -1,6 +1,6 @@
-# planta_tracker
+# Planta! Tracker
 
-A new Flutter project.
+“Planta!” es un proyecto que tiene como meta la preservación de la rica y singular flora de Cuba para las futuras generaciones y el manejo sustentable de la misma.
 
 ## Getting Started
 
