@@ -1,0 +1,262 @@
+{
+    "account": "I do not have an account.",
+    "@account": {
+        "description": "not account"
+    },
+    "account_accept": "I already have an account.",
+    "@account_accept": {
+        "description": "I have an account"
+    },
+    "date": "04/16/2024",
+    "@date": {
+        "description": "date"
+    },
+    "details": "Details",
+    "@details": {
+        "description": "details"
+    },
+    "email": "Email",
+    "@email": {
+        "description": "Email"
+    },
+    "email_enter": "Enter email",
+    "@email_enter": {
+        "description": "Email"
+    },
+    "enter_full_name": "Enter your full name",
+    "@enter_full_name": {
+        "description": "enter_full_name"
+    },
+    "enter_password_confirm": "Enter your password to confirm",
+    "@enter_password_confirm": {
+        "description": "enter_password_confirm"
+    },
+    "forget": "I forgot my password.",
+    "@forget": {
+        "description": "forget password"
+    },
+    "full_name": "Full name",
+    "@full_name": {
+        "description": "full_name"
+    },
+    "log_in": "Log In",
+    "@log_in": {
+        "description": "Login"
+    },
+    "map": "Map",
+    "@map": {
+        "description": "map"
+    },
+    "my_plants": "My plants",
+    "@my_plants": {
+        "description": "my_plants"
+    },
+    "name_alert": "The name will be used to give credit for the photos uploaded.",
+    "@name_alert": {
+        "description": "name_alert"
+    },
+    "no_elements": "There are no items to display",
+    "@no_elements": {
+        "description": "no_elements"
+    },
+    "obligatory_camp": "Obligatory field",
+    "@obligatory_camp": {
+        "description": "Obligacion"
+    },
+    "password": "Password",
+    "@password": {
+        "description": "password"
+    },
+    "password_confirm": "Confirm password",
+    "@password_confirm": {
+        "description": "password_confirm"
+    },
+    "password_enter": "Enter password",
+    "@password_enter": {
+        "description": "password"
+    },
+    "password_match": "Passwords do not match.",
+    "@password_match": {
+        "description": "password_match"
+    },
+    "plant_lifestage": "Young",
+    "@plant_lifestage": {
+        "description": "plant_lifestage"
+    },
+    "plant_name": "Savior",
+    "@plant_name": {
+        "description": "plant_name"
+    },
+    "plant_name_science": "Savior",
+    "@plant_name_science": {
+        "description": "plant_name_science"
+    },
+    "plant_register": "Register Plant",
+    "@plant_register": {
+        "description": "plant_register"
+    },
+    "plant_register_fruit_image": "Fruit Image",
+    "@plant_register_fruit_image": {
+        "description": "Text"
+    },
+    "plant_register_full_image": "Full Image",
+    "@plant_register_full_image": {
+        "description": "Text"
+    },
+    "plant_register_image_branches": "Branches Image",
+    "@plant_register_image_branches": {
+        "description": "Text"
+    },
+    "plant_register_sheet_image": "Sheet Image",
+    "@plant_register_sheet_image": {
+        "description": "Text"
+    },
+    "plant_register_trunk_image": "Trunk Image",
+    "@plant_register_trunk_image": {
+        "description": "Text"
+    },
+    "plant_status": "Approved",
+    "@plant_status": {
+        "description": "plant_status"
+    },
+    "plants": "Plants",
+    "@plants": {
+        "description": "plants"
+    },
+    "polices_warning": "You must accept the terms and conditions",
+    "@polices_warning": {
+        "description": "polices_warning"
+    },
+    "recover_password": "Recover password",
+    "@recover_password": {
+        "description": "recover_password"
+    },
+    "register": "Register",
+    "@register": {
+        "description": "register"
+    },
+    "search": "Search plant!...",
+    "@search": {
+        "description": "search"
+    },
+    "terms": "I accept the policies and agreements.",
+    "@terms": {
+        "description": "terms"
+    },
+    "terms_conditions": "Terms and Conditions",
+    "@terms_conditions": {
+        "description": "terms_conditions"
+    },
+    "terms_conditions_eigth": "Thank you for your support and for contributing to the Planta community! Tracker",
+    "@terms_conditions_eigth": {
+        "description": "terms_conditions_eigth"
+    },
+    "terms_conditions_first": "1. Information we collect",
+    "@terms_conditions_first": {
+        "description": "terms_conditions_first"
+    },
+    "terms_conditions_first_text": "By using the Planta!Tracker app, you agree that we may collect your name, email, and the date and location of each photo you take using the app.",
+    "@terms_conditions_first_text": {
+        "description": "terms_conditions_first_text"
+    },
+    "terms_conditions_five": "5. Changes to the terms of use",
+    "@terms_conditions_five": {
+        "description": "terms_conditions_five"
+    },
+    "terms_conditions_five_text": "We reserve the right to modify these terms of use at any time without prior notice. You will be notified of any significant changes through the app or by email. Your continued use of the application after such changes will constitute your acceptance of the new terms.",
+    "@terms_conditions_five_text": {
+        "description": "terms_conditions_five"
+    },
+    "terms_conditions_four": "4. License of the photos",
+    "@terms_conditions_four": {
+        "description": "terms_conditions_four"
+    },
+    "terms_conditions_four_text": "All photos taken using the Planta!Tracker app are automatically licensed under a Creative Commons Attribution 4.0 International (CC BY 4.0) license. This means that other people can use, share and adapt your photos with proper attribution to you as the original creator.",
+    "@terms_conditions_four_text": {
+        "description": "terms_conditions_four"
+    },
+    "terms_conditions_second": "2. Use of information",
+    "@terms_conditions_second": {
+        "description": "terms_conditions_second"
+    },
+    "terms_conditions_second_text": "The information collected is used solely for the purpose of reporting plant distribution. We will not share your email with third parties, except in the cases specified in our privacy policy. Your name will be displayed to give you credit for authoring your photos.",
+    "@terms_conditions_second_text": {
+        "description": "terms_conditions_second_text"
+    },
+    "terms_conditions_seven": "By using the Planta!Tracker application, you agree to comply with these terms of use. If you do not agree with any of these terms, please refrain from using the application.",
+    "@terms_conditions_seven": {
+        "description": "terms_conditions_seven"
+    },
+    "terms_conditions_six": "6. Contact",
+    "@terms_conditions_six": {
+        "description": "terms_conditions_six"
+    },
+    "terms_conditions_six_text": "If you have any questions or concerns about these terms of use, please contact us at plantatracker@planta.ngo.",
+    "@terms_conditions_six_text": {
+        "description": "terms_conditions_six_text"
+    },
+    "terms_conditions_three": "3. Data storage",
+    "@terms_conditions_three": {
+        "description": "terms_conditions_three"
+    },
+    "terms_conditions_three_text": "You understand and agree that all information collected by the Planta!Tracker application, including your personal data and the photos you take, will be stored on servers located in Canada. We are committed to maintaining the security of your data in accordance with applicable privacy laws.",
+    "@terms_conditions_three_text": {
+        "description": "terms_conditions_three"
+    },
+    "terms_conditions_warning": "Please read these terms of use carefully before using the Planta app! Tracker.",
+    "@terms_conditions_warning": {
+        "description": "terms_conditions_warning"
+    },
+    "text_buttom_accept": "Accept",
+    "@text_buttom_accept": {
+        "description": "Text Buttom"
+    },
+    "text_buttom_continue": "Continue",
+    "@text_buttom_continue": {
+        "description": "Text Buttom"
+    },
+    "text_buttom_denied": "Cancel",
+    "@text_buttom_denied": {
+        "description": "Text Buttom"
+    },
+    "text_buttom_next": "Next",
+    "@text_buttom_next": {
+        "description": "Text Buttom"
+    },
+    "text_onboarding_first": "Join Plant! with our mobile app and contribute to plant conservation while exploring cities and countryside!",
+    "@text_onboarding_first": {
+        "description": "Text"
+    },
+    "text_onboarding_second": "Join us today and start exploring, learning and contributing to the conservation of the natural environment!",
+    "@text_onboarding_second": {
+        "description": "Text"
+    },
+    "text_onboarding_three_00": "Record the plants you find during your walks.",
+    "@text_onboarding_three_00": {
+        "description": "Text"
+    },
+    "text_onboarding_three_01": "Contribute to research and conservation by collecting data on species distribution.",
+    "@text_onboarding_three_01": {
+        "description": "Text"
+    },
+    "text_onboarding_three_02": "Learn about local plants and discover new species with the help of our community of users.",
+    "@text_onboarding_three_02": {
+        "description": "Text"
+    },
+    "title_onboarding_second": "Become a member of Planta! Tracker",
+    "@title_onboarding_second": {
+        "description": "Title"
+    },
+    "title_onboarding_three": "With Planta! Tracker, you can",
+    "@title_onboarding_three": {
+        "description": "Title"
+    },
+    "user_profile": "User profile",
+    "@user_profile": {
+        "description": "user_profile"
+    },
+    "warning_exit": "Are you sure to go out?",
+    "@warning_exit": {
+        "description": "warning_exit"
+    }
+}
