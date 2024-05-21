@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
@@ -46,11 +45,16 @@ class CardPlant extends StatelessWidget {
         child: Row(
           children: [
             ClipOval(
-              child: Image.asset(
+              child: CachedNetworkImage(
+                filterQuality: FilterQuality.low,
+                imageUrl: picture,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    Icon(Ionicons.image_sharp, color: PlantaColors.colorBlack),
+                fit: BoxFit.cover,
                 width: 70,
                 height: 70,
-                picture,
-                fit: BoxFit.cover,
               ),
             ),
             horizontalMargin16,
@@ -75,7 +79,7 @@ class CardPlant extends StatelessWidget {
                             horizontal: 8.0, vertical: 4.0),
                         decoration: BoxDecoration(
                           borderRadius: borderRadius20,
-                          color: PlantaColors.colorDarkGreen,
+                          color: getColor(),
                         ),
                         child: Center(
                           child: AutoSizeText(
@@ -109,6 +113,15 @@ class CardPlant extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color getColor() {
+    if (status.toLowerCase() == 'aprobado') {
+      return PlantaColors.colorDarkGreen;
+    } else if (status.toLowerCase() == 'en_revision') {
+      return PlantaColors.colorLightGreen;
+    }
+    return PlantaColors.colorDarkOrange;
   }
 }
 

@@ -2,41 +2,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:planta_tracker/assets/utils/assets.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/models/all_plants_models.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
+import 'package:planta_tracker/services/all_plants_services.dart';
 
-class AllPlants extends StatelessWidget {
+class AllPlants extends StatefulWidget {
   const AllPlants({super.key});
+
+  @override
+  State<AllPlants> createState() => _AllPlantsState();
+}
+
+class _AllPlantsState extends State<AllPlants> {
+  final AllPlantServices allPlantServices = AllPlantServices();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.separated(
-              clipBehavior: Clip.none,
-              itemCount: 15,
-              separatorBuilder: (context, index) => verticalMargin4,
-              itemBuilder: (context, index) => CardPlant(
-                picture: Assets.plant_example,
-                title: 'Excoecaria biglandulosa var. petiolaris Mull. Arg.',
-                lifestage: 'Floreciendo',
-                status: 'Sin aprobar',
-                date: AppLocalizations.of(context)!.date,
-                onTap: () {
-                  Navigator.push(
-                      context, SlideRightRoute(page: const Details()));
-                },
-              ),
-            ),
-          ),
-        ],
+      body: FutureBuilder(
+        future: allPlantServices.getAllPlants(context),
+        builder: (context, AsyncSnapshot<AllPlantsModel> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return AllPlantsWidget(snapshot.data!.results);
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
@@ -73,6 +70,42 @@ class AllPlants extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class AllPlantsWidget extends StatefulWidget {
+  final List<Result> plants;
+  const AllPlantsWidget(this.plants, {super.key});
+
+  @override
+  State<AllPlantsWidget> createState() => _AllPlantsWidgetState();
+}
+
+class _AllPlantsWidgetState extends State<AllPlantsWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.separated(
+            clipBehavior: Clip.none,
+            itemCount: widget.plants.length,
+            separatorBuilder: (context, index) => verticalMargin4,
+            itemBuilder: (context, index) => CardPlant(
+              picture: widget.plants[index].imagenPrincipal,
+              title: widget.plants[index].especiePlanta,
+              lifestage: widget.plants[index].lifestage,
+              status: widget.plants[index].estadoActual,
+              date:
+                  '${widget.plants[index].fechaRegistro.day.toString()} / ${widget.plants[index].fechaRegistro.month.toString()} / ${widget.plants[index].fechaRegistro.year.toString()}',
+              onTap: () {
+                Navigator.push(context, SlideRightRoute(page: const Details()));
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

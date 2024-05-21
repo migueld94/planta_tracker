@@ -1,15 +1,21 @@
+// ignore_for_file: avoid_print
+
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/drop_buttom.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
-import 'package:planta_tracker/pages/home/home.dart';
 
 class RegisterPlantEnd extends StatefulWidget {
-  const RegisterPlantEnd({super.key});
+  final List<String>? pictures;
+
+  const RegisterPlantEnd({super.key, this.pictures});
 
   @override
   RegisterPlantEndState createState() => RegisterPlantEndState();
@@ -18,6 +24,7 @@ class RegisterPlantEnd extends StatefulWidget {
 class RegisterPlantEndState extends State<RegisterPlantEnd> {
   final GlobalKey<FormState> formKey = GlobalKey();
   final note = TextEditingController();
+  final storage = const FlutterSecureStorage();
 
   @override
   void dispose() {
@@ -53,67 +60,52 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
               // Aquí va tu lista horizontal de cámaras
               SizedBox(
                 height: 150, // Ajusta la altura según necesites
-                child: ListView.builder(
+                child: ListView.separated(
+                  clipBehavior: Clip.none,
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      5, // Asegúrate de usar la cantidad correcta de elementos
+                  separatorBuilder: (context, index) => horizontalMargin16,
+                  itemCount: widget.pictures!.length,
                   itemBuilder: (context, index) {
-                    int i = index;
-                    List<String> nombres = [
-                      AppLocalizations.of(context)!.plant_register_full_image,
-                      AppLocalizations.of(context)!.plant_register_trunk_image,
-                      AppLocalizations.of(context)!
-                          .plant_register_image_branches,
-                      AppLocalizations.of(context)!.plant_register_sheet_image,
-                      AppLocalizations.of(context)!.plant_register_fruit_image,
-                    ];
-                    return Stack(
-                      alignment: Alignment.topRight,
-                      children: <Widget>[
-                        Column(
-                          children: [
-                            Container(
-                              padding: allPadding32,
-                              margin: const EdgeInsets.only(
-                                left: 16.0,
-                                right: 16.0,
-                              ),
-                              decoration: BoxDecoration(
-                                color: PlantaColors.colorWhite,
-                                borderRadius: borderRadius10,
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: const Offset(5, 7),
-                                    blurRadius: 12,
-                                    color: PlantaColors.colorBlack
-                                        .withOpacity(0.3),
+                    return widget.pictures![index] != ''
+                        ? Stack(
+                            alignment: Alignment.topRight,
+                            children: <Widget>[
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      color: PlantaColors.colorWhite,
+                                      borderRadius: borderRadius10,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: borderRadius10,
+                                      child: Image.file(
+                                        File(widget.pictures![index]),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
+                                  verticalMargin12,
+                                  AutoSizeText('probando',
+                                      style: context.theme.textTheme.text_01),
                                 ],
                               ),
-                              child: Icon(
-                                Ionicons.camera_outline,
-                                size: 30,
-                                color: PlantaColors.colorOrange,
+                              Positioned(
+                                left: 75,
+                                bottom: 115,
+                                child: IconButton(
+                                  icon: const Icon(Icons.loop_rounded),
+                                  color: PlantaColors.colorLightRed,
+                                  onPressed: () {
+                                    // Acción al presionar el botón de editar
+                                  },
+                                ),
                               ),
-                            ),
-                            verticalMargin12,
-                            AutoSizeText(nombres[i],
-                                style: context.theme.textTheme.text_01),
-                          ],
-                        ),
-                        Positioned(
-                          left: 75,
-                          bottom: 115,
-                          child: IconButton(
-                            icon: const Icon(Icons.loop_rounded),
-                            color: PlantaColors.colorLightRed,
-                            onPressed: () {
-                              // Acción al presionar el botón de editar
-                            },
-                          ),
-                        ),
-                      ],
-                    );
+                            ],
+                          )
+                        : emptyWidget;
                   },
                 ),
               ),
@@ -151,11 +143,16 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
 
               ButtomLarge(
                   color: PlantaColors.colorGreen,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Home()),
-                    );
+                  onTap: () async {
+                    final lifestage = await storage.read(key: 'lifestage');
+                    print(widget.pictures);
+                    print(lifestage);
+                    print(note.text);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const Home()),
+                    // );
+                    await storage.delete(key: 'lifestage');
                   },
                   title: AppLocalizations.of(context)!.text_buttom_next),
             ],
@@ -165,3 +162,6 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
     );
   }
 }
+
+// La direccion de las imagenes de la planta es
+// https://api.planta.ngo/media/img_planta_principal/IMG_2448.JPG
