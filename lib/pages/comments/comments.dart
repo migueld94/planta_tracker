@@ -95,7 +95,7 @@ class _CommentsState extends State<Comments> {
                           setState(() {
                             comments = comment.text;
                           });
-                          goToDetails(context);
+                          // goToDetails(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: PlantaColors.colorGreen,

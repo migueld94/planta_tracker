@@ -4,7 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/pages/comments/comments.dart';
-import 'package:planta_tracker/pages/details_plant/details.dart';
 import 'package:planta_tracker/pages/home/home.dart';
 import 'package:planta_tracker/pages/login/change_password.dart';
 import 'package:planta_tracker/pages/login/forgot_password.dart';
@@ -16,7 +15,7 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/pages/login/terms.dart';
 import 'package:planta_tracker/pages/profile_user/profile_user.dart';
 import 'package:planta_tracker/pages/register_plants/register_plant.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<Object?> warning(BuildContext context, String text, Function() onTap) {
   return showAnimatedDialog(
@@ -60,15 +59,13 @@ Future<Object?> warning(BuildContext context, String text, Function() onTap) {
                 ButtomSmall(
                   color: PlantaColors.colorOrange,
                   onTap: () => Navigator.pop(context),
-                  title: 'No',
-                  // title: AppLocalizations.of(context)!.text_buttom_denied,
+                  title: AppLocalizations.of(context)!.text_buttom_denied,
                 ),
                 horizontalMargin16,
                 ButtomSmall(
                   onTap: onTap,
                   color: PlantaColors.colorGreen,
-                  // title: AppLocalizations.of(context)!.text_buttom_accept,
-                  title: 'si',
+                  title: AppLocalizations.of(context)!.text_buttom_accept,
                 ),
               ],
             )
@@ -169,20 +166,6 @@ goToRegisterPlant(BuildContext context) => Navigator.push(
         builder: (context) => const RegisterPlant(),
       ),
     );
-
-goToDetails(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Details(),
-      ),
-    );
-
-// goToVerifyCode(BuildContext context) => Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => const VerifyCode(email: email,),
-//       ),
-//     );
 
 goToChangePassword(BuildContext context) => Navigator.push(
       context,

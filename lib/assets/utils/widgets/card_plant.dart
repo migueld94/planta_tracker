@@ -172,11 +172,17 @@ class CardMyPlants extends StatelessWidget {
                 child: Row(
                   children: [
                     ClipOval(
-                      child: Image.asset(
+                      child: CachedNetworkImage(
+                        filterQuality: FilterQuality.low,
+                        imageUrl: picture,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(
+                            Ionicons.image_sharp,
+                            color: PlantaColors.colorBlack),
+                        fit: BoxFit.cover,
                         width: 70,
                         height: 70,
-                        picture,
-                        fit: BoxFit.cover,
                       ),
                     ),
                     horizontalMargin8,
@@ -205,7 +211,7 @@ class CardMyPlants extends StatelessWidget {
                                       horizontal: 8.0, vertical: 4.0),
                                   decoration: BoxDecoration(
                                     borderRadius: borderRadius20,
-                                    color: PlantaColors.colorDarkGreen,
+                                    color: getColor(),
                                   ),
                                   child: Center(
                                     child: AutoSizeText(
@@ -296,5 +302,14 @@ class CardMyPlants extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color getColor() {
+    if (status.toLowerCase() == 'aprobado') {
+      return PlantaColors.colorDarkGreen;
+    } else if (status.toLowerCase() == 'en_revision') {
+      return PlantaColors.colorLightGreen;
+    }
+    return PlantaColors.colorDarkOrange;
   }
 }

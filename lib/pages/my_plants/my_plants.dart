@@ -3,16 +3,18 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
+import 'package:planta_tracker/pages/details_plant/details.dart';
 
 class MyPlants extends StatefulWidget {
   const MyPlants({super.key});
@@ -28,23 +30,30 @@ class _MyPlantsState extends State<MyPlants> {
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
   final storage = const FlutterSecureStorage();
+  final String noPicture =
+      'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg';
 
   _loadMore() async {
     final token = await storage.read(key: "token");
     String idioma = getFlag();
+    log(token.toString());
 
     final myPlantsUri =
         Uri.parse('${Constants.baseUrl}/$idioma/api/my_plants?page=$next');
 
     final response = await http.get(myPlantsUri,
-        headers: <String, String>{'authorization': "Bearer $token"});
+        headers: <String, String>{'authorization': "Token $token"});
 
     try {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body)['results'] as List;
-        setState(() {
-          items.addAll(json);
-        });
+        if (json.isEmpty) {
+          return alert(context, 'No existen elementos');
+        } else {
+          setState(() {
+            items.addAll(json);
+          });
+        }
       }
     } catch (e) {
       log('Error => ${e.toString()}');
@@ -59,6 +68,7 @@ class _MyPlantsState extends State<MyPlants> {
 
   @override
   void initState() {
+    EasyLoading.show();
     _loadMore();
     scroll.addListener(() async {
       if (isLoadMore == true) return;
@@ -87,22 +97,26 @@ class _MyPlantsState extends State<MyPlants> {
               itemCount: isLoadMore ? items.length + 1 : items.length,
               separatorBuilder: (context, index) => verticalMargin4,
               itemBuilder: (context, index) {
-                log(isLoadMore.toString());
-                if (items.isEmpty) {
-                  return const AutoSizeText('No se encontraron elementos');
-                } else if (index >= items.length) {
+                EasyLoading.dismiss();
+                if (index >= items.length) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   final date = DateTime.parse(items[index]["fecha_registro_"]);
                   return CardMyPlants(
-                    picture: items[index]['imagen_principal'],
+                    picture: items[index]['imagen_principal'] ?? noPicture,
                     title: items[index]['especie_planta'],
                     lifestage: items[index]['lifestage'],
                     status: items[index]['estado_actual'],
                     date: '${date.day} / ${date.month} / ${date.year}',
                     onTap: () {
-                      // Navigator.push(
-                      //     context, SlideRightRoute(page: const Details()));
+                      Navigator.push(
+                        context,
+                        SlideRightRoute(
+                          page: Details(
+                            id: items[index]['id'],
+                          ),
+                        ),
+                      );
                     },
                   );
                 }

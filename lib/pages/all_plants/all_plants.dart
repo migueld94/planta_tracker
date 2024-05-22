@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
+import 'package:planta_tracker/pages/details_plant/details.dart';
 
 class AllPlants extends StatefulWidget {
   const AllPlants({super.key});
@@ -25,6 +27,8 @@ class _AllPlantsState extends State<AllPlants> {
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
+  final String noPicture =
+      'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg';
 
   _loadMore() async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
@@ -67,9 +71,7 @@ class _AllPlantsState extends State<AllPlants> {
   @override
   void initState() {
     EasyLoading.show();
-
     _loadMore();
-
     scroll.addListener(() async {
       if (isLoadMore == true) return;
       if (scroll.position.pixels == scroll.position.maxScrollExtent) {
@@ -98,20 +100,25 @@ class _AllPlantsState extends State<AllPlants> {
               separatorBuilder: (context, index) => verticalMargin4,
               itemBuilder: (context, index) {
                 EasyLoading.dismiss();
-
                 if (index >= items.length) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   final date = DateTime.parse(items[index]["fecha_registro_"]);
                   return CardPlant(
-                    picture: items[index]['imagen_principal'],
+                    picture: items[index]['imagen_principal'] ?? noPicture,
                     title: items[index]['especie_planta'],
                     lifestage: items[index]['lifestage'],
                     status: items[index]['estado_actual'],
                     date: '${date.day} / ${date.month} / ${date.year}',
                     onTap: () {
-                      // Navigator.push(
-                      //     context, SlideRightRoute(page: const Details()));
+                      Navigator.push(
+                        context,
+                        SlideRightRoute(
+                          page: Details(
+                            id: items[index]['id'],
+                          ),
+                        ),
+                      );
                     },
                   );
                 }
