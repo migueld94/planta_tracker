@@ -137,6 +137,7 @@ class _HomeState extends State<Home> {
             child: const TabBarView(
               children: [
                 AllPlants(),
+                // All(),
                 MapView(),
                 MyPlants(),
               ],

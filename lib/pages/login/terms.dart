@@ -1,12 +1,20 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:planta_tracker/assets/utils/methods/utils.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/models/policies_models.dart';
+import 'package:planta_tracker/services/policies_services.dart';
 
-class TermsAndConditions extends StatelessWidget {
+class TermsAndConditions extends StatefulWidget {
   const TermsAndConditions({super.key});
+
+  @override
+  State<TermsAndConditions> createState() => _TermsAndConditionsState();
+}
+
+class _TermsAndConditionsState extends State<TermsAndConditions> {
+  final PoliciesServices policiesServices = PoliciesServices();
 
   @override
   Widget build(BuildContext context) {
@@ -20,112 +28,53 @@ class TermsAndConditions extends StatelessWidget {
           style: context.theme.textTheme.titleApBar,
         ),
       ),
-      body: Padding(
-        padding: allPadding16,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_warning,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_first,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin8,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_first_text,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.text_01,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_second,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin8,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_second_text,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.text_01,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_three,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin8,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_three_text,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.text_01,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_four,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin8,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_four_text,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.text_01,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_five,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin8,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_five_text,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.text_01,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_six,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin8,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_six_text,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.text_01,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_seven,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.text_01,
-              ),
-              verticalMargin16,
-              AutoSizeText(
-                AppLocalizations.of(context)!.terms_conditions_eigth,
-                textAlign: TextAlign.justify,
-                style: context.theme.textTheme.h3,
-              ),
-              verticalMargin16,
-              ButtomLarge(
-                color: PlantaColors.colorGreen,
-                onTap: () {
-                  goToRegister(context);
+      body: FutureBuilder(
+        future: policiesServices.getPolicies(context),
+        builder: (context, AsyncSnapshot<PoliciesModels> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return PoliciesWidget(snapshot.data!.results);
+          }
+        },
+      ),
+    );
+  }
+}
+
+class PoliciesWidget extends StatefulWidget {
+  final List<Result> policies;
+  const PoliciesWidget(this.policies, {super.key});
+
+  @override
+  State<PoliciesWidget> createState() => _PoliciesWidgetState();
+}
+
+class _PoliciesWidgetState extends State<PoliciesWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: allPadding16,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.policies.length,
+              itemBuilder: (context, index) => Html(
+                data: widget.policies[index].descripcion,
+                style: {
+                  "p": Style(
+                    color: PlantaColors.colorBlack,
+                    textAlign: TextAlign.justify,
+                  ),
                 },
-                title: AppLocalizations.of(context)!.text_buttom_accept,
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
