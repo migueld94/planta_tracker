@@ -48,6 +48,8 @@ class _MyPlantsState extends State<MyPlants> {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body)['results'] as List;
         if (json.isEmpty) {
+          EasyLoading.dismiss();
+
           return alert(context, 'No existen elementos');
         } else {
           setState(() {
