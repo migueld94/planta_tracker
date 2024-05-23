@@ -116,9 +116,11 @@ class CardPlant extends StatelessWidget {
   }
 
   Color getColor() {
-    if (status.toLowerCase() == 'aprobado') {
+    if ((status.toLowerCase() == 'aprobado') ||
+        (status.toLowerCase() == 'approved')) {
       return PlantaColors.colorDarkGreen;
-    } else if (status.toLowerCase() == 'en_revision') {
+    } else if ((status.toLowerCase() == 'en revision') ||
+        (status.toLowerCase() == 'revision')) {
       return PlantaColors.colorLightGreen;
     }
     return PlantaColors.colorDarkOrange;
@@ -258,39 +260,58 @@ class CardMyPlants extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: PlantaColors.colorGreen),
-                        borderRadius: borderRadius10,
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Ionicons.pencil_outline,
-                          color: PlantaColors.colorBlack,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // EDITAR
                   GestureDetector(
                     onTap: () {
-                      warning(context, '¿Esta seguro de eliminar la planta?',
-                          () => null);
+                      if (status.toLowerCase() == 'pendiente') {
+                        null;
+                      } else {
+                        null;
+                      }
                     },
                     child: Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        border: Border.all(color: PlantaColors.colorOrange),
+                        border: Border.all(color: getColorOptionEdit()),
+                        borderRadius: borderRadius10,
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Ionicons.pencil_outline,
+                          color: ((status.toLowerCase() == 'pendiente') ||
+                                  (status.toLowerCase() == 'earring'))
+                              ? PlantaColors.colorBlack
+                              : PlantaColors.colorGrey,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // ELIMINAR
+                  GestureDetector(
+                    onTap: () {
+                      if (status.toLowerCase() == 'pendiente') {
+                        warning(context, '¿Esta seguro de eliminar la planta?',
+                            () => null);
+                      } else {
+                        null;
+                      }
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: getColorOptionDelete()),
                         borderRadius: borderRadius10,
                       ),
                       child: Center(
                         child: Icon(
                           Ionicons.trash_outline,
-                          color: PlantaColors.colorBlack,
+                          color: ((status.toLowerCase() == 'pendiente') ||
+                                  (status.toLowerCase() == 'earring'))
+                              ? PlantaColors.colorBlack
+                              : PlantaColors.colorGrey,
                         ),
                       ),
                     ),
@@ -304,10 +325,30 @@ class CardMyPlants extends StatelessWidget {
     );
   }
 
+  Color getColorOptionEdit() {
+    if ((status.toLowerCase() == 'pendiente') ||
+        (status.toLowerCase() == 'earring')) {
+      return PlantaColors.colorGreen;
+    } else {
+      return PlantaColors.colorGrey;
+    }
+  }
+
+  Color getColorOptionDelete() {
+    if ((status.toLowerCase() == 'pendiente') ||
+        (status.toLowerCase() == 'earring')) {
+      return PlantaColors.colorOrange;
+    } else {
+      return PlantaColors.colorGrey;
+    }
+  }
+
   Color getColor() {
-    if (status.toLowerCase() == 'aprobado') {
+    if ((status.toLowerCase() == 'aprobado') ||
+        (status.toLowerCase() == 'approved')) {
       return PlantaColors.colorDarkGreen;
-    } else if (status.toLowerCase() == 'en_revision') {
+    } else if ((status.toLowerCase() == 'en revision') ||
+        (status.toLowerCase() == 'revision')) {
       return PlantaColors.colorLightGreen;
     }
     return PlantaColors.colorDarkOrange;

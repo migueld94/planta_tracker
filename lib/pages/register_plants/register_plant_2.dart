@@ -22,6 +22,7 @@ class RegisterPlant2 extends StatefulWidget {
 
 class _RegisterPlant2State extends State<RegisterPlant2> {
   File? _image;
+  bool flag = false;
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
@@ -35,6 +36,7 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
       setState(() {
         if (image != null) {
           _image = File(image.path);
+          flag = true;
         } else {
           //print('No se seleccionó ninguna imagen.');
         }
@@ -51,14 +53,8 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Icon(
-            Ionicons.arrow_back_outline,
-            color: PlantaColors.colorWhite,
-          ),
-        ),
         backgroundColor: PlantaColors.colorGreen,
         title: AutoSizeText(
           AppLocalizations.of(context)!.plant_register,
@@ -66,27 +62,69 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
         ),
       ),
       body: Center(
-        child: GestureDetector(
-          onTap: () => getImage(),
-          child: CameraWidget(
-            text: AppLocalizations.of(context)!.plant_register_trunk_image,
-            picture: _image,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (flag == true)
+              Flexible(
+                child: AutoSizeText(
+                  'Para volver a tomar la foto pulse la imagén',
+                  style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            verticalMargin57,
+            GestureDetector(
+              onTap: () => getImage(),
+              child: CameraWidget(
+                text: AppLocalizations.of(context)!.plant_register_trunk_image,
+                picture: _image,
+              ),
+            ),
+          ],
         ),
       ),
       bottomSheet: Padding(
         padding: allPadding24,
-        child: ButtomLarge(
-            color: PlantaColors.colorGreen,
-            onTap: () {
-              widget.pictures!.add(_image!.path);
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RegisterPlant3(pictures: widget.pictures,)),
-              );
-            },
-            title: AppLocalizations.of(context)!.text_buttom_next),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ButtomSkip(
+              color: PlantaColors.colorTransparent,
+              onTap: () {
+                if (flag == true) {
+                  null;
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              RegisterPlant3(pictures: widget.pictures)));
+                }
+              },
+              title: 'Omitir',
+              colorText:
+                  flag ? PlantaColors.colorGrey : PlantaColors.colorBlack,
+            ),
+            ButtomSmall(
+                color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
+                onTap: () {
+                  if (flag == true) {
+                    widget.pictures!.add(_image!.path);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegisterPlant3(
+                                pictures: widget.pictures,
+                              )),
+                    );
+                  } else {
+                    null;
+                  }
+                },
+                title: AppLocalizations.of(context)!.text_buttom_next),
+          ],
+        ),
       ),
     );
   }

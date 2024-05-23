@@ -128,6 +128,7 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                         setState(() {
                           email = emailController.text;
                         });
+                        alert(context, 'En desarrollo');
                         // goToVerifyCode(context);
                         // resetPassword();
                       }

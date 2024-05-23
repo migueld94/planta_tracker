@@ -36,14 +36,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Icon(
-            Ionicons.arrow_back_outline,
-            color: PlantaColors.colorWhite,
-          ),
-        ),
         backgroundColor: PlantaColors.colorGreen,
         title: AutoSizeText(
           AppLocalizations.of(context)!.plant_register,

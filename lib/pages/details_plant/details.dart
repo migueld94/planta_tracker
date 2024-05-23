@@ -229,9 +229,11 @@ class DetailsWidget extends StatelessWidget {
   }
 
   Color getColor() {
-    if (details.estadoActual?.toLowerCase() == 'aprobado') {
+    if ((details.estadoActual?.toLowerCase() == 'aprobado') ||
+        (details.estadoActual?.toLowerCase() == 'approved')) {
       return PlantaColors.colorDarkGreen;
-    } else if (details.estadoActual?.toLowerCase() == 'en_revision') {
+    } else if ((details.estadoActual?.toLowerCase() == 'en revision') ||
+        (details.estadoActual?.toLowerCase() == 'revision')) {
       return PlantaColors.colorLightGreen;
     }
     return PlantaColors.colorDarkOrange;

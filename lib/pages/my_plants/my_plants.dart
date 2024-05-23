@@ -49,7 +49,6 @@ class _MyPlantsState extends State<MyPlants> {
         final json = jsonDecode(response.body)['results'] as List;
         if (json.isEmpty) {
           EasyLoading.dismiss();
-
           return alert(context, 'No existen elementos');
         } else {
           setState(() {
@@ -112,13 +111,9 @@ class _MyPlantsState extends State<MyPlants> {
                     date: '${date.day} / ${date.month} / ${date.year}',
                     onTap: () {
                       Navigator.push(
-                        context,
-                        SlideRightRoute(
-                          page: Details(
-                            id: items[index]['id'],
-                          ),
-                        ),
-                      );
+                          context,
+                          SlideRightRoute(
+                              page: Details(id: items[index]['id'])));
                     },
                   );
                 }

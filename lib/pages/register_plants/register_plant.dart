@@ -23,6 +23,7 @@ class RegisterPlant extends StatefulWidget {
 class _RegisterPlantState extends State<RegisterPlant> {
   File? _image;
   List<String>? pictures = [];
+  bool flag = false;
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
@@ -36,6 +37,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
       setState(() {
         if (image != null) {
           _image = File(image.path);
+          flag = true;
         } else {
           //print('No se seleccionó ninguna imagen.');
         }
@@ -68,32 +70,54 @@ class _RegisterPlantState extends State<RegisterPlant> {
         ),
       ),
       body: Center(
-        child: GestureDetector(
-          onTap: () => getImage(),
-          child: CameraWidget(
-            text: AppLocalizations.of(context)!.plant_register_full_image,
-            picture: _image,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (flag == true)
+              Flexible(
+                child: AutoSizeText(
+                  'Para volver a tomar la foto pulse la imagén',
+                  style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            verticalMargin57,
+            Center(
+              child: GestureDetector(
+                onTap: () => getImage(),
+                child: CameraWidget(
+                  text: AppLocalizations.of(context)!.plant_register_full_image,
+                  picture: _image,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       bottomSheet: Padding(
         padding: allPadding24,
-        child: ButtomLarge(
-            color: PlantaColors.colorGreen,
-            onTap: () {
-              log(_image!.path);
-              pictures!.add(_image!.path);
-              // log();
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => RegisterPlant2(
-                          pictures: pictures,
-                        )),
-              );
-            },
-            title: AppLocalizations.of(context)!.text_buttom_next),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            emptyWidget,
+            ButtomSmall(
+                color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
+                onTap: () {
+                  if (flag == true) {
+                    log(_image!.path);
+                    pictures!.add(_image!.path);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                RegisterPlant2(pictures: pictures)));
+                  } else {
+                    null;
+                  }
+                },
+                title: AppLocalizations.of(context)!.text_buttom_next),
+          ],
+        ),
       ),
     );
   }
