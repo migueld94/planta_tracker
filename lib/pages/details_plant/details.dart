@@ -149,7 +149,7 @@ class DetailsWidget extends StatelessWidget {
             ),
             verticalMargin8,
             AutoSizeText(
-              details.especiePlanta ?? '',
+              details.especiePlanta ?? 'Determinación pendiente',
               style: context.theme.textTheme.h2.copyWith(fontSize: 23.0),
             ),
             verticalMargin8,

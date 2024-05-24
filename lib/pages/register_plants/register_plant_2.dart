@@ -1,15 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/pages/register_plants/register_plant_3.dart';
 import 'package:planta_tracker/pages/register_plants/widget/camera_widget.dart';
+import 'package:planta_tracker/services/plants_services.dart';
 
 class RegisterPlant2 extends StatefulWidget {
   final List<String>? pictures;
@@ -23,6 +27,7 @@ class RegisterPlant2 extends StatefulWidget {
 class _RegisterPlant2State extends State<RegisterPlant2> {
   File? _image;
   bool flag = false;
+  final OptionPlantServices optionServices = OptionPlantServices();
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
@@ -91,10 +96,14 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
           children: [
             ButtomSkip(
               color: PlantaColors.colorTransparent,
-              onTap: () {
+              onTap: () async {
                 if (flag == true) {
                   null;
                 } else {
+                  File f = await optionServices
+                      .getImageFileFromAssets(Constants.noPicture);
+                  widget.pictures!.add(f.path);
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:planta_tracker/assets/utils/methods/utils.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 
 //* Aqui falta agregarle la foto
@@ -136,6 +136,8 @@ class CardMyPlants extends StatelessWidget {
     required this.date,
     required this.onTap,
     required this.picture,
+    required this.id,
+    required this.onTapDelete,
   });
 
   final String title;
@@ -144,6 +146,8 @@ class CardMyPlants extends StatelessWidget {
   final String status;
   final String date;
   final Function()? onTap;
+  final int id;
+  final Function()? onTapDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +283,8 @@ class CardMyPlants extends StatelessWidget {
                       child: Center(
                         child: Icon(
                           Ionicons.pencil_outline,
-                          color: ((status.toLowerCase() == 'pendiente') ||
+                          color: ((status.toLowerCase() ==
+                                      'pendiente') ||
                                   (status.toLowerCase() == 'earring'))
                               ? PlantaColors.colorBlack
                               : PlantaColors.colorGrey,
@@ -290,14 +295,7 @@ class CardMyPlants extends StatelessWidget {
 
                   // ELIMINAR
                   GestureDetector(
-                    onTap: () {
-                      if (status.toLowerCase() == 'pendiente') {
-                        warning(context, '¿Esta seguro de eliminar la planta?',
-                            () => null);
-                      } else {
-                        null;
-                      }
-                    },
+                    onTap: onTapDelete,
                     child: Container(
                       width: 40,
                       height: 40,
@@ -308,7 +306,8 @@ class CardMyPlants extends StatelessWidget {
                       child: Center(
                         child: Icon(
                           Ionicons.trash_outline,
-                          color: ((status.toLowerCase() == 'pendiente') ||
+                          color: ((status.toLowerCase() ==
+                                      'pendiente') ||
                                   (status.toLowerCase() == 'earring'))
                               ? PlantaColors.colorBlack
                               : PlantaColors.colorGrey,

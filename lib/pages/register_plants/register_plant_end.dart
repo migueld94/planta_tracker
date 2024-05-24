@@ -1,16 +1,21 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/drop_buttom.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
+import 'package:planta_tracker/models/register_plant_models.dart';
+import 'package:planta_tracker/pages/home/home.dart';
+import 'package:planta_tracker/services/plants_services.dart';
 
 class RegisterPlantEnd extends StatefulWidget {
   final List<String>? pictures;
@@ -25,6 +30,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   final GlobalKey<FormState> formKey = GlobalKey();
   final note = TextEditingController();
   final storage = const FlutterSecureStorage();
+  final OptionPlantServices optionServices = OptionPlantServices();
+  RegisterPlant plant = RegisterPlant();
 
   @override
   void dispose() {
@@ -139,14 +146,111 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                   color: PlantaColors.colorGreen,
                   onTap: () async {
                     final lifestage = await storage.read(key: 'lifestage');
-                    print(widget.pictures);
-                    print(lifestage);
-                    print(note.text);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const Home()),
-                    // );
-                    await storage.delete(key: 'lifestage');
+
+                    plant.imagenPrincipal = File(widget.pictures![0]);
+                    plant.imagenTronco = File(widget.pictures![1]);
+                    plant.imagenRamas = File(widget.pictures![2]);
+                    plant.imagenHojas = File(widget.pictures![3]);
+                    plant.imagenFlor = File(widget.pictures![5]);
+                    plant.imagenFruto = File(widget.pictures![4]);
+
+                    plant.notas = note.text;
+
+                    plant.lifestage = lifestage;
+
+                    EasyLoading.show();
+                    try {
+                      var res = await optionServices.register(plant);
+
+                      log(res!.statusCode.toString());
+
+                      switch (res!.statusCode) {
+                        case 200:
+                          log('Mision Cumplida');
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                res.body,
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          EasyLoading.dismiss();
+                          if (!context.mounted) return;
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((_) async {
+                            Navigator.push(
+                                context, SlideRightRoute(page: const Home()));
+                          });
+                          await storage.delete(key: 'lifestage');
+                          break;
+                        case 400:
+                          EasyLoading.dismiss();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                res.body,
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                        case 401:
+                          EasyLoading.dismiss();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                res.body,
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                        default:
+                          EasyLoading.dismiss();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                res.body,
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                      }
+                    } on SocketException {
+                      EasyLoading.dismiss();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: PlantaColors.colorOrange,
+                        content: Center(
+                          child: AutoSizeText(
+                            'Sin conexión',
+                            style: context.theme.textTheme.text_01.copyWith(
+                              color: PlantaColors.colorWhite,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ));
+                    }
                   },
                   title: AppLocalizations.of(context)!.text_buttom_next),
             ],

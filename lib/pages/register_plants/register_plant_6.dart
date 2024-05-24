@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -8,24 +9,23 @@ import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
-import 'package:planta_tracker/pages/register_plants/register_plant_4.dart';
+import 'package:planta_tracker/pages/register_plants/register_plant_end.dart';
 import 'package:planta_tracker/pages/register_plants/widget/camera_widget.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 
-class RegisterPlant3 extends StatefulWidget {
+class RegisterPlant6 extends StatefulWidget {
   final List<String>? pictures;
 
-  const RegisterPlant3({super.key, this.pictures});
+  const RegisterPlant6({super.key, this.pictures});
 
   @override
-  State<RegisterPlant3> createState() => _RegisterPlant3State();
+  State<RegisterPlant6> createState() => _RegisterPlant6State();
 }
 
-class _RegisterPlant3State extends State<RegisterPlant3> {
+class _RegisterPlant6State extends State<RegisterPlant6> {
   File? _image;
   bool flag = false;
   final OptionPlantServices optionServices = OptionPlantServices();
-
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
@@ -80,8 +80,7 @@ class _RegisterPlant3State extends State<RegisterPlant3> {
             GestureDetector(
               onTap: () => getImage(),
               child: CameraWidget(
-                text:
-                    AppLocalizations.of(context)!.plant_register_image_branches,
+                text: 'Flor',
                 picture: _image,
               ),
             ),
@@ -99,16 +98,17 @@ class _RegisterPlant3State extends State<RegisterPlant3> {
                 if (flag == true) {
                   null;
                 } else {
-                  // widget.pictures!.add(Constants.noPicture);
+                  // log(widget.pictures!.toString());
                   File f = await optionServices
                       .getImageFileFromAssets(Constants.noPicture);
                   widget.pictures!.add(f.path);
-                  
+
+                  widget.pictures!.add(Constants.noPicture);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              RegisterPlant4(pictures: widget.pictures)));
+                              RegisterPlantEnd(pictures: widget.pictures)));
                 }
               },
               title: 'Omitir',
@@ -123,7 +123,7 @@ class _RegisterPlant3State extends State<RegisterPlant3> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RegisterPlant4(
+                          builder: (context) => RegisterPlantEnd(
                                 pictures: widget.pictures,
                               )),
                     );

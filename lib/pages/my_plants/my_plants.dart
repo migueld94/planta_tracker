@@ -15,6 +15,7 @@ import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
+import 'package:planta_tracker/services/plants_services.dart';
 
 class MyPlants extends StatefulWidget {
   const MyPlants({super.key});
@@ -24,12 +25,13 @@ class MyPlants extends StatefulWidget {
 }
 
 class _MyPlantsState extends State<MyPlants> {
+  final OptionPlantServices optionServices = OptionPlantServices();
+  final storage = const FlutterSecureStorage();
   List items = [];
   int next = 1;
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
-  final storage = const FlutterSecureStorage();
   final String noPicture =
       'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg';
 
@@ -104,16 +106,45 @@ class _MyPlantsState extends State<MyPlants> {
                 } else {
                   final date = DateTime.parse(items[index]["fecha_registro_"]);
                   return CardMyPlants(
+                    id: items[index]['id'],
                     picture: items[index]['imagen_principal'] ?? noPicture,
-                    title: items[index]['especie_planta'],
-                    lifestage: items[index]['lifestage'],
-                    status: items[index]['estado_actual'],
+                    title: items[index]['especie_planta'] ??
+                        'Determinación pendiente',
+                    lifestage: items[index]['lifestage'] ?? '',
+                    status: items[index]['estado_actual'] ?? '',
                     date: '${date.day} / ${date.month} / ${date.year}',
+
+                    // Este es el onTap de enviar el id a Detalles
                     onTap: () {
                       Navigator.push(
                           context,
                           SlideRightRoute(
                               page: Details(id: items[index]['id'])));
+                    },
+
+                    // Este es el onTap del servicio Eliminar Planta solo se pueden eliminar los PENDIENTES
+                    onTapDelete: () {
+                      if (items[index]['estado_actual']
+                              .toString()
+                              .toLowerCase() ==
+                          'pendiente') {
+                        warning(
+                          context,
+                          '¿Esta seguro de eliminar la planta?',
+                          () async {
+                            await optionServices
+                                .delete(items[index]['id'].toString());
+                            Navigator.pop(context);
+                            setState(() {
+                              items = [];
+                            });
+                            EasyLoading.show();
+                            _loadMore();
+                          },
+                        );
+                      } else {
+                        null;
+                      }
                     },
                   );
                 }

@@ -46,7 +46,7 @@ class _NomLifestage extends StatefulWidget {
 class _NomLifestageState extends State<_NomLifestage> {
   String? values;
   final storage = const FlutterSecureStorage();
-
+  int life = 0;
 
   @override
   Widget build(BuildContext context) {
