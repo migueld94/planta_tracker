@@ -162,8 +162,6 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                     try {
                       var res = await optionServices.register(plant);
 
-                      log(res!.statusCode.toString());
-
                       switch (res!.statusCode) {
                         case 200:
                           log('Mision Cumplida');

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -25,7 +27,6 @@ class _RegisterPlant4State extends State<RegisterPlant4> {
   File? _image;
   bool flag = false;
   final OptionPlantServices optionServices = OptionPlantServices();
-
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
@@ -102,7 +103,7 @@ class _RegisterPlant4State extends State<RegisterPlant4> {
                   File f = await optionServices
                       .getImageFileFromAssets(Constants.noPicture);
                   widget.pictures!.add(f.path);
-                  
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(

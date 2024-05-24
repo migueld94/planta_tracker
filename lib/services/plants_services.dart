@@ -64,14 +64,10 @@ class OptionPlantServices {
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
 
-    log('Este es el response del servicio ${response.body}');
-    log('Este es el status del servicio ${response.statusCode}');
-    log('Este es el reasonPhrase del servicio ${response.reasonPhrase}');
-
     if (response.statusCode == 200) {
-      print('Imagen y texto enviados correctamente');
+      log('Este es el response del servicio ${response.body}');
     } else {
-      print('Error al enviar la imagen y el texto: ${response.reasonPhrase}');
+      log('Este es el reasonPhrase del servicio ${response.reasonPhrase}');
     }
     return response;
   }
