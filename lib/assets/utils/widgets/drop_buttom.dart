@@ -24,9 +24,7 @@ class _MyDropButtomState extends State<MyDropButtom> {
       future: lifestageServices.getLifestage(context),
       builder: (context, AsyncSnapshot<Lifestage> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const _NomLifestage([]);
         } else {
           return _NomLifestage(snapshot.data!.results);
         }
