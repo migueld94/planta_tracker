@@ -3,7 +3,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
-import 'package:planta_tracker/pages/comments/comments.dart';
 import 'package:planta_tracker/pages/home/home.dart';
 import 'package:planta_tracker/pages/login/change_password.dart';
 import 'package:planta_tracker/pages/login/forgot_password.dart';
