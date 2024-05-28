@@ -173,10 +173,3 @@ goToChangePassword(BuildContext context) => Navigator.push(
         builder: (context) => const ChangePassword(),
       ),
     );
-
-goToComments(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Comments(),
-      ),
-    );

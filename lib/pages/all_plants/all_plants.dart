@@ -54,7 +54,7 @@ class _AllPlantsState extends State<AllPlants> {
         headers: <String, String>{'authorization': "Bearer $accessToken"});
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
-    
+
     if (response.statusCode == 200) {
       final json = jsonDecode(utf)['results'] as List;
       setState(() {
@@ -107,7 +107,8 @@ class _AllPlantsState extends State<AllPlants> {
                   final date = DateTime.parse(items[index]["fecha_registro_"]);
                   return CardPlant(
                     picture: items[index]['imagen_principal'] ?? noPicture,
-                    title: items[index]['especie_planta'] ?? 'Determinación pendiente',
+                    title: items[index]['especie_planta'] ??
+                        'Determinación pendiente',
                     lifestage: items[index]['lifestage'] ?? '',
                     status: items[index]['estado_actual'] ?? '',
                     date: '${date.day} / ${date.month} / ${date.year}',
