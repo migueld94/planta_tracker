@@ -12,6 +12,8 @@ import 'package:planta_tracker/blocs/gps/gps_state.dart';
 import 'package:planta_tracker/blocs/map/map_bloc.dart';
 import 'package:planta_tracker/blocs/map/map_state.dart';
 import 'package:http/http.dart' as http;
+import 'package:planta_tracker/models/plants_models.dart';
+import 'package:planta_tracker/services/all_plants_services.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -21,6 +23,7 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> {
+  final AllPlantServices plantServices = AllPlantServices();
   TextEditingController? controller;
   String search = '';
   String selectedFilter = '';
@@ -236,30 +239,77 @@ class _MapViewState extends State<MapView> {
   }
 
   Widget _buildMap(BuildContext context, LatLng location) {
-    return FlutterMap(
-      options: MapOptions(
-        initialCenter: location,
-        minZoom: 5,
-        maxZoom: 25,
-        initialZoom: 18,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-        ),
-        MarkerLayer(markers: [
-          Marker(
-            point: location,
-            child: const Icon(
-              Icons.person_pin_circle,
-              color: Colors.blue,
-              size: 40,
+    return FutureBuilder<List<Plant>>(
+      future:
+          AllPlantServices().getAllPlants(context, 1), // el 1 es el currentPage
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Plant> plants = snapshot.data!;
+          return FlutterMap(
+            options: MapOptions(
+              initialCenter: location,
+              minZoom: 5,
+              maxZoom: 25,
+              initialZoom: 18,
             ),
-          ),
-        ]),
-      ],
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+              ),
+              MarkerLayer(markers: [
+                Marker(
+                  point: location,
+                  child: const Icon(
+                    Icons.person_pin_circle,
+                    color: Colors.blue,
+                    size: 40,
+                  ),
+                ),
+                ...createMarkers(
+                  plants,
+                  const Icon(
+                    Icons.pin_drop,
+                    color: Colors.blue,
+                    size: 40,
+                  ),
+                ),
+              ]),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
+
+    // FlutterMap(
+    //   options: MapOptions(
+    //     initialCenter: location,
+    //     minZoom: 5,
+    //     maxZoom: 25,
+    //     initialZoom: 18,
+    //   ),
+    //   children: [
+    //     TileLayer(
+    //       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    //       userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+    //     ),
+    //     MarkerLayer(markers: [
+    //       Marker(
+    //         point: location,
+    //         child: const Icon(
+    //           Icons.person_pin_circle,
+    //           color: Colors.blue,
+    //           size: 40,
+    //         ),
+    //       ),
+
+    //     ]),
+    //   ],
+    // );
   }
 
   Widget filterButton(String text, IconData icon, String filter) {
@@ -289,6 +339,19 @@ class _MapViewState extends State<MapView> {
       ),
     );
   }
+}
+
+//class CustomMaker para otros pines en el mapa
+class CustomMarker extends Marker {
+  CustomMarker(LatLng point, Widget child) : super(point: point, child: child);
+}
+
+//funcion para generar lista de posiciones para el customMarker
+List<CustomMarker> createMarkers(List<Plant> plants, Widget child) {
+  return plants.map((plant) {
+    LatLng location = LatLng(plant.latitude, plant.longitude);
+    return CustomMarker(location, child);
+  }).toList();
 }
 
 class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

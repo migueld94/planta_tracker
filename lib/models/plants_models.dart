@@ -5,6 +5,8 @@ class Plant {
   final String lifestage;
   final String status;
   DateTime fechaRegistro;
+  final double latitude;
+  final double longitude;
 
   Plant({
     required this.id,
@@ -13,6 +15,8 @@ class Plant {
     required this.lifestage,
     required this.status,
     required this.fechaRegistro,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory Plant.fromJson(Map<String, dynamic> json) {
@@ -20,9 +24,12 @@ class Plant {
         id: json['id'],
         imagenPrincipal: json["imagen_principal"],
         name: json['especie_planta'],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
         lifestage: json['lifestage'],
         status: json['estado_actual'],
-        fechaRegistro: DateTime.parse(json["fecha_registro_"])
-        );
+        fechaRegistro: DateTime.parse(
+          json["fecha_registro_"],
+        ));
   }
 }
