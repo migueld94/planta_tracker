@@ -349,7 +349,7 @@ class CustomMarker extends Marker {
 //funcion para generar lista de posiciones para el customMarker
 List<CustomMarker> createMarkers(List<Plant> plants, Widget child) {
   return plants.map((plant) {
-    LatLng location = LatLng(plant.latitude, plant.longitude);
+    LatLng location = LatLng(plant.latitude!, plant.longitude!);
     return CustomMarker(location, child);
   }).toList();
 }

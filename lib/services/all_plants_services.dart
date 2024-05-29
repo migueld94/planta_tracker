@@ -29,8 +29,6 @@ class AllPlantServices {
     final allspecie =
         Uri.parse('${Constants.baseUrl}/$flag/api/plants_api?page=$currentPage');
 
-    log(allspecie.toString());
-
     final response = await http.get(allspecie,
         headers: <String, String>{'authorization': "Bearer $accessToken"});
 
