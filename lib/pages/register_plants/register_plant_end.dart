@@ -188,6 +188,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                           break;
                         case 400:
                           EasyLoading.dismiss();
+                          Navigator.push(
+                              context, SlideRightRoute(page: const Home()));
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: PlantaColors.colorOrange,
                             content: Center(
@@ -204,6 +206,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                         case 401:
                           EasyLoading.dismiss();
                           if (!context.mounted) return;
+                          Navigator.push(
+                              context, SlideRightRoute(page: const Home()));
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: PlantaColors.colorOrange,
                             content: Center(
@@ -220,6 +224,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                         default:
                           EasyLoading.dismiss();
                           if (!context.mounted) return;
+                          Navigator.push(
+                              context, SlideRightRoute(page: const Home()));
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: PlantaColors.colorOrange,
                             content: Center(
@@ -236,6 +242,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                       }
                     } on SocketException {
                       EasyLoading.dismiss();
+                      Navigator.push(
+                          context, SlideRightRoute(page: const Home()));
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: PlantaColors.colorOrange,
                         content: Center(

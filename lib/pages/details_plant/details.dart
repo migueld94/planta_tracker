@@ -7,8 +7,11 @@ import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/models/details_models.dart';
+import 'package:planta_tracker/pages/comments/comments.dart';
+import 'package:planta_tracker/pages/details_plant/view_image.dart';
 import 'package:planta_tracker/services/details_services.dart';
 
 class Details extends StatefulWidget {
@@ -45,7 +48,12 @@ class _DetailsState extends State<Details> {
             child: GestureDetector(
               onTap: () {
                 log(widget.id.toString());
-                // goToComments(context);
+                Navigator.push(
+                    context,
+                    SlideRightRoute(
+                        page: Comments(
+                      id: widget.id,
+                    )));
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +111,7 @@ class DetailsWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 140.0,
+              height: 170.0,
               child: ListView.separated(
                 itemCount: images!.length,
                 clipBehavior: Clip.none,
@@ -111,33 +119,60 @@ class DetailsWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 separatorBuilder: (context, index) => horizontalMargin16,
                 itemBuilder: (context, index) {
-                  return Container(
-                    width: 240.0,
-                    decoration: BoxDecoration(
-                      borderRadius: borderRadius10,
-                      color: PlantaColors.colorWhite,
-                      boxShadow: [
-                        BoxShadow(
-                          offset: const Offset(5, 7),
-                          blurRadius: 10,
-                          color: PlantaColors.colorBlack.withOpacity(0.3),
-                        )
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: borderRadius10,
-                      child: CachedNetworkImage(
-                        filterQuality: FilterQuality.low,
-                        imageUrl:
-                            '${Constants.baseUrl}${images?[index].posterPath}',
-                        placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) => Icon(
-                            Ionicons.image_sharp,
-                            color: PlantaColors.colorBlack),
-                        fit: BoxFit.cover,
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              SlideRightRoute(
+                                  page: ViewImage(
+                                id: images![index].id,
+                                type: images![index].type,
+                                posterPath:
+                                    '${Constants.baseUrl}${images?[index].posterPath}',
+                              )));
+                        },
+                        child: Hero(
+                          tag: images![index].id,
+                          child: Container(
+                            width: 240.0,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              borderRadius: borderRadius10,
+                              color: PlantaColors.colorWhite,
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(5, 7),
+                                  blurRadius: 10,
+                                  color:
+                                      PlantaColors.colorBlack.withOpacity(0.3),
+                                )
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: borderRadius10,
+                              child: CachedNetworkImage(
+                                filterQuality: FilterQuality.low,
+                                imageUrl:
+                                    '${Constants.baseUrl}${images?[index].posterPath}',
+                                placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) => Icon(
+                                    Ionicons.image_sharp,
+                                    color: PlantaColors.colorBlack),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      verticalMargin8,
+                      AutoSizeText(
+                        images![index].type,
+                        style: context.theme.textTheme.text_01,
+                      ),
+                    ],
                   );
                 },
               ),
@@ -213,7 +248,7 @@ class DetailsWidget extends StatelessWidget {
             ),
             verticalMargin8,
             SizedBox(
-              height: 400,
+              height: 300,
               child: SingleChildScrollView(
                 child: AutoSizeText(
                   details.notas ?? 'No se encontraron notas',

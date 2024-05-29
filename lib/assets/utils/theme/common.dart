@@ -82,6 +82,7 @@ const allPadding48 = EdgeInsets.all(48.0);
 const onlyPadding120 = EdgeInsets.symmetric(horizontal: 120.0, vertical: 20.0);
 
 const allMargin8 = EdgeInsets.all(8.0);
+const allMargin16 = EdgeInsets.all(16.0);
 
 const leftPadding2 = EdgeInsets.only(left: 2.0);
 const leftPadding4 = EdgeInsets.only(left: 4.0);

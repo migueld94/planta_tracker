@@ -71,6 +71,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
             fontFamily: 'Nunito',
+            appBarTheme: AppBarTheme(
+              backgroundColor: PlantaColors.colorGreen,
+              iconTheme: IconThemeData(
+                color: PlantaColors.colorWhite,
+              ),
+            ),
             bottomSheetTheme: BottomSheetThemeData(
               surfaceTintColor: PlantaColors.colorWhite,
             ),
