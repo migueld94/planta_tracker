@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
+import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/my_custom_card.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_event.dart';
@@ -266,14 +267,7 @@ class _MapViewState extends State<MapView> {
                     size: 40,
                   ),
                 ),
-                ...createMarkers(
-                  plants,
-                  const Icon(
-                    Icons.pin_drop,
-                    color: Colors.blue,
-                    size: 40,
-                  ),
-                ),
+                ...createMarkers(plants),
               ]),
             ],
           );
@@ -347,10 +341,37 @@ class CustomMarker extends Marker {
 }
 
 //funcion para generar lista de posiciones para el customMarker
-List<CustomMarker> createMarkers(List<Plant> plants, Widget child) {
+// List<CustomMarker> createMarkers(List<Plant> plants, Widget child) {
+//   return plants.map((plant) {
+//     LatLng location = LatLng(plant.latitude!, plant.longitude!);
+//     return CustomMarker(location, child);
+//   }).toList();
+// }
+List<CustomMarker> createMarkers(List<Plant> plants) {
   return plants.map((plant) {
     LatLng location = LatLng(plant.latitude!, plant.longitude!);
-    return CustomMarker(location, child);
+    Color color;
+    switch (plant.estadoActual) {
+      case EstadoActual.APPROVED:
+        color = PlantaColors.colorDarkGreen;
+        break;
+      case EstadoActual.REVISION:
+        color = PlantaColors.colorDarkYellow;
+        break;
+      case EstadoActual.EARRING:
+        color = PlantaColors.colorLightRed;
+        break;
+      default:
+        color = Colors.grey;
+    }
+    return CustomMarker(
+      location,
+      Icon(
+        Icons.location_pin,
+        color: color,
+        size: 40,
+      ),
+    );
   }).toList();
 }
 
