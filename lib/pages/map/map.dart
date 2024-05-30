@@ -43,6 +43,19 @@ class _MapViewState extends State<MapView> {
 
   double maxLat = 0.0;
   double minLat = 0.0;
+  late LatLngBounds visibleRegion;
+
+  void _onMapChanged(MapPosition position, bool gesture) {
+    visibleRegion = position.bounds!;
+    setState(() {
+      // Obtener las latitudes y longitudes máximas y mínimas
+      double maxLat = visibleRegion.north;
+      double minLat = visibleRegion.south;
+      double maxLng = visibleRegion.east;
+      double minLng = visibleRegion.west;
+      log('Max Lat: $maxLat, Min Lat: $minLat, Max Lng: $maxLng, Min Lng: $minLng');
+    });
+  }
 
   _loadMore() async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
@@ -263,11 +276,13 @@ class _MapViewState extends State<MapView> {
               minZoom: 5,
               maxZoom: 25,
               initialZoom: 18,
+              onPositionChanged: _onMapChanged,
             ),
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                subdomains: const ['a', 'b', 'c'],
               ),
               MarkerLayer(markers: [
                 Marker(
