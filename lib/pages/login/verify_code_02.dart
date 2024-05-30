@@ -13,7 +13,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:planta_tracker/pages/login/change_password.dart';
-import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/services/auth_services.dart';
 
 class VerifyCode02 extends StatefulWidget {
