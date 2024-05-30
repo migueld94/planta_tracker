@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/utils/assets.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
@@ -9,6 +12,8 @@ import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/pages/login/verify_code_02.dart';
+import 'package:planta_tracker/services/auth_services.dart';
 
 class PasswordRecovery extends StatefulWidget {
   const PasswordRecovery({super.key});
@@ -21,10 +26,8 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
   String email = '';
   final emailController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
-
-  resetPassword() async {
-    goToLogin(context);
-  }
+  final AuthService authService = AuthService();
+  final storage = const FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -123,14 +126,38 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                   const Expanded(child: SizedBox()),
                   ButtomLarge(
                     color: PlantaColors.colorGreen,
-                    onTap: () {
+                    onTap: () async {
                       if (formKey.currentState!.validate()) {
                         setState(() {
                           email = emailController.text;
                         });
-                        alert(context, 'En desarrollo');
-                        // goToVerifyCode(context);
-                        // resetPassword();
+
+                        EasyLoading.show();
+                        var res = await authService.forgotPassword(email);
+
+                        switch (res!.statusCode) {
+                          case 200:
+                            EasyLoading.dismiss();
+                            Navigator.push(
+                              context,
+                              SlideRightRoute(page: VerifyCode02(email: email)),
+                            );
+                            break;
+                          case 400:
+                            EasyLoading.dismiss();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Registro fallido"),
+                            ));
+                            break;
+                          default:
+                            EasyLoading.dismiss();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Verificacion fallida"),
+                            ));
+                            break;
+                        }
                       }
                     },
                     title: AppLocalizations.of(context)!.text_buttom_accept,

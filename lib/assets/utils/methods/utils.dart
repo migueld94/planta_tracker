@@ -165,10 +165,3 @@ goToRegisterPlant(BuildContext context) => Navigator.push(
         builder: (context) => const RegisterPlant(),
       ),
     );
-
-goToChangePassword(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ChangePassword(),
-      ),
-    );
