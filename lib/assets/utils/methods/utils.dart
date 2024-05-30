@@ -4,8 +4,8 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
-import 'package:planta_tracker/pages/home/home.dart';
 import 'package:planta_tracker/pages/login/forgot_password.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/pages/login/register.dart';
@@ -218,48 +218,20 @@ Future<Object?> info(BuildContext context, String lifestage, String status,
   );
 }
 
-goToHome(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Home(),
-      ),
-    );
+goTerms(BuildContext context) =>
+    Navigator.push(context, SlideRightRoute(page: const TermsAndConditions()));
 
-goTerms(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const TermsAndConditions(),
-      ),
-    );
+goToRecovery(BuildContext context) =>
+    Navigator.push(context, SlideRightRoute(page: const PasswordRecovery()));
 
-goToRecovery(BuildContext context) => Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const PasswordRecovery(),
-    ));
+goToRegister(BuildContext context) =>
+    Navigator.push(context, SlideRightRoute(page: const Register()));
 
-goToRegister(BuildContext context) => Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const Register(),
-    ));
+goToLogin(BuildContext context) =>
+    Navigator.push(context, SlideRightRoute(page: const Login()));
 
-goToLogin(BuildContext context) => Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const Login(),
-    ));
+goToProfile(BuildContext context) =>
+    Navigator.push(context, SlideRightRoute(page: const ProfileUser()));
 
-goToProfile(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ProfileUser(),
-      ),
-    );
-
-goToRegisterPlant(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const RegisterPlant(),
-      ),
-    );
+goToRegisterPlant(BuildContext context) =>
+    Navigator.push(context, SlideRightRoute(page: const RegisterPlant()));
