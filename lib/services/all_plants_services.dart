@@ -7,9 +7,9 @@ import 'package:planta_tracker/models/plants_models.dart';
 
 class AllPlantServices {
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
+  List<Plant> plants = [];
 
-  Future<List<Plant>> getAllPlants(
-      BuildContext context, int currentPage) async {
+  Future<List<Plant>> getAllPin(BuildContext context) async {
     final locale = Localizations.localeOf(context);
     var flag = L10n.getFlag(locale.languageCode);
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
@@ -26,21 +26,21 @@ class AllPlantServices {
     final Map<String, dynamic> data = json.decode(resp.body);
     final accessToken = data["access_token"];
 
-    final allplant = Uri.parse('${Constants.baseUrl}/$flag/api/plants_map_api');
+    final allPinPlant =
+        Uri.parse('${Constants.baseUrl}/$flag/api/plants_map_api');
 
-    final response = await http.get(allplant,
+    final response = await http.get(allPinPlant,
         headers: <String, String>{'authorization': "Bearer $accessToken"});
 
-    // final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+    // final utf = const Utf8Decoder().convert(resp.body.codeUnits);
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final newMovies = (data['results'] as List)
-          .map((json) => Plant.fromJson(json))
-          .toList();
-      return newMovies;
+      final List<dynamic> data = json.decode(response.body);
+      plants = data.map((json) => Plant.fromJson(json)).toList();
+      return plants;
     } else {
-      throw Exception('Failed to load movies');
+      throw Exception('Something Error');
     }
   }
 }

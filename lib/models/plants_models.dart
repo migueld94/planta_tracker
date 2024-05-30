@@ -51,8 +51,8 @@ class Plant {
   double? latitude;
   double? longitude;
   String? imagenPrincipal;
-  Lifestage? lifestage;
-  EstadoActual? estadoActual;
+  String? lifestage;
+  String? estadoActual;
   DateTime? fechaRegistro;
 
   Plant({
@@ -72,8 +72,8 @@ class Plant {
         latitude: json["latitude"]?.toDouble(),
         longitude: json["longitude"]?.toDouble(),
         imagenPrincipal: json["imagen_principal"],
-        lifestage: lifestageValues.map[json["lifestage"]]!,
-        estadoActual: estadoActualValues.map[json["estado_actual"]]!,
+        lifestage: json["lifestage"],
+        estadoActual: json["estado_actual"],
         fechaRegistro: DateTime.parse(json["fecha_registro_"]),
       );
 
@@ -83,37 +83,37 @@ class Plant {
         "latitude": latitude,
         "longitude": longitude,
         "imagen_principal": imagenPrincipal,
-        "lifestage": lifestageValues.reverse[lifestage],
-        "estado_actual": estadoActualValues.reverse[estadoActual],
+        "lifestage": lifestage,
+        "estado_actual": estadoActual,
         "fecha_registro_":
             "${fechaRegistro?.year.toString().padLeft(4, '0')}-${fechaRegistro?.month.toString().padLeft(2, '0')}-${fechaRegistro?.day.toString().padLeft(2, '0')}",
       };
 }
 
-enum EstadoActual { APPROVED, EARRING, REVISION }
+// enum EstadoActual { APPROVED, EARRING, REVISION }
 
-final estadoActualValues = EnumValues({
-  "Approved": EstadoActual.APPROVED,
-  "Earring": EstadoActual.EARRING,
-  "Revision": EstadoActual.REVISION
-});
+// final estadoActualValues = EnumValues({
+//   "Approved": EstadoActual.APPROVED,
+//   "Earring": EstadoActual.EARRING,
+//   "Revision": EstadoActual.REVISION
+// });
 
-enum Lifestage { BLOOMING, FRUITING, YOUTH }
+// enum Lifestage { BLOOMING, FRUITING, YOUTH }
 
-final lifestageValues = EnumValues({
-  "Blooming": Lifestage.BLOOMING,
-  "Fruiting": Lifestage.FRUITING,
-  "Youth": Lifestage.YOUTH
-});
+// final lifestageValues = EnumValues({
+//   "Blooming": Lifestage.BLOOMING,
+//   "Fruiting": Lifestage.FRUITING,
+//   "Youth": Lifestage.YOUTH
+// });
 
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
+// class EnumValues<T> {
+//   Map<String, T> map;
+//   late Map<T, String> reverseMap;
 
-  EnumValues(this.map);
+//   EnumValues(this.map);
 
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
-}
+//   Map<T, String> get reverse {
+//     reverseMap = map.map((k, v) => MapEntry(v, k));
+//     return reverseMap;
+//   }
+// }
