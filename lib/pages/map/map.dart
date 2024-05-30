@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
@@ -39,6 +40,9 @@ class _MapViewState extends State<MapView> {
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
+
+  double maxLat = 0.0;
+  double minLat = 0.0;
 
   _loadMore() async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
@@ -161,7 +165,7 @@ class _MapViewState extends State<MapView> {
                               child: TextField(
                                 controller: controller,
                                 decoration: InputDecoration(
-                                  hintText: 'buscar',
+                                  hintText: '$maxLat, $minLat',
                                   hintStyle:
                                       const TextStyle(color: Colors.blue),
                                   prefixIcon: const Icon(Icons.search,
@@ -233,6 +237,7 @@ class _MapViewState extends State<MapView> {
             bottom: fabBottomOffset,
             child: FloatingActionButton(
               onPressed: () {
+                // getLocations();
                 context.read<GpsBloc>().add(GpsStarted());
               },
               backgroundColor: Colors.blue,
@@ -339,6 +344,22 @@ class _MapViewState extends State<MapView> {
         ],
       ),
     );
+  }
+
+  void getLocations() async {
+    var positions = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    if (positions.latitude > maxLat) {
+      maxLat = positions.latitude;
+    }
+
+    if (positions.latitude < minLat) {
+      minLat = positions.latitude;
+    }
+
+    log('Max Latitud $maxLat');
+    log('Min Latitud $minLat');
   }
 }
 
