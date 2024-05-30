@@ -46,9 +46,9 @@ class _MapViewState extends State<MapView> {
   late LatLngBounds visibleRegion;
 
   void _onMapChanged(MapPosition position, bool gesture) {
-    visibleRegion = position.bounds!;
     setState(() {
       // Obtener las latitudes y longitudes máximas y mínimas
+      visibleRegion = position.bounds!;
       double maxLat = visibleRegion.north;
       double minLat = visibleRegion.south;
       double maxLng = visibleRegion.east;
@@ -283,6 +283,18 @@ class _MapViewState extends State<MapView> {
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'dev.fleaflet.flutter_map.example',
                 subdomains: const ['a', 'b', 'c'],
+              ),
+              PolylineLayer(
+                polylines: [
+                  Polyline(
+                    points: [
+                      LatLng(visibleRegion.south, visibleRegion.west),
+                      LatLng(visibleRegion.north, visibleRegion.east),
+                    ],
+                    color: Colors.blue,
+                    strokeWidth: 2.0,
+                  ),
+                ],
               ),
               MarkerLayer(markers: [
                 Marker(
