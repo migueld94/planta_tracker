@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
+import 'package:planta_tracker/assets/utils/methods/utils.dart';
+import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/my_custom_card.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_event.dart';
@@ -12,6 +17,9 @@ import 'package:planta_tracker/blocs/gps/gps_state.dart';
 import 'package:planta_tracker/blocs/map/map_bloc.dart';
 import 'package:planta_tracker/blocs/map/map_state.dart';
 import 'package:http/http.dart' as http;
+import 'package:planta_tracker/models/plants_models.dart';
+import 'package:planta_tracker/pages/details_plant/details.dart';
+import 'package:planta_tracker/services/all_plants_services.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -21,6 +29,7 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> {
+  final AllPlantServices plantServices = AllPlantServices();
   TextEditingController? controller;
   String search = '';
   String selectedFilter = '';
@@ -236,30 +245,72 @@ class _MapViewState extends State<MapView> {
   }
 
   Widget _buildMap(BuildContext context, LatLng location) {
-    return FlutterMap(
-      options: MapOptions(
-        initialCenter: location,
-        minZoom: 5,
-        maxZoom: 25,
-        initialZoom: 18,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-        ),
-        MarkerLayer(markers: [
-          Marker(
-            point: location,
-            child: const Icon(
-              Icons.person_pin_circle,
-              color: Colors.blue,
-              size: 40,
+    return FutureBuilder<List<Plant>>(
+      future: AllPlantServices().getAllPin(context),
+      builder: (context, AsyncSnapshot<List<Plant>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData) {
+          List<Plant> plants = snapshot.data!;
+          return FlutterMap(
+            options: MapOptions(
+              initialCenter: location,
+              minZoom: 5,
+              maxZoom: 25,
+              initialZoom: 18,
             ),
-          ),
-        ]),
-      ],
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+              ),
+              MarkerLayer(markers: [
+                Marker(
+                  point: location,
+                  child: const Icon(
+                    Icons.person_pin_circle,
+                    color: Colors.blue,
+                    size: 40,
+                  ),
+                ),
+                ...createMarkers(plants, context),
+              ]),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          log(snapshot.error.toString());
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return const Center(child: Text('No data available.'));
+        }
+      },
     );
+
+    // FlutterMap(
+    //   options: MapOptions(
+    //     initialCenter: location,
+    //     minZoom: 5,
+    //     maxZoom: 25,
+    //     initialZoom: 18,
+    //   ),
+    //   children: [
+    //     TileLayer(
+    //       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    //       userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+    //     ),
+    //     MarkerLayer(markers: [
+    //       Marker(
+    //         point: location,
+    //         child: const Icon(
+    //           Icons.person_pin_circle,
+    //           color: Colors.blue,
+    //           size: 40,
+    //         ),
+    //       ),
+
+    //     ]),
+    //   ],
+    // );
   }
 
   Widget filterButton(String text, IconData icon, String filter) {
@@ -289,6 +340,57 @@ class _MapViewState extends State<MapView> {
       ),
     );
   }
+}
+
+//class CustomMaker para otros pines en el mapa
+class CustomMarker extends Marker {
+  const CustomMarker(LatLng point, Widget child)
+      : super(
+          point: point,
+          child: child,
+        );
+}
+
+//funcion para generar lista de posiciones para el customMarker
+// List<CustomMarker> createMarkers(List<Plant> plants, Widget child) {
+//   return plants.map((plant) {
+//     LatLng location = LatLng(plant.latitude!, plant.longitude!);
+//     return CustomMarker(location, child);
+//   }).toList();
+// }
+List<CustomMarker> createMarkers(List<Plant> plants, BuildContext context) {
+  return plants.map((plant) {
+    LatLng location = LatLng(plant.latitude!, plant.longitude!);
+
+    Color getColor() {
+      if ((plant.estadoActual?.toLowerCase() == 'aprobado') ||
+          (plant.estadoActual?.toLowerCase() == 'approved')) {
+        return PlantaColors.colorDarkGreen;
+      } else if ((plant.estadoActual?.toLowerCase() == 'en revision') ||
+          (plant.estadoActual?.toLowerCase() == 'revision')) {
+        return PlantaColors.colorLightGreen;
+      }
+      return PlantaColors.colorDarkOrange;
+    }
+
+    return CustomMarker(
+      location,
+      GestureDetector(
+        onTap: () {
+          info(context, plant.lifestage!, plant.estadoActual!,
+              plant.especiePlanta ?? 'Determinación pendiente', getColor(), () {
+            Navigator.push(
+                context, SlideRightRoute(page: Details(id: plant.id!)));
+          });
+        },
+        child: Icon(
+          Ionicons.location_sharp,
+          color: getColor(),
+          size: 40,
+        ),
+      ),
+    );
+  }).toList();
 }
 
 class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
