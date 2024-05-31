@@ -289,18 +289,6 @@ class _MapViewState extends State<MapView> {
                 userAgentPackageName: 'dev.fleaflet.flutter_map.example',
                 subdomains: const ['a', 'b', 'c'],
               ),
-              PolylineLayer(
-                polylines: [
-                  Polyline(
-                    points: [
-                      LatLng(visibleRegion.south, visibleRegion.west),
-                      LatLng(visibleRegion.north, visibleRegion.east),
-                    ],
-                    color: Colors.blue,
-                    strokeWidth: 2.0,
-                  ),
-                ],
-              ),
               MarkerLayer(markers: [
                 Marker(
                   point: location,
