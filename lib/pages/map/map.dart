@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -44,18 +46,7 @@ class _MapViewState extends State<MapView> {
   double maxLat = 0.0;
   double minLat = 0.0;
   late LatLngBounds visibleRegion;
-
-  void _onMapChanged(MapPosition position, bool gesture) {
-    setState(() {
-      // Obtener las latitudes y longitudes máximas y mínimas
-      visibleRegion = position.bounds!;
-      double maxLat = visibleRegion.north;
-      double minLat = visibleRegion.south;
-      double maxLng = visibleRegion.east;
-      double minLng = visibleRegion.west;
-      log('Max Lat: $maxLat, Min Lat: $minLat, Max Lng: $maxLng, Min Lng: $minLng');
-    });
-  }
+  final MapController _mapController = MapController();
 
   _loadMore() async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
@@ -271,12 +262,26 @@ class _MapViewState extends State<MapView> {
         } else if (snapshot.hasData) {
           List<Plant> plants = snapshot.data!;
           return FlutterMap(
+            mapController: _mapController,
             options: MapOptions(
+              interactionOptions: const InteractionOptions(
+                flags: InteractiveFlag.all,
+              ),
               initialCenter: location,
               minZoom: 5,
               maxZoom: 25,
               initialZoom: 18,
-              onPositionChanged: _onMapChanged,
+              onPositionChanged: (position, hasGesture) {
+                if (hasGesture) {
+                  setState(() {
+                    visibleRegion = LatLngBounds(
+                      position.bounds!.northEast,
+                      position.bounds!.southWest,
+                    );
+                    log('Región visible - Noroeste: ${visibleRegion.northEast}, Suroeste: ${visibleRegion.southWest}');
+                  });
+                }
+              },
             ),
             children: [
               TileLayer(
