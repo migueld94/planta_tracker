@@ -27,11 +27,18 @@ class _RegisterPlantState extends State<RegisterPlant> {
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
+    var locationStatus = await Permission.location.status;
+
     if (!cameraStatus.isGranted) {
       await Permission.camera.request();
     }
 
-    if (await Permission.camera.isGranted) {
+    if (!locationStatus.isGranted) {
+      await Permission.location.request();
+    }
+
+    if (await Permission.camera.isGranted &&
+        await Permission.location.isGranted) {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
       setState(() {
@@ -46,7 +53,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
       return _image;
     } else {
       return null;
-      //print('Permiso de cámara no concedido.');
+      //print('Permiso de cámara o localización no concedido.');
     }
   }
 
