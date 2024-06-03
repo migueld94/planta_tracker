@@ -2,7 +2,7 @@
 
 class Assets {
   // pictures
-  static const no_image = 'assets/images/no-image.png';
+  static const no_image = 'assets/images/De7au1t.png';
   static const page_01 = 'assets/images/page_01.png';
   static const page_02 = 'assets/images/page_02.png';
   static const page_03 = 'assets/images/page_03.png';

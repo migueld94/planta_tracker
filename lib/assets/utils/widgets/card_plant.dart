@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:planta_tracker/assets/utils/methods/utils.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 
 //* Aqui falta agregarle la foto
@@ -46,11 +45,16 @@ class CardPlant extends StatelessWidget {
         child: Row(
           children: [
             ClipOval(
-              child: Image.asset(
+              child: CachedNetworkImage(
+                filterQuality: FilterQuality.low,
+                imageUrl: picture,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    Icon(Ionicons.image_sharp, color: PlantaColors.colorBlack),
+                fit: BoxFit.cover,
                 width: 70,
                 height: 70,
-                picture,
-                fit: BoxFit.cover,
               ),
             ),
             horizontalMargin16,
@@ -75,7 +79,7 @@ class CardPlant extends StatelessWidget {
                             horizontal: 8.0, vertical: 4.0),
                         decoration: BoxDecoration(
                           borderRadius: borderRadius20,
-                          color: PlantaColors.colorDarkGreen,
+                          color: getColor(),
                         ),
                         child: Center(
                           child: AutoSizeText(
@@ -110,6 +114,17 @@ class CardPlant extends StatelessWidget {
       ),
     );
   }
+
+  Color getColor() {
+    if ((status.toLowerCase() == 'aprobado') ||
+        (status.toLowerCase() == 'approved')) {
+      return PlantaColors.colorDarkGreen;
+    } else if ((status.toLowerCase() == 'en revision') ||
+        (status.toLowerCase() == 'revision')) {
+      return PlantaColors.colorLightGreen;
+    }
+    return PlantaColors.colorDarkOrange;
+  }
 }
 
 class CardMyPlants extends StatelessWidget {
@@ -121,6 +136,8 @@ class CardMyPlants extends StatelessWidget {
     required this.date,
     required this.onTap,
     required this.picture,
+    required this.id,
+    required this.onTapDelete,
   });
 
   final String title;
@@ -129,6 +146,8 @@ class CardMyPlants extends StatelessWidget {
   final String status;
   final String date;
   final Function()? onTap;
+  final int id;
+  final Function()? onTapDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -159,11 +178,17 @@ class CardMyPlants extends StatelessWidget {
                 child: Row(
                   children: [
                     ClipOval(
-                      child: Image.asset(
+                      child: CachedNetworkImage(
+                        filterQuality: FilterQuality.low,
+                        imageUrl: picture,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(
+                            Ionicons.image_sharp,
+                            color: PlantaColors.colorBlack),
+                        fit: BoxFit.cover,
                         width: 70,
                         height: 70,
-                        picture,
-                        fit: BoxFit.cover,
                       ),
                     ),
                     horizontalMargin8,
@@ -192,7 +217,7 @@ class CardMyPlants extends StatelessWidget {
                                       horizontal: 8.0, vertical: 4.0),
                                   decoration: BoxDecoration(
                                     borderRadius: borderRadius20,
-                                    color: PlantaColors.colorDarkGreen,
+                                    color: getColor(),
                                   ),
                                   child: Center(
                                     child: AutoSizeText(
@@ -239,39 +264,53 @@ class CardMyPlants extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: PlantaColors.colorGreen),
-                        borderRadius: borderRadius10,
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Ionicons.pencil_outline,
-                          color: PlantaColors.colorBlack,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // EDITAR
                   GestureDetector(
                     onTap: () {
-                      warning(context, '¿Esta seguro de eliminar la planta?',
-                          () => null);
+                      if (status.toLowerCase() == 'pendiente') {
+                        null;
+                      } else {
+                        null;
+                      }
                     },
                     child: Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        border: Border.all(color: PlantaColors.colorOrange),
+                        border: Border.all(color: getColorOptionEdit()),
+                        borderRadius: borderRadius10,
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Ionicons.pencil_outline,
+                          color: ((status.toLowerCase() ==
+                                      'pendiente') ||
+                                  (status.toLowerCase() == 'earring'))
+                              ? PlantaColors.colorBlack
+                              : PlantaColors.colorGrey,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // ELIMINAR
+                  GestureDetector(
+                    onTap: onTapDelete,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: getColorOptionDelete()),
                         borderRadius: borderRadius10,
                       ),
                       child: Center(
                         child: Icon(
                           Ionicons.trash_outline,
-                          color: PlantaColors.colorBlack,
+                          color: ((status.toLowerCase() ==
+                                      'pendiente') ||
+                                  (status.toLowerCase() == 'earring'))
+                              ? PlantaColors.colorBlack
+                              : PlantaColors.colorGrey,
                         ),
                       ),
                     ),
@@ -283,5 +322,34 @@ class CardMyPlants extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color getColorOptionEdit() {
+    if ((status.toLowerCase() == 'pendiente') ||
+        (status.toLowerCase() == 'earring')) {
+      return PlantaColors.colorGreen;
+    } else {
+      return PlantaColors.colorGrey;
+    }
+  }
+
+  Color getColorOptionDelete() {
+    if ((status.toLowerCase() == 'pendiente') ||
+        (status.toLowerCase() == 'earring')) {
+      return PlantaColors.colorOrange;
+    } else {
+      return PlantaColors.colorGrey;
+    }
+  }
+
+  Color getColor() {
+    if ((status.toLowerCase() == 'aprobado') ||
+        (status.toLowerCase() == 'approved')) {
+      return PlantaColors.colorDarkGreen;
+    } else if ((status.toLowerCase() == 'en revision') ||
+        (status.toLowerCase() == 'revision')) {
+      return PlantaColors.colorLightGreen;
+    }
+    return PlantaColors.colorDarkOrange;
   }
 }

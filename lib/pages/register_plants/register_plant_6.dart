@@ -10,20 +10,20 @@ import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
-import 'package:planta_tracker/pages/register_plants/register_plant_5.dart';
+import 'package:planta_tracker/pages/register_plants/register_plant_end.dart';
 import 'package:planta_tracker/pages/register_plants/widget/camera_widget.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 
-class RegisterPlant4 extends StatefulWidget {
+class RegisterPlant6 extends StatefulWidget {
   final List<String>? pictures;
 
-  const RegisterPlant4({super.key, this.pictures});
+  const RegisterPlant6({super.key, this.pictures});
 
   @override
-  State<RegisterPlant4> createState() => _RegisterPlant4State();
+  State<RegisterPlant6> createState() => _RegisterPlant6State();
 }
 
-class _RegisterPlant4State extends State<RegisterPlant4> {
+class _RegisterPlant6State extends State<RegisterPlant6> {
   File? _image;
   bool flag = false;
   final OptionPlantServices optionServices = OptionPlantServices();
@@ -88,7 +88,7 @@ class _RegisterPlant4State extends State<RegisterPlant4> {
             GestureDetector(
               onTap: () => getImage(),
               child: CameraWidget(
-                text: AppLocalizations.of(context)!.plant_register_sheet_image,
+                text: 'Flor',
                 picture: _image,
               ),
             ),
@@ -106,16 +106,17 @@ class _RegisterPlant4State extends State<RegisterPlant4> {
                 if (flag == true) {
                   null;
                 } else {
-                  // widget.pictures!.add(Constants.noPicture);
+                  // log(widget.pictures!.toString());
                   File f = await optionServices
                       .getImageFileFromAssets(Constants.noPicture);
                   widget.pictures!.add(f.path);
 
+                  widget.pictures!.add(Constants.noPicture);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              RegisterPlant5(pictures: widget.pictures)));
+                              RegisterPlantEnd(pictures: widget.pictures)));
                 }
               },
               title: 'Omitir',
@@ -130,7 +131,7 @@ class _RegisterPlant4State extends State<RegisterPlant4> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RegisterPlant5(
+                          builder: (context) => RegisterPlantEnd(
                                 pictures: widget.pictures,
                               )),
                     );

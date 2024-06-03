@@ -1,20 +1,33 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
+import 'package:planta_tracker/models/comment_models.dart';
+import 'package:planta_tracker/pages/home/home.dart';
+import 'package:planta_tracker/services/plants_services.dart';
 
 class Comments extends StatefulWidget {
-  const Comments({super.key});
+  final int id;
+  const Comments({super.key, required this.id});
 
   @override
   State<Comments> createState() => _CommentsState();
 }
 
 class _CommentsState extends State<Comments> {
+  CommentModels comentario = CommentModels();
+  OptionPlantServices sendComments = OptionPlantServices();
   final GlobalKey<FormState> formKey = GlobalKey();
   final comment = TextEditingController();
   String comments = '';
@@ -76,58 +89,139 @@ class _CommentsState extends State<Comments> {
                 },
               ),
               verticalMargin16,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ButtomSmall(
-                    color: PlantaColors.colorOrange,
-                    onTap: () => Navigator.of(context).pop,
-                    title: AppLocalizations.of(context)!.text_buttom_denied,
-                  ),
-                  horizontalMargin16,
-                  ButtomSmall(
-                    color: PlantaColors.colorGreen,
-                    onTap: () => warning(
-                      context,
-                      '¿Esta seguro de enviar su comentario?',
-                      () {
-                        if (formKey.currentState!.validate()) {
-                          setState(() {
-                            comments = comment.text;
-                          });
-                          goToDetails(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+              ButtomLarge(
+                color: PlantaColors.colorGreen,
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    setState(() {
+                      comments = comment.text;
+                    });
+
+                    warning(context, '¿Esta seguro de enviar su comentario?',
+                        () async {
+                      EasyLoading.show();
+
+                      comentario.id = widget.id.toString();
+                      comentario.notas = comments;
+
+                      try {
+                        var res = await sendComments.addComment(comentario);
+
+                        switch (res!.statusCode) {
+                          case 200:
+                            log('Mision Cumplida');
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: PlantaColors.colorGreen,
                               content: Center(
                                 child: AutoSizeText(
-                                  'Comentario publicado con exito',
+                                  'Sucessfully post',
                                   style:
-                                      context.theme.textTheme.messengerScaffold,
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        } else {
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            ));
+                            EasyLoading.dismiss();
+                            if (!context.mounted) return;
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((_) async {
+                              Navigator.push(
+                                  context, SlideRightRoute(page: const Home()));
+                            });
+                            break;
+                          case 406:
+                            EasyLoading.dismiss();
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: PlantaColors.colorOrange,
                               content: Center(
                                 child: AutoSizeText(
-                                  'No ha realizado el comentario',
+                                  'Repetitive Post',
                                   style:
-                                      context.theme.textTheme.messengerScaffold,
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
+                            ));
+                            break;
+                          case 400:
+                            EasyLoading.dismiss();
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  res.body,
+                                  style:
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ),
+                            ));
+                            break;
+                          case 401:
+                            EasyLoading.dismiss();
+                            Navigator.pop(context);
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  res.body,
+                                  style:
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ),
+                            ));
+                            break;
+                          default:
+                            EasyLoading.dismiss();
+                            Navigator.pop(context);
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  res.body,
+                                  style:
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ),
+                            ));
+                            break;
                         }
-                      },
-                    ),
-                    title: AppLocalizations.of(context)!.text_buttom_accept,
-                  ),
-                ],
+                      } on SocketException {
+                        EasyLoading.dismiss();
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: PlantaColors.colorOrange,
+                          content: Center(
+                            child: AutoSizeText(
+                              'Sin conexión',
+                              style: context.theme.textTheme.text_01.copyWith(
+                                color: PlantaColors.colorWhite,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        ));
+                      }
+                    });
+                  }
+                },
+                title: 'Enviar',
               )
             ],
           ),

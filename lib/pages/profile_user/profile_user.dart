@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/models/user_models.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
@@ -64,9 +70,18 @@ class _UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<_UserProfile> {
-  final password = TextEditingController();
-  final name = TextEditingController();
-  final passwordConfirm = TextEditingController();
+  final nameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
+  final UserServices userServices = UserServices();
+  final storage = const FlutterSecureStorage();
+  final GlobalKey<FormState> formKeyName = GlobalKey();
+  final GlobalKey<FormState> formKeyPassword = GlobalKey();
+  final GlobalKey<FormState> formKeyPasswordConfirm = GlobalKey();
+
+  String fullName = '';
+  String password = '';
+  String passwordConfirm = '';
   bool visibility = true;
   bool visibilityConfirm = true;
   bool disabledPassword = false;
@@ -123,32 +138,36 @@ class _UserProfileState extends State<_UserProfile> {
                       ),
                     ],
                   )
-                : TextFormField(
-                    controller: name,
-                    obscureText: false,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: InputDecorations.authInputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PlantaColors.colorGreen),
-                        borderRadius: borderRadius10,
+                : Form(
+                    key: formKeyName,
+                    child: TextFormField(
+                      controller: nameController,
+                      obscureText: false,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: InputDecorations.authInputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: PlantaColors.colorGreen),
+                          borderRadius: borderRadius10,
+                        ),
+                        hintText: AppLocalizations.of(context)!.enter_full_name,
+                        labelText: AppLocalizations.of(context)!.full_name,
+                        icon: Icon(
+                          Ionicons.person_sharp,
+                          color: PlantaColors.colorGreen,
+                        ),
                       ),
-                      hintText: AppLocalizations.of(context)!.enter_full_name,
-                      labelText: AppLocalizations.of(context)!.full_name,
-                      icon: Icon(
-                        Ionicons.person_sharp,
-                        color: PlantaColors.colorGreen,
-                      ),
+                      onChanged: (value) {
+                        nameController.text = value;
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return AppLocalizations.of(context)!.obligatory_camp;
+                        }
+                        return null;
+                      },
                     ),
-                    onChanged: (value) {
-                      password.text = value;
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return AppLocalizations.of(context)!.obligatory_camp;
-                      }
-                      return null;
-                    },
                   ),
             verticalMargin24,
             AutoSizeText(
@@ -209,111 +228,308 @@ class _UserProfileState extends State<_UserProfile> {
               ],
             ),
             verticalMargin12,
-            TextFormField(
-              enabled: disabledPassword,
-              controller: password,
-              obscureText: false,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: InputDecorations.authInputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: PlantaColors.colorGreen),
-                  borderRadius: borderRadius10,
+            Form(
+              key: formKeyPassword,
+              child: TextFormField(
+                enabled: disabledPassword,
+                controller: passwordController,
+                obscureText: false,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: InputDecorations.authInputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: PlantaColors.colorGreen),
+                    borderRadius: borderRadius10,
+                  ),
+                  hintText: AppLocalizations.of(context)!.password_enter,
+                  labelText: AppLocalizations.of(context)!.password,
+                  suffix: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        visibility = !visibility;
+                      });
+                    },
+                    icon: visibility
+                        ? Icon(
+                            Ionicons.eye_off_outline,
+                            color: disabledPassword
+                                ? PlantaColors.colorGreen
+                                : PlantaColors.colorGrey,
+                          )
+                        : Icon(
+                            Ionicons.eye_outline,
+                            color: PlantaColors.colorGreen,
+                          ),
+                  ),
+                  icon: Icon(
+                    Ionicons.key_outline,
+                    color: disabledPassword
+                        ? PlantaColors.colorGreen
+                        : PlantaColors.colorGrey,
+                  ),
                 ),
-                hintText: AppLocalizations.of(context)!.password_enter,
-                labelText: AppLocalizations.of(context)!.password,
-                suffix: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      visibility = !visibility;
-                    });
-                  },
-                  icon: visibility
-                      ? Icon(
-                          Ionicons.eye_off_outline,
-                          color: disabledPassword
-                              ? PlantaColors.colorGreen
-                              : PlantaColors.colorGrey,
-                        )
-                      : Icon(
-                          Ionicons.eye_outline,
-                          color: PlantaColors.colorGreen,
-                        ),
-                ),
-                icon: Icon(
-                  Ionicons.key_outline,
-                  color: disabledPassword
-                      ? PlantaColors.colorGreen
-                      : PlantaColors.colorGrey,
-                ),
+                onChanged: (value) {
+                  passwordController.text = value;
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return AppLocalizations.of(context)!.obligatory_camp;
+                  }
+                  return null;
+                },
               ),
-              onChanged: (value) {
-                password.text = value;
-              },
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return AppLocalizations.of(context)!.obligatory_camp;
-                }
-                return null;
-              },
             ),
             verticalMargin12,
-            TextFormField(
-              enabled: disabledPassword,
-              controller: passwordConfirm,
-              obscureText: visibilityConfirm,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: InputDecorations.authInputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: PlantaColors.colorGreen),
-                  borderRadius: borderRadius10,
+            Form(
+              key: formKeyPasswordConfirm,
+              child: TextFormField(
+                enabled: disabledPassword,
+                controller: passwordConfirmController,
+                obscureText: visibilityConfirm,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: InputDecorations.authInputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: PlantaColors.colorGreen),
+                    borderRadius: borderRadius10,
+                  ),
+                  hintText:
+                      AppLocalizations.of(context)!.enter_password_confirm,
+                  labelText: AppLocalizations.of(context)!.password_confirm,
+                  icon: Icon(
+                    Ionicons.key_outline,
+                    color: disabledPassword
+                        ? PlantaColors.colorGreen
+                        : PlantaColors.colorGrey,
+                  ),
+                  suffix: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        visibilityConfirm = !visibilityConfirm;
+                      });
+                    },
+                    icon: visibilityConfirm
+                        ? Icon(
+                            Ionicons.eye_off_outline,
+                            color: disabledPassword
+                                ? PlantaColors.colorGreen
+                                : PlantaColors.colorGrey,
+                          )
+                        : Icon(
+                            Ionicons.eye_outline,
+                            color: PlantaColors.colorGreen,
+                          ),
+                  ),
                 ),
-                hintText: AppLocalizations.of(context)!.enter_password_confirm,
-                labelText: AppLocalizations.of(context)!.password_confirm,
-                icon: Icon(
-                  Ionicons.key_outline,
-                  color: disabledPassword
-                      ? PlantaColors.colorGreen
-                      : PlantaColors.colorGrey,
-                ),
-                suffix: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      visibilityConfirm = !visibilityConfirm;
-                    });
-                  },
-                  icon: visibilityConfirm
-                      ? Icon(
-                          Ionicons.eye_off_outline,
-                          color: disabledPassword
-                              ? PlantaColors.colorGreen
-                              : PlantaColors.colorGrey,
-                        )
-                      : Icon(
-                          Ionicons.eye_outline,
-                          color: PlantaColors.colorGreen,
-                        ),
-                ),
+                onChanged: (value2) {
+                  passwordConfirmController.text = value2;
+                },
+                validator: (value2) {
+                  if (value2!.isEmpty) {
+                    return AppLocalizations.of(context)!.obligatory_camp;
+                  }
+                  return null;
+                },
               ),
-              onChanged: (value) {
-                passwordConfirm.text = value;
-              },
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return AppLocalizations.of(context)!.obligatory_camp;
-                }
-                return null;
-              },
             ),
             const Expanded(flex: 5, child: SizedBox()),
             ButtomLarge(
               color: changeColor(),
-              onTap: () {
-                setState(() {
-                  disabledName = true;
-                  disabledPassword = false;
-                });
+              onTap: () async {
+                if (!disabledName) {
+                  if (formKeyName.currentState!.validate()) {
+                    formKeyName.currentState!.save();
+
+                    EasyLoading.show();
+                    setState(() {
+                      fullName = nameController.text;
+                    });
+
+                    try {
+                      var res =
+                          await userServices.changeName(context, fullName);
+
+                      switch (res.statusCode) {
+                        case 200:
+                          EasyLoading.dismiss();
+                          log('Nombre cambiado ${res.body}');
+
+                          if (!context.mounted) return;
+                          setState(() {
+                            disabledName = true;
+                          });
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((_) async {
+                            Navigator.pop(context);
+                          });
+                          break;
+                        case 400:
+                          EasyLoading.dismiss();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Credenciales incorrectas',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                        case 401:
+                          EasyLoading.dismiss();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Credenciales incorrectas',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                        default:
+                          EasyLoading.dismiss();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Credenciales incorrectas',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                      }
+                    } on SocketException {
+                      EasyLoading.dismiss();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: PlantaColors.colorOrange,
+                        content: Center(
+                          child: AutoSizeText(
+                            'Sin conexión',
+                            style: context.theme.textTheme.text_01.copyWith(
+                              color: PlantaColors.colorWhite,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ));
+                    } catch (e) {
+                      EasyLoading.dismiss();
+                      throw Exception(e);
+                    }
+                  }
+                }
+                if (disabledPassword) {
+                  log('Vas a cambiar el password');
+                  if (formKeyPassword.currentState!.validate() &&
+                      formKeyPasswordConfirm.currentState!.validate()) {
+                    formKeyPassword.currentState!.save();
+                    formKeyPasswordConfirm.currentState!.save();
+
+                    EasyLoading.show();
+                    setState(() {
+                      password = passwordController.text;
+                      passwordConfirm = passwordConfirmController.text;
+                    });
+
+                    try {
+                      var res = await userServices.changePassword(
+                          context, password, passwordConfirm);
+
+                      switch (res.statusCode) {
+                        case 200:
+                          EasyLoading.dismiss();
+                          log('Password ${res.body}');
+
+                          if (!context.mounted) return;
+                          setState(() {
+                            disabledPassword = false;
+                          });
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((_) async {
+                            Navigator.pop(context);
+                          });
+                          break;
+                        case 400:
+                          EasyLoading.dismiss();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Credenciales incorrectas',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                        case 401:
+                          EasyLoading.dismiss();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Credenciales incorrectas',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                        default:
+                          EasyLoading.dismiss();
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Credenciales incorrectas',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                          break;
+                      }
+                    } on SocketException {
+                      EasyLoading.dismiss();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: PlantaColors.colorOrange,
+                        content: Center(
+                          child: AutoSizeText(
+                            'Sin conexión',
+                            style: context.theme.textTheme.text_01.copyWith(
+                              color: PlantaColors.colorWhite,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ));
+                    } catch (e) {
+                      EasyLoading.dismiss();
+                      throw Exception(e);
+                    }
+                  }
+                }
               },
               title: 'Guardar',
             ),

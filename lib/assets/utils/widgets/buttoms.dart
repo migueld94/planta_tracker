@@ -69,3 +69,43 @@ class ButtomSmall extends StatelessWidget {
     );
   }
 }
+
+class ButtomSkip extends StatelessWidget {
+  const ButtomSkip({
+    super.key,
+    required this.color,
+    required this.onTap,
+    required this.title,
+    required this.colorText,
+  });
+
+  final Color color;
+  final Function() onTap;
+  final String title;
+  final Color colorText;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 120,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: borderRadius10,
+        ),
+        child: Center(
+          child: AutoSizeText(
+            title,
+            style: context.theme.textTheme.textButtomMedium.copyWith(
+              color: colorText,
+              decoration: TextDecoration.underline,
+              decorationThickness: 2.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
