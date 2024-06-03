@@ -40,9 +40,7 @@ class _LoginState extends State<Login> {
   void checkToken() async {
     var token = await storage.read(key: "token");
     if (token != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(context, SlideRightRoute(page: const Home()));
-      });
+      Navigator.push(context, FadeTransitionRoute(page: const Home()));
     }
   }
 
