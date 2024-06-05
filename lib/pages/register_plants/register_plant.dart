@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
-
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
