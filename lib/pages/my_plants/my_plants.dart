@@ -2,7 +2,9 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -40,13 +42,13 @@ class _MyPlantsState extends State<MyPlants> {
     String idioma = getFlag();
     log(token.toString());
 
-    final myPlantsUri =
-        Uri.parse('${Constants.baseUrl}/$idioma/api/my_plants?page=$next');
-
-    final response = await http.get(myPlantsUri,
-        headers: <String, String>{'authorization': "Token $token"});
-
     try {
+      final myPlantsUri =
+          Uri.parse('${Constants.baseUrl}/$idioma/api/my_plants?page=$next');
+
+      final response = await http.get(myPlantsUri,
+          headers: <String, String>{'authorization': "Token $token"});
+
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body)['results'] as List;
         if (json.isEmpty) {
@@ -58,8 +60,23 @@ class _MyPlantsState extends State<MyPlants> {
           });
         }
       }
+    } on SocketException {
+      EasyLoading.dismiss();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: PlantaColors.colorOrange,
+        content: Center(
+          child: AutoSizeText(
+            'Sin conexión',
+            style: context.theme.textTheme.text_01.copyWith(
+              color: PlantaColors.colorWhite,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
+      ));
     } catch (e) {
-      log('Error => ${e.toString()}');
+      EasyLoading.dismiss();
+      throw Exception(e);
     }
   }
 

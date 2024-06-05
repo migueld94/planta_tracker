@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,30 +38,49 @@ class _AllPlantsState extends State<AllPlants> {
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
 
-    var resp = await http.post(secretUrl, headers: <String, String>{
-      'authorization': basicAuth
-    }, body: {
-      "grant_type": "client_credentials",
-    });
-
-    final Map<String, dynamic> data = json.decode(resp.body);
-    final accessToken = data["access_token"];
-
-    String idioma = getFlag();
-
-    final allplants =
-        Uri.parse('${Constants.baseUrl}/$idioma/api/plants_api?page=$next');
-
-    final response = await http.get(allplants,
-        headers: <String, String>{'authorization': "Bearer $accessToken"});
-
-    final utf = const Utf8Decoder().convert(response.body.codeUnits);
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(utf)['results'] as List;
-      setState(() {
-        items.addAll(json);
+    try {
+      var resp = await http.post(secretUrl, headers: <String, String>{
+        'authorization': basicAuth
+      }, body: {
+        "grant_type": "client_credentials",
       });
+
+      final Map<String, dynamic> data = json.decode(resp.body);
+      final accessToken = data["access_token"];
+
+      String idioma = getFlag();
+
+      final allplants =
+          Uri.parse('${Constants.baseUrl}/$idioma/api/plants_api?page=$next');
+
+      final response = await http.get(allplants,
+          headers: <String, String>{'authorization': "Bearer $accessToken"});
+
+      final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(utf)['results'] as List;
+        setState(() {
+          items.addAll(json);
+        });
+      }
+    } on SocketException {
+      EasyLoading.dismiss();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: PlantaColors.colorOrange,
+        content: Center(
+          child: AutoSizeText(
+            'Sin conexión',
+            style: context.theme.textTheme.text_01.copyWith(
+              color: PlantaColors.colorWhite,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
+      ));
+    } catch (e) {
+      EasyLoading.dismiss();
+      throw Exception(e);
     }
   }
 
