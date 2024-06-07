@@ -174,109 +174,109 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                         plant.notas = note.text;
                         plant.lifestage = lifestage;
 
-                        // EasyLoading.show();
-                        // try {
-                        //   var res = await optionServices.register(plant);
+                        EasyLoading.show();
+                        try {
+                          var res = await optionServices.register(plant);
 
-                        //   switch (res!.statusCode) {
-                        //     case 200:
-                        //       log('Mision Cumplida');
-                        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //         backgroundColor: PlantaColors.colorGreen,
-                        //         content: Center(
-                        //           child: AutoSizeText(
-                        //             res.body,
-                        //             style:
-                        //                 context.theme.textTheme.text_01.copyWith(
-                        //               color: PlantaColors.colorWhite,
-                        //               fontSize: 16.0,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ));
-                        //       EasyLoading.dismiss();
-                        //       if (!context.mounted) return;
-                        //       WidgetsBinding.instance
-                        //           .addPostFrameCallback((_) async {
-                        //         Navigator.push(
-                        //             context, SlideRightRoute(page: const Home()));
-                        //       });
-                        //       await storage.delete(key: 'lifestage');
-                        //       break;
-                        //     case 400:
-                        //       EasyLoading.dismiss();
-                        //       Navigator.push(
-                        //           context, SlideRightRoute(page: const Home()));
-                        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //         backgroundColor: PlantaColors.colorOrange,
-                        //         content: Center(
-                        //           child: AutoSizeText(
-                        //             res.body,
-                        //             style:
-                        //                 context.theme.textTheme.text_01.copyWith(
-                        //               color: PlantaColors.colorWhite,
-                        //               fontSize: 16.0,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ));
-                        //       break;
-                        //     case 401:
-                        //       EasyLoading.dismiss();
-                        //       if (!context.mounted) return;
-                        //       Navigator.push(
-                        //           context, SlideRightRoute(page: const Home()));
-                        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //         backgroundColor: PlantaColors.colorOrange,
-                        //         content: Center(
-                        //           child: AutoSizeText(
-                        //             res.body,
-                        //             style:
-                        //                 context.theme.textTheme.text_01.copyWith(
-                        //               color: PlantaColors.colorWhite,
-                        //               fontSize: 16.0,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ));
-                        //       break;
-                        //     default:
-                        //       EasyLoading.dismiss();
-                        //       if (!context.mounted) return;
-                        //       Navigator.push(
-                        //           context, SlideRightRoute(page: const Home()));
-                        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //         backgroundColor: PlantaColors.colorOrange,
-                        //         content: Center(
-                        //           child: AutoSizeText(
-                        //             res.body,
-                        //             style:
-                        //                 context.theme.textTheme.text_01.copyWith(
-                        //               color: PlantaColors.colorWhite,
-                        //               fontSize: 16.0,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ));
-                        //       break;
-                        //   }
-                        // } on SocketException {
-                        //   EasyLoading.dismiss();
-                        //   Navigator.push(
-                        //       context, SlideRightRoute(page: const Home()));
-                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //     backgroundColor: PlantaColors.colorOrange,
-                        //     content: Center(
-                        //       child: AutoSizeText(
-                        //         'Sin conexión',
-                        //         style: context.theme.textTheme.text_01.copyWith(
-                        //           color: PlantaColors.colorWhite,
-                        //           fontSize: 16.0,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ));
-                        // }
+                          switch (res!.statusCode) {
+                            case 200:
+                              log('Mision Cumplida');
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorGreen,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    res.body,
+                                    style:
+                                        context.theme.textTheme.text_01.copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ));
+                              EasyLoading.dismiss();
+                              if (!context.mounted) return;
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) async {
+                                Navigator.push(
+                                    context, SlideRightRoute(page: const Home()));
+                              });
+                              await storage.delete(key: 'lifestage');
+                              break;
+                            case 400:
+                              EasyLoading.dismiss();
+                              Navigator.push(
+                                  context, SlideRightRoute(page: const Home()));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    res.body,
+                                    style:
+                                        context.theme.textTheme.text_01.copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ));
+                              break;
+                            case 401:
+                              EasyLoading.dismiss();
+                              if (!context.mounted) return;
+                              Navigator.push(
+                                  context, SlideRightRoute(page: const Home()));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    res.body,
+                                    style:
+                                        context.theme.textTheme.text_01.copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ));
+                              break;
+                            default:
+                              EasyLoading.dismiss();
+                              if (!context.mounted) return;
+                              Navigator.push(
+                                  context, SlideRightRoute(page: const Home()));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    res.body,
+                                    style:
+                                        context.theme.textTheme.text_01.copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ));
+                              break;
+                          }
+                        } on SocketException {
+                          EasyLoading.dismiss();
+                          Navigator.push(
+                              context, SlideRightRoute(page: const Home()));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Sin conexión',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
+                        }
                       } else {
                         _lifestage.currentState?.shake();
                       }
