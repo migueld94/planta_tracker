@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,30 +38,49 @@ class _AllPlantsState extends State<AllPlants> {
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
 
-    var resp = await http.post(secretUrl, headers: <String, String>{
-      'authorization': basicAuth
-    }, body: {
-      "grant_type": "client_credentials",
-    });
-
-    final Map<String, dynamic> data = json.decode(resp.body);
-    final accessToken = data["access_token"];
-
-    String idioma = getFlag();
-
-    final allplants =
-        Uri.parse('${Constants.baseUrl}/$idioma/api/plants_api?page=$next');
-
-    final response = await http.get(allplants,
-        headers: <String, String>{'authorization': "Bearer $accessToken"});
-
-    final utf = const Utf8Decoder().convert(response.body.codeUnits);
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(utf)['results'] as List;
-      setState(() {
-        items.addAll(json);
+    try {
+      var resp = await http.post(secretUrl, headers: <String, String>{
+        'authorization': basicAuth
+      }, body: {
+        "grant_type": "client_credentials",
       });
+
+      final Map<String, dynamic> data = json.decode(resp.body);
+      final accessToken = data["access_token"];
+
+      String idioma = getFlag();
+
+      final allplants =
+          Uri.parse('${Constants.baseUrl}/$idioma/api/plants_api?page=$next');
+
+      final response = await http.get(allplants,
+          headers: <String, String>{'authorization': "Bearer $accessToken"});
+
+      final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(utf)['results'] as List;
+        setState(() {
+          items.addAll(json);
+        });
+      }
+    } on SocketException {
+      EasyLoading.dismiss();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: PlantaColors.colorDarkOrange,
+        content: Center(
+          child: AutoSizeText(
+            'Sin conexión',
+            style: context.theme.textTheme.text_01.copyWith(
+              color: PlantaColors.colorWhite,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
+      ));
+    } catch (e) {
+      EasyLoading.dismiss();
+      throw Exception(e);
     }
   }
 
@@ -167,123 +188,3 @@ class _AllPlantsState extends State<AllPlants> {
     );
   }
 }
-
-// class All extends StatefulWidget {
-//   const All({super.key});
-
-//   @override
-//   State<All> createState() => _AllState();
-// }
-
-// class _AllState extends State<All> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: const AllPlants(),
-//       floatingActionButton: FloatingActionButton(
-//         shape: const CircleBorder(),
-//         backgroundColor: PlantaColors.colorGreen,
-//         onPressed: () => goToRegisterPlant(context),
-//         child: Icon(
-//           Ionicons.add_outline,
-//           color: PlantaColors.colorWhite,
-//         ),
-//       ),
-//       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//       bottomNavigationBar: Ink(
-//         height: 60.0,
-//         child: ClipRRect(
-//           borderRadius: BorderRadius.only(
-//             topLeft: borderRadius10.topLeft,
-//             topRight: borderRadius10.topRight,
-//           ),
-//           child: BottomAppBar(
-//             color: PlantaColors.colorGreen,
-//             elevation: 0,
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 IconButton(
-//                   icon: Icon(
-//                     Ionicons.people_outline,
-//                     color: PlantaColors.colorWhite,
-//                   ),
-//                   onPressed: () => goToProfile(context),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class AllPlants extends StatefulWidget {
-//   const AllPlants({super.key});
-
-//   @override
-//   State<AllPlants> createState() => _AllPlantsState();
-// }
-
-// class _AllPlantsState extends State<AllPlants> {
-//   final ScrollController _scrollController = ScrollController();
-//   int currentPage = 1;
-//   List<Plant> movies = [];
-//   final AllPlantServices plantServices = AllPlantServices();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _scrollController.addListener(() async {
-//       if (_scrollController.position.pixels ==
-//           _scrollController.position.maxScrollExtent) {
-//         currentPage++;
-//         await plantServices
-//             .getAllPlants(context, currentPage)
-//             .then((newMovies) {
-//           setState(() {
-//             movies.addAll(newMovies);
-//           });
-//         });
-//         log(movies.length.toString());
-//       }
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder<List<Plant>>(
-//       future: plantServices.getAllPlants(context, currentPage),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return const Center(child: CircularProgressIndicator());
-//         } else if (snapshot.hasError) {
-//           return const Text('Error loading data');
-//         } else if (snapshot.hasData) {
-//           movies.addAll(snapshot.data!);
-//           return ListView.builder(
-//             controller: _scrollController,
-//             itemCount: movies.length,
-//             itemBuilder: (context, index) {
-//               log(movies.length.toString());
-//               return CardPlant(
-//                 picture: movies[index].imagenPrincipal,
-//                 title: movies[index].name,
-//                 lifestage: movies[index].lifestage,
-//                 status: movies[index].status,
-//                 date: '17/02/90',
-//                 onTap: () {
-//                   Navigator.push(
-//                       context, SlideRightRoute(page: const Details()));
-//                 },
-//               );
-//             },
-//           );
-//         } else {
-//           return const Text('No data available');
-//         }
-//       },
-//     );
-//   }
-// }

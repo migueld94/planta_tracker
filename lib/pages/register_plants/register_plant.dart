@@ -1,12 +1,15 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously, unused_element
+import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:exif/exif.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
-import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
@@ -55,6 +58,11 @@ class _RegisterPlantState extends State<RegisterPlant> {
       return null;
       //print('Permiso de cámara o localización no concedido.');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -109,15 +117,30 @@ class _RegisterPlantState extends State<RegisterPlant> {
             emptyWidget,
             ButtomSmall(
                 color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
-                onTap: () {
+                onTap: () async {
                   if (flag == true) {
-                    log(_image!.path);
-                    pictures!.add(_image!.path);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                RegisterPlant2(pictures: pictures)));
+                    final bytes = await _image!.readAsBytes();
+                    final data =
+                        await readExifFromBytes(Uint8List.fromList(bytes));
+                    // final gpsData = data['GPS'];
+                    final latitude = data['GPS GPSLatitude'];
+                    final longitude = data['GPS GPSLongitude'];
+
+                    if (longitude != null && latitude != null) {
+                      // final lat = _parseCoordinate(latitude);
+                      // final lon = _parseCoordinate(longitude);
+                      // log('Latitud: $lat, Longitud: $lon');
+
+                      pictures!.add(_image!.path);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  RegisterPlant2(pictures: pictures)));
+                    } else {
+                      alert(context,
+                          'La imagen capturada no tiene informacion de GPS, por favor usted debe activar los permisos de su camara para continuar con el registro de su planta.');
+                    }
                   } else {
                     null;
                   }
@@ -127,5 +150,14 @@ class _RegisterPlantState extends State<RegisterPlant> {
         ),
       ),
     );
+  }
+
+  // Metodo para calcular la latitud y longitud que nos envia la foto en su metadata
+  double _parseCoordinate(IfdTag coordinate) {
+    final values = coordinate.values.toList();
+    final degrees = values[0]?.toDouble() ?? 0.0;
+    final minutes = values[1]?.toDouble() ?? 0.0;
+    final seconds = values[2]?.toDouble() ?? 0.0;
+    return degrees + (minutes / 60) + (seconds / 3600);
   }
 }

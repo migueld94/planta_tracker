@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:planta_tracker/assets/l10n/l10n.dart';
+import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/map/map_event.dart';
-import 'package:planta_tracker/pages/login/login.dart';
+import 'package:planta_tracker/dependency_injection.dart';
 import 'package:planta_tracker/pages/onboarding/onboarding.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 
@@ -31,6 +33,7 @@ void main() async {
       child: MyApp(showHome: showHome),
     ),
   );
+  DependencyInjection.init();
 }
 
 void configLoading() {
@@ -64,7 +67,7 @@ class MyApp extends StatelessWidget {
       },
       builder: (context, child) {
         final provider = Provider.of<ThemeProvider>(context);
-        return MaterialApp(
+        return GetMaterialApp(
           builder: EasyLoading.init(),
           debugShowCheckedModeBanner: false,
           title: 'Planta! Tracker',
