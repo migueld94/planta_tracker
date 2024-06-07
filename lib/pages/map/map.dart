@@ -293,17 +293,17 @@ class _MapViewState extends State<MapView> {
               minZoom: 5,
               maxZoom: 25,
               initialZoom: 18,
-              onPositionChanged: (position, hasGesture) {
-                if (hasGesture) {
-                  setState(() {
-                    visibleRegion = LatLngBounds(
-                      position.bounds!.northEast,
-                      position.bounds!.southWest,
-                    );
-                    log('Región visible - Noroeste: ${visibleRegion.northEast}, Suroeste: ${visibleRegion.southWest}');
-                  });
-                }
-              },
+              // onPositionChanged: (position, hasGesture) {
+              //   if (hasGesture) {
+              //     setState(() {
+              //       visibleRegion = LatLngBounds(
+              //         position.bounds!.northEast,
+              //         position.bounds!.southWest,
+              //       );
+              //       log('Región visible - Noroeste: ${visibleRegion.northEast}, Suroeste: ${visibleRegion.southWest}');
+              //     });
+              //   }
+              // },
             ),
             children: [
               TileLayer(

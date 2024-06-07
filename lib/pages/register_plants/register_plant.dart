@@ -30,21 +30,12 @@ class _RegisterPlantState extends State<RegisterPlant> {
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
-    var status = await Permission.location.status;
 
     if (!cameraStatus.isGranted) {
       await Permission.camera.request();
-    } else {
-      openAppSettings();
     }
 
-    if (status.isPermanentlyDenied) {
-      openAppSettings();
-    } else {
-      await Permission.location.request();
-    }
-
-    if (cameraStatus.isGranted && status.isGranted) {
+    if (cameraStatus.isGranted) {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
       setState(() {

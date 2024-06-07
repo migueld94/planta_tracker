@@ -33,7 +33,7 @@ void main() async {
       child: MyApp(showHome: showHome),
     ),
   );
-  // DependencyInjection.init();
+  DependencyInjection.init();
 }
 
 void configLoading() {
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
       },
       builder: (context, child) {
         final provider = Provider.of<ThemeProvider>(context);
-        return MaterialApp(
+        return GetMaterialApp(
           builder: EasyLoading.init(),
           debugShowCheckedModeBanner: false,
           title: 'Planta! Tracker',

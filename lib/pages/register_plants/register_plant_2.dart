@@ -101,6 +101,7 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
                 } else {
                   File f = await optionServices
                       .getImageFileFromAssets(Constants.noPicture);
+
                   widget.pictures!.add(f.path);
 
                   Navigator.push(

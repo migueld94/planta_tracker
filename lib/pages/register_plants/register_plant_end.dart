@@ -157,6 +157,9 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                     onTap: () async {
                       var lifestage = await storage.read(key: 'lifestage');
 
+                      log(widget.pictures.toString());
+                      log(widget.pictures!.length.toString());
+
                       if (formKey.currentState!.validate() &&
                           lifestage != null) {
                         formKey.currentState!.save();
