@@ -1,12 +1,12 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
+import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:exif/exif.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:exif/exif.dart';
-import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
@@ -30,11 +30,21 @@ class _RegisterPlantState extends State<RegisterPlant> {
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
+    var status = await Permission.location.status;
+
     if (!cameraStatus.isGranted) {
       await Permission.camera.request();
+    } else {
+      openAppSettings();
     }
 
-    if (await Permission.camera.isGranted) {
+    if (status.isPermanentlyDenied) {
+      openAppSettings();
+    } else {
+      await Permission.location.request();
+    }
+
+    if (cameraStatus.isGranted && status.isGranted) {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
       setState(() {
