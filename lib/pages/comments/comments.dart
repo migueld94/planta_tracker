@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -52,7 +51,7 @@ class _CommentsState extends State<Comments> {
         ),
         backgroundColor: PlantaColors.colorGreen,
         title: AutoSizeText(
-          'Añadir comentario',
+          AppLocalizations.of(context)!.add_comments,
           style: context.theme.textTheme.titleApBar,
         ),
       ),
@@ -71,8 +70,8 @@ class _CommentsState extends State<Comments> {
                 maxLength: 150,
                 textAlign: TextAlign.justify,
                 decoration: InputDecorations.authInputDecoration(
-                  hintText: 'Escriba su comentario aqui...',
-                  labelText: 'Escriba su comentario aqui...',
+                  hintText: AppLocalizations.of(context)!.write_comments,
+                  labelText: AppLocalizations.of(context)!.write_comments,
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: PlantaColors.colorGreen),
                     borderRadius: borderRadius10,
@@ -97,7 +96,8 @@ class _CommentsState extends State<Comments> {
                       comments = comment.text;
                     });
 
-                    warning(context, '¿Esta seguro de enviar su comentario?',
+                    warning(context,
+                        AppLocalizations.of(context)!.message_add_comments,
                         () async {
                       EasyLoading.show();
 
@@ -109,12 +109,11 @@ class _CommentsState extends State<Comments> {
 
                         switch (res!.statusCode) {
                           case 200:
-                            log('Mision Cumplida');
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: PlantaColors.colorGreen,
                               content: Center(
                                 child: AutoSizeText(
-                                  'Sucessfully post',
+                                  AppLocalizations.of(context)!.publish,
                                   style:
                                       context.theme.textTheme.text_01.copyWith(
                                     color: PlantaColors.colorWhite,
@@ -138,7 +137,8 @@ class _CommentsState extends State<Comments> {
                               backgroundColor: PlantaColors.colorOrange,
                               content: Center(
                                 child: AutoSizeText(
-                                  'Repetitive Post',
+                                  AppLocalizations.of(context)!
+                                      .publish_repetitive,
                                   style:
                                       context.theme.textTheme.text_01.copyWith(
                                     color: PlantaColors.colorWhite,
@@ -209,7 +209,7 @@ class _CommentsState extends State<Comments> {
                           backgroundColor: PlantaColors.colorOrange,
                           content: Center(
                             child: AutoSizeText(
-                              'Sin conexión',
+                              AppLocalizations.of(context)!.no_internet,
                               style: context.theme.textTheme.text_01.copyWith(
                                 color: PlantaColors.colorWhite,
                                 fontSize: 16.0,
@@ -221,7 +221,7 @@ class _CommentsState extends State<Comments> {
                     });
                   }
                 },
-                title: 'Enviar',
+                title: AppLocalizations.of(context)!.text_buttom_send,
               )
             ],
           ),

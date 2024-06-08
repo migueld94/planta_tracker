@@ -18,6 +18,7 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
 import 'package:planta_tracker/services/plants_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyPlants extends StatefulWidget {
   const MyPlants({super.key});
@@ -34,8 +35,6 @@ class _MyPlantsState extends State<MyPlants> {
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
-  final String noPicture =
-      'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg';
 
   _loadMore() async {
     final token = await storage.read(key: "token");
@@ -118,15 +117,13 @@ class _MyPlantsState extends State<MyPlants> {
               separatorBuilder: (context, index) => verticalMargin4,
               itemBuilder: (context, index) {
                 EasyLoading.dismiss();
-                if (index >= items.length) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
+                if (index < items.length) {
                   final date = DateTime.parse(items[index]["fecha_registro_"]);
                   return CardMyPlants(
                     id: items[index]['id'],
-                    picture: items[index]['imagen_principal'] ?? noPicture,
+                    picture: items[index]['imagen_principal'],
                     title: items[index]['especie_planta'] ??
-                        'Determinación pendiente',
+                        AppLocalizations.of(context)!.name_plant,
                     lifestage: items[index]['lifestage'] ?? '',
                     status: items[index]['estado_actual'] ?? '',
                     date: '${date.day} / ${date.month} / ${date.year}',
@@ -141,21 +138,24 @@ class _MyPlantsState extends State<MyPlants> {
 
                     // Este es el onTap del servicio Eliminar Planta solo se pueden eliminar los PENDIENTES
                     onTapDelete: () {
-                      if (items[index]['estado_actual']
-                              .toString()
-                              .toLowerCase() ==
-                          'pendiente') {
+                      var status = items[index]['estado_actual']
+                          .toString()
+                          .toLowerCase();
+                      if ((status == 'pendiente') || (status == 'earring')) {
                         warning(
                           context,
                           '¿Esta seguro de eliminar la planta?',
                           () async {
+                            EasyLoading.show();
+                            Navigator.pop(context);
+
                             await optionServices
                                 .delete(items[index]['id'].toString());
-                            Navigator.pop(context);
+
                             setState(() {
                               items = [];
                             });
-                            EasyLoading.show();
+
                             _loadMore();
                           },
                         );
@@ -163,6 +163,26 @@ class _MyPlantsState extends State<MyPlants> {
                         null;
                       }
                     },
+                  );
+                } else if (index == items.length) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                    child: Center(
+                      child: AutoSizeText(
+                        'No more data',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.0),
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
               },

@@ -63,7 +63,7 @@ class _DetailsState extends State<Details> {
                     color: PlantaColors.colorWhite,
                   ),
                   AutoSizeText(
-                    'Comentarios',
+                    AppLocalizations.of(context)!.comments,
                     style: TextStyle(
                       color: PlantaColors.colorWhite,
                     ),
@@ -184,12 +184,12 @@ class DetailsWidget extends StatelessWidget {
             ),
             verticalMargin8,
             AutoSizeText(
-              details.especiePlanta ?? 'Determinación pendiente',
+              details.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
               style: context.theme.textTheme.h2.copyWith(fontSize: 23.0),
             ),
             verticalMargin8,
             AutoSizeText(
-              details.direccionGps ?? 'No se registro la dirección',
+              details.direccionGps ?? AppLocalizations.of(context)!.address,
               style: context.theme.textTheme.text_02,
             ),
             verticalMargin8,
@@ -238,12 +238,12 @@ class DetailsWidget extends StatelessWidget {
             ),
             verticalMargin16,
             AutoSizeText(
-              'Foto tomada por: ${details.nombreUser}',
+              '${AppLocalizations.of(context)!.take_photo} ${details.nombreUser}',
               style: context.theme.textTheme.text_01.copyWith(fontSize: 16),
             ),
             verticalMargin8,
             AutoSizeText(
-              'Notas',
+              AppLocalizations.of(context)!.note,
               style: context.theme.textTheme.h2,
             ),
             verticalMargin8,
@@ -251,7 +251,7 @@ class DetailsWidget extends StatelessWidget {
               height: 300,
               child: SingleChildScrollView(
                 child: AutoSizeText(
-                  details.notas ?? 'No se encontraron notas',
+                  details.notas ?? AppLocalizations.of(context)!.no_notes,
                   style: context.theme.textTheme.text_01,
                   textAlign: TextAlign.justify,
                 ),

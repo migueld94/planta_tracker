@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
                         Navigator.pop(context);
 
                         WidgetsBinding.instance.addPostFrameCallback((_) async {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                               context, SlideRightRoute(page: const Login()));
                         });
                         await storage.delete(key: 'token');

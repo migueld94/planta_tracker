@@ -9,6 +9,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,6 +27,8 @@ class RegisterPlant extends StatefulWidget {
 class _RegisterPlantState extends State<RegisterPlant> {
   File? _image;
   List<String>? pictures = [];
+  List<Map<String, dynamic>> valores = [];
+
   bool flag = false;
 
   Future<File?> getImage() async {
@@ -131,12 +134,18 @@ class _RegisterPlantState extends State<RegisterPlant> {
                       // final lon = _parseCoordinate(longitude);
                       // log('Latitud: $lat, Longitud: $lon');
 
-                      pictures!.add(_image!.path);
+                      // pictures!.add(_image!.path);
+
+                      valores.add({
+                        "imagen": _image!.path,
+                        "name": AppLocalizations.of(context)!
+                            .plant_register_full_image
+                      });
+
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  RegisterPlant2(pictures: pictures)));
+                          SlideRightRoute(
+                              page: RegisterPlant2(valores: valores)));
                     } else {
                       alert(context,
                           'La imagen capturada no tiene informacion de GPS, por favor usted debe activar los permisos de su camara para continuar con el registro de su planta.');

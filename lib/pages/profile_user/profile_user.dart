@@ -122,7 +122,7 @@ class _UserProfileState extends State<_UserProfile> {
                         onTap: () {
                           warning(
                             context,
-                            '¿Esta seguro de cambiar el nombre?',
+                            AppLocalizations.of(context)!.message_change_name,
                             () {
                               setState(() {
                                 disabledName = false;
@@ -171,14 +171,14 @@ class _UserProfileState extends State<_UserProfile> {
                   ),
             verticalMargin24,
             AutoSizeText(
-              'Correo: ${widget.user.email}',
+              '${AppLocalizations.of(context)!.email}: ${widget.user.email}',
               style: context.theme.textTheme.text_01,
             ),
             verticalMargin12,
             Row(
               children: [
                 AutoSizeText(
-                  'Cambiar lenguaje:',
+                  AppLocalizations.of(context)!.select_languages,
                   style: context.theme.textTheme.text_01,
                 ),
                 horizontalMargin12,
@@ -202,7 +202,7 @@ class _UserProfileState extends State<_UserProfile> {
             Row(
               children: [
                 AutoSizeText(
-                  'Contraseña',
+                  AppLocalizations.of(context)!.password,
                   style: context.theme.textTheme.text_01,
                 ),
                 horizontalMargin8,
@@ -210,7 +210,7 @@ class _UserProfileState extends State<_UserProfile> {
                   onTap: () {
                     warning(
                       context,
-                      '¿Esta seguro de cambiar contraseña?',
+                      AppLocalizations.of(context)!.message_change_password,
                       () {
                         setState(() {
                           disabledPassword = true;
@@ -336,6 +336,7 @@ class _UserProfileState extends State<_UserProfile> {
             ButtomLarge(
               color: changeColor(),
               onTap: () async {
+                //* AQUI_SE CAMBIA EL NOMBRE
                 if (!disabledName) {
                   if (formKeyName.currentState!.validate()) {
                     formKeyName.currentState!.save();
@@ -352,8 +353,6 @@ class _UserProfileState extends State<_UserProfile> {
                       switch (res.statusCode) {
                         case 200:
                           EasyLoading.dismiss();
-                          log('Nombre cambiado ${res.body}');
-
                           if (!context.mounted) return;
                           setState(() {
                             disabledName = true;
@@ -369,7 +368,8 @@ class _UserProfileState extends State<_UserProfile> {
                             backgroundColor: PlantaColors.colorOrange,
                             content: Center(
                               child: AutoSizeText(
-                                'Credenciales incorrectas',
+                                AppLocalizations.of(context)!
+                                    .verify_credentials,
                                 style: context.theme.textTheme.text_01.copyWith(
                                   color: PlantaColors.colorWhite,
                                   fontSize: 16.0,
@@ -385,7 +385,8 @@ class _UserProfileState extends State<_UserProfile> {
                             backgroundColor: PlantaColors.colorOrange,
                             content: Center(
                               child: AutoSizeText(
-                                'Credenciales incorrectas',
+                                AppLocalizations.of(context)!
+                                    .verify_credentials,
                                 style: context.theme.textTheme.text_01.copyWith(
                                   color: PlantaColors.colorWhite,
                                   fontSize: 16.0,
@@ -401,7 +402,10 @@ class _UserProfileState extends State<_UserProfile> {
                             backgroundColor: PlantaColors.colorOrange,
                             content: Center(
                               child: AutoSizeText(
-                                'Credenciales incorrectas',
+                                // 'Credenciales incorrectas',
+                                AppLocalizations.of(context)!
+                                    .verify_credentials,
+
                                 style: context.theme.textTheme.text_01.copyWith(
                                   color: PlantaColors.colorWhite,
                                   fontSize: 16.0,
@@ -417,7 +421,9 @@ class _UserProfileState extends State<_UserProfile> {
                         backgroundColor: PlantaColors.colorOrange,
                         content: Center(
                           child: AutoSizeText(
-                            'Sin conexión',
+                            // 'Sin conexión',
+                            AppLocalizations.of(context)!.no_internet,
+
                             style: context.theme.textTheme.text_01.copyWith(
                               color: PlantaColors.colorWhite,
                               fontSize: 16.0,
@@ -431,107 +437,123 @@ class _UserProfileState extends State<_UserProfile> {
                     }
                   }
                 }
+
+                //* AQUI_SE CAMBIA EL PASSWORD
                 if (disabledPassword) {
-                  log('Vas a cambiar el password');
-                  if (formKeyPassword.currentState!.validate() &&
-                      formKeyPasswordConfirm.currentState!.validate()) {
+                  if ((formKeyPassword.currentState!.validate()) &&
+                      (formKeyPasswordConfirm.currentState!.validate())) {
                     formKeyPassword.currentState!.save();
                     formKeyPasswordConfirm.currentState!.save();
 
-                    EasyLoading.show();
-                    setState(() {
-                      password = passwordController.text;
-                      passwordConfirm = passwordConfirmController.text;
-                    });
+                    if (passwordController.text.toLowerCase() ==
+                        passwordConfirmController.text.toLowerCase()) {
+                      EasyLoading.show();
+                      setState(() {
+                        password = passwordController.text;
+                        passwordConfirm = passwordConfirmController.text;
+                      });
 
-                    try {
-                      var res = await userServices.changePassword(
-                          context, password, passwordConfirm);
+                      try {
+                        var res = await userServices.changePassword(
+                            context, password, passwordConfirm);
 
-                      switch (res.statusCode) {
-                        case 200:
-                          EasyLoading.dismiss();
-                          log('Password ${res.body}');
-
-                          if (!context.mounted) return;
-                          setState(() {
-                            disabledPassword = false;
-                          });
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) async {
-                            Navigator.pop(context);
-                          });
-                          break;
-                        case 400:
-                          EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                'Credenciales incorrectas',
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                        switch (res.statusCode) {
+                          case 200:
+                            EasyLoading.dismiss();
+                            if (!context.mounted) return;
+                            setState(() {
+                              disabledPassword = false;
+                            });
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((_) async {
+                              Navigator.pop(context);
+                            });
+                            break;
+                          case 400:
+                            EasyLoading.dismiss();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  // 'Credenciales incorrectas',
+                                  AppLocalizations.of(context)!
+                                      .verify_credentials,
+                                  style:
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ));
-                          break;
-                        case 401:
-                          EasyLoading.dismiss();
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                'Credenciales incorrectas',
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                            ));
+                            break;
+                          case 401:
+                            EasyLoading.dismiss();
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  // 'Credenciales incorrectas',
+                                  AppLocalizations.of(context)!
+                                      .verify_credentials,
+                                  style:
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ));
-                          break;
-                        default:
-                          EasyLoading.dismiss();
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                'Credenciales incorrectas',
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                            ));
+                            break;
+                          default:
+                            EasyLoading.dismiss();
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  // 'Credenciales incorrectas',
+                                  AppLocalizations.of(context)!
+                                      .verify_credentials,
+                                  style:
+                                      context.theme.textTheme.text_01.copyWith(
+                                    color: PlantaColors.colorWhite,
+                                    fontSize: 16.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ));
-                          break;
-                      }
-                    } on SocketException {
-                      EasyLoading.dismiss();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: PlantaColors.colorOrange,
-                        content: Center(
-                          child: AutoSizeText(
-                            'Sin conexión',
-                            style: context.theme.textTheme.text_01.copyWith(
-                              color: PlantaColors.colorWhite,
-                              fontSize: 16.0,
+                            ));
+                            break;
+                        }
+                      } on SocketException {
+                        EasyLoading.dismiss();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: PlantaColors.colorOrange,
+                          content: Center(
+                            child: AutoSizeText(
+                              // 'Sin conexión',
+                              AppLocalizations.of(context)!.no_internet,
+                              style: context.theme.textTheme.text_01.copyWith(
+                                color: PlantaColors.colorWhite,
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
-                        ),
-                      ));
-                    } catch (e) {
-                      EasyLoading.dismiss();
-                      throw Exception(e);
+                        ));
+                      } catch (e) {
+                        EasyLoading.dismiss();
+                        throw Exception(e);
+                      }
+                    } else {
+                      log('No coinciden las constrasenas');
+                      alert(context,
+                          AppLocalizations.of(context)!.match_password);
                     }
                   }
                 }
               },
-              title: 'Guardar',
+              title: AppLocalizations.of(context)!.text_buttom_save,
             ),
           ],
         ),

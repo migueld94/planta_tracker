@@ -219,7 +219,7 @@ class _LoginState extends State<Login> {
                               if (!context.mounted) return;
                               WidgetsBinding.instance
                                   .addPostFrameCallback((_) async {
-                                Navigator.pushReplacement(context,
+                                Navigator.push(context,
                                     SlideRightRoute(page: const Home()));
                               });
                               break;

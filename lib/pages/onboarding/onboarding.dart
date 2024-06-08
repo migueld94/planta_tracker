@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:planta_tracker/assets/utils/assets.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/container_onboarding.dart';
@@ -75,9 +76,7 @@ class _OnboardingState extends State<Onboarding> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.setBool('showHome', true);
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const Login(),
-                  ));
+                  Navigator.push(context, SlideRightRoute(page: const Login()));
                 },
                 title: AppLocalizations.of(context)!.text_buttom_continue,
               ),
