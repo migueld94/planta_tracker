@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously, must_be_immutable
+// ignore_for_file: avoid_print, use_build_context_synchronously, must_be_immutable, unrelated_type_equality_checks
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';

@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 // import 'package:get/get.dart';
 
 import 'package:planta_tracker/assets/l10n/l10n.dart';
-import 'package:planta_tracker/pages/all_plants/all_plants.dart';
 // import 'package:planta_tracker/dependency_injection.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
