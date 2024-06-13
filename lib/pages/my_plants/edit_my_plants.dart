@@ -6,7 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,6 +41,13 @@ class _EditState extends State<Edit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: AutoSizeText(
+          'Editar Planta',
+          style: context.theme.textTheme.titleApBar,
+        ),
+      ),
       body: FutureBuilder(
         future: detailsServices.getDetails(context, widget.id),
         builder: (context, AsyncSnapshot<DetailsModel> snapshot) {
