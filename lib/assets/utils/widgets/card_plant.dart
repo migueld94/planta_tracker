@@ -138,6 +138,7 @@ class CardMyPlants extends StatelessWidget {
     required this.picture,
     required this.id,
     required this.onTapDelete,
+    required this.onTapEdit,
   });
 
   final String title;
@@ -148,6 +149,7 @@ class CardMyPlants extends StatelessWidget {
   final Function()? onTap;
   final int id;
   final Function()? onTapDelete;
+  final Function()? onTapEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -266,13 +268,7 @@ class CardMyPlants extends StatelessWidget {
                 children: [
                   // EDITAR
                   GestureDetector(
-                    onTap: () {
-                      if (status.toLowerCase() == 'pendiente') {
-                        null;
-                      } else {
-                        null;
-                      }
-                    },
+                    onTap: onTapEdit,
                     child: Container(
                       width: 40,
                       height: 40,

@@ -93,7 +93,8 @@ class _LoginState extends State<Login> {
                       controller: email,
                       decoration: InputDecorations.authInputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: PlantaColors.colorGreen),
+                          borderSide:
+                              BorderSide(color: PlantaColors.colorGreen),
                           borderRadius: borderRadius10,
                         ),
                         hintText: AppLocalizations.of(context)!.email_enter,
@@ -124,7 +125,8 @@ class _LoginState extends State<Login> {
                       autocorrect: false,
                       decoration: InputDecorations.authInputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: PlantaColors.colorGreen),
+                          borderSide:
+                              BorderSide(color: PlantaColors.colorGreen),
                           borderRadius: borderRadius10,
                         ),
                         hintText: AppLocalizations.of(context)!.password_enter,
@@ -197,7 +199,7 @@ class _LoginState extends State<Login> {
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-        
+
                           setState(() {
                             emails = email.text;
                             passwords = password.text;
@@ -206,14 +208,14 @@ class _LoginState extends State<Login> {
                           try {
                             var res = await authService.login(
                                 email.text, password.text);
-        
+
                             switch (res!.statusCode) {
                               case 200:
                                 EasyLoading.dismiss();
                                 var data = jsonDecode(res.body);
                                 await storage.write(
                                     key: "token", value: data['token']);
-        
+
                                 await storage.write(
                                   key: "refresh_token",
                                   value: data['refresh_token'],
@@ -286,7 +288,8 @@ class _LoginState extends State<Login> {
                               content: Center(
                                 child: AutoSizeText(
                                   'Sin conexión',
-                                  style: context.theme.textTheme.text_01.copyWith(
+                                  style:
+                                      context.theme.textTheme.text_01.copyWith(
                                     color: PlantaColors.colorWhite,
                                     fontSize: 16.0,
                                   ),

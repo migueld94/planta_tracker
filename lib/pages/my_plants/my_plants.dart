@@ -17,6 +17,7 @@ import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
+import 'package:planta_tracker/pages/my_plants/edit_my_plants.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -157,6 +158,28 @@ class _MyPlantsState extends State<MyPlants> {
                             });
 
                             _loadMore();
+                          },
+                        );
+                      } else {
+                        null;
+                      }
+                    },
+
+                    // Este es el onTap del servicio EDITAR Planta solo se pueden eliminar los PENDIENTES
+                    onTapEdit: () {
+                      var status = items[index]['estado_actual']
+                          .toString()
+                          .toLowerCase();
+                      if ((status == 'pendiente') || (status == 'earring')) {
+                        warning(
+                          context,
+                          '¿Esta seguro de editar la planta?',
+                          () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                SlideRightRoute(
+                                    page: Edit(id: items[index]['id'])));
                           },
                         );
                       } else {
