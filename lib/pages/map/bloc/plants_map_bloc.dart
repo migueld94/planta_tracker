@@ -29,9 +29,9 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
   final AllPlantServices _allPlantServices;
 
   Future<void> _onLoad(Emitter<PlantsMapState> emit) async {
-    final response = await _allPlantServices.getAllPin();
-
-    emit(state.copyWith(plants: response));
+    //!Esta son las dos lineas de codigo que te digo que se afectan por el servicio, ahora tienes que pasarle los parametros
+    // final response = await _allPlantServices.getAllPin();
+    // emit(state.copyWith(plants: response));
   }
 
   Future<void> _onLoadMoreByBoundries(
