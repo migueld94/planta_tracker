@@ -1,0 +1,11 @@
+part of 'plants_map_bloc.dart';
+
+@freezed
+class PlantsMapState with _$PlantsMapState {
+  const factory PlantsMapState({
+    @Default(LatLng(23.11958, -82.397264)) LatLng location,
+    LatLng? northEast,
+    LatLng? southWest,
+    @Default([]) List<Plant> plants,
+  }) = _PlantsMapState;
+}
