@@ -361,7 +361,7 @@ class AppFlutterMap extends StatelessWidget {
                   PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
                 );
 
-            log('Región visible - Noroeste: $northEast, Suroeste: $southWest');
+            //log('Región visible - Noroeste: $northEast, Suroeste: $southWest');
           }
         },
       ),
