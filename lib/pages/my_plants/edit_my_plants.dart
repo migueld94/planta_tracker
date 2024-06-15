@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:ionicons/ionicons.dart';
 import 'package:image_picker/image_picker.dart';
@@ -82,6 +83,7 @@ class EditPlant extends StatefulWidget {
 
 class EditPlantState extends State<EditPlant> {
   File? _image;
+  List<File> imageFile = [];
   bool flag = false;
   final GlobalKey<FormState> formKey = GlobalKey();
   final note = TextEditingController();
@@ -109,6 +111,7 @@ class EditPlantState extends State<EditPlant> {
       setState(() {
         if (image != null) {
           _image = File(image.path);
+          imageFile.add(_image!);
           flag = true;
         } else {
           //print('No se seleccionó ninguna imagen.');
@@ -131,15 +134,6 @@ class EditPlantState extends State<EditPlant> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: PlantaColors.colorGreen,
-        title: AutoSizeText(
-          AppLocalizations.of(context)!.plant_register,
-          style: context.theme.textTheme.titleApBar,
-        ),
-      ),
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -149,109 +143,73 @@ class EditPlantState extends State<EditPlant> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Aquí va tu lista horizontal de cámaras
+                if (widget.images!.length < 6)
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => getImage(),
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          margin: allPadding8,
+                          decoration: BoxDecoration(
+                            color: PlantaColors.colorLightGrey,
+                            borderRadius: borderRadius10,
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Ionicons.camera_outline,
+                              color: PlantaColors.colorBlack,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_image != null)
+                        ListView.builder(
+                          itemCount: imageFile.length,
+                          itemBuilder: (context, index) => Container(
+                            width: 50,
+                            height: 50,
+                            margin: allPadding8,
+                            decoration: BoxDecoration(
+                              color: PlantaColors.colorLightGrey,
+                              borderRadius: borderRadius10,
+                            ),
+                            child: Image.file(
+                              imageFile[index],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 SizedBox(
-                  height: 150, // Ajusta la altura según necesites
+                  height: 150,
                   child: ListView.separated(
                     clipBehavior: Clip.none,
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (context, index) => horizontalMargin16,
-                    itemCount: 6,
+                    itemCount: widget.images!.length,
                     itemBuilder: (context, index) {
-                      //* Aqui es pata cuando no hay imagen valida
-                      if (index >= widget.images!.length) {
-                        return Stack(
-                          alignment: Alignment.topRight,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () => getImage(),
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                margin: allPadding8,
-                                decoration: BoxDecoration(
-                                  color: PlantaColors.colorLightGrey,
-                                  borderRadius: borderRadius10,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Ionicons.camera_outline,
-                                    color: PlantaColors.colorBlack,
-                                    size: 30.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-
-                      //* Caso Contrario
-                      return Stack(
-                        alignment: Alignment.topRight,
-                        children: <Widget>[
-                          Container(
-                            width: 100,
-                            height: 100,
-                            margin: allPadding8,
-                            decoration: BoxDecoration(
-                              color: PlantaColors.colorWhite,
-                              borderRadius: borderRadius10,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: borderRadius10,
-                              child: _image == null
-                                  ? CachedNetworkImage(
-                                      filterQuality: FilterQuality.low,
-                                      fit: BoxFit.cover,
-                                      imageUrl:
-                                          '${Constants.baseUrl}${widget.images?[index].posterPath}')
-                                  : Image.file(
-                                      _image!,
-                                      scale: 10.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
+                      return Container(
+                        width: 100,
+                        height: 100,
+                        margin: allPadding8,
+                        decoration: BoxDecoration(
+                          color: PlantaColors.colorWhite,
+                          borderRadius: borderRadius10,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: borderRadius10,
+                          child: CachedNetworkImage(
+                            filterQuality: FilterQuality.low,
+                            fit: BoxFit.cover,
+                            imageUrl:
+                                '${Constants.baseUrl}${widget.images?[index].posterPath}',
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator()),
                           ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                log('Vas a eliminar una photo');
-                                setState(() {
-                                  widget.images
-                                      ?.removeAt(index); // Elimina la imagen
-                                });
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: PlantaColors.colorWhite,
-                                radius: 10,
-                                child: Icon(
-                                  Icons.remove_circle,
-                                  color: PlantaColors.colorDarkOrange,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: GestureDetector(
-                              onTap: () => getImage(),
-                              child: CircleAvatar(
-                                backgroundColor: PlantaColors.colorWhite,
-                                radius: 10,
-                                child: Icon(
-                                  Icons.flip_camera_android,
-                                  color: PlantaColors.colorGreen,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       );
                     },
                   ),
