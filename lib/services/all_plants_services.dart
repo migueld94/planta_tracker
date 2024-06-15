@@ -10,7 +10,6 @@ class AllPlantServices {
 
   Future<List<Plant>> getAllPin(
       double latMax, double latMin, double longMax, double longMin) async {
-
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
     String secret =
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';

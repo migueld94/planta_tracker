@@ -27,20 +27,31 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
   }
 
   final AllPlantServices _allPlantServices;
+  LatLng? northEast;
+  LatLng? southWest;
 
   Future<void> _onLoad(Emitter<PlantsMapState> emit) async {
-    //!Esta son las dos lineas de codigo que te digo que se afectan por el servicio, ahora tienes que pasarle los parametros
-    // final response = await _allPlantServices.getAllPin();
-    // emit(state.copyWith(plants: response));
+    if (northEast != null && southWest != null) {
+      List<double> limites = obtenerLimites(northEast!, southWest!);
+      final double latMax = limites[0];
+      final double latMin = limites[1];
+      final double longMax = limites[2];
+      final double longMin = limites[3];
+      final response =
+          await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
+      emit(state.copyWith(plants: response));
+    }
   }
 
   Future<void> _onLoadMoreByBoundries(
     Emitter<PlantsMapState> emit,
     _LoadMoreByBoundries event,
   ) async {
+    northEast = event.northEast;
+    southWest = event.southWest;
     final response = await _allPlantServices.getPinsByBoundries(
-      event.northEast,
-      event.southWest,
+      northEast!,
+      southWest!,
     );
 
     emit(
@@ -60,3 +71,101 @@ EventTransformer<E> debounceSequential<E>([
     return sequential<E>().call(events.debounceTime(duration), mapper);
   };
 }
+
+List<double> obtenerLimites(LatLng northEast, LatLng southWest) {
+  double latMax = northEast.latitude > southWest.latitude
+      ? northEast.latitude
+      : southWest.latitude;
+  double latMin = northEast.latitude < southWest.latitude
+      ? northEast.latitude
+      : southWest.latitude;
+  double longMax = northEast.longitude > southWest.longitude
+      ? northEast.longitude
+      : southWest.longitude;
+  double longMin = northEast.longitude < southWest.longitude
+      ? northEast.longitude
+      : southWest.longitude;
+
+  return [latMax, latMin, longMax, longMin];
+}
+
+
+
+
+
+
+// class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
+//   PlantsMapBloc(this._allPlantServices) : super(const _PlantsMapState()) {
+//     on<PlantsMapEvent>(
+//       (event, emit) => event.mapOrNull(
+//         load: (_) => _onLoad(emit),
+//       ),
+//     );
+
+//     on<_LoadMoreByBoundries>(
+//       (event, emit) => _onLoadMoreByBoundries(emit, event),
+//       transformer: debounceSequential(),
+//     );
+
+//     add(const PlantsMapEvent.load());
+//   }
+
+//   final AllPlantServices _allPlantServices;
+//   LatLng northEast;
+//   LatLng southWest;
+//   List<double> limites = obtenerLimites();
+
+//   final double latMax = limites[0];
+//   final double latMin = limites[1];
+//   final double longMax = limites[2];
+//   final double longMin = limites[3];
+
+//   Future<void> _onLoad(Emitter<PlantsMapState> emit) async {
+//     final response =
+//         await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
+//     emit(state.copyWith(plants: response));
+//   }
+
+//   Future<void> _onLoadMoreByBoundries(
+//     Emitter<PlantsMapState> emit,
+//     _LoadMoreByBoundries event,
+//   ) async {
+//     final response = await _allPlantServices.getPinsByBoundries(
+//       northEast = event.northEast,
+//       southWest = event.southWest,
+//     );
+
+//     emit(
+//       state.copyWith(
+//         plants: response,
+//         northEast: event.northEast,
+//         southWest: event.southWest,
+//       ),
+//     );
+//   }
+// }
+
+// EventTransformer<E> debounceSequential<E>([
+//   Duration duration = const Duration(milliseconds: 500),
+// ]) {
+//   return (events, mapper) {
+//     return sequential<E>().call(events.debounceTime(duration), mapper);
+//   };
+// }
+
+// List<double> obtenerLimites(LatLng northEast, LatLng southWest) {
+//   double latMax = northEast.latitude > southWest.latitude
+//       ? northEast.latitude
+//       : southWest.latitude;
+//   double latMin = northEast.latitude < southWest.latitude
+//       ? northEast.latitude
+//       : southWest.latitude;
+//   double longMax = northEast.longitude > southWest.longitude
+//       ? northEast.longitude
+//       : southWest.longitude;
+//   double longMin = northEast.longitude < southWest.longitude
+//       ? northEast.longitude
+//       : southWest.longitude;
+
+//   return [latMax, latMin, longMax, longMin];
+// }
