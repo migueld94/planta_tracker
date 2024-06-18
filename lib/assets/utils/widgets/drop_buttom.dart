@@ -121,7 +121,10 @@ class _MyDropButtomEditState extends State<MyDropButtomEdit> {
 class _NomLifestageEdit extends StatefulWidget {
   final List<Result> lifestages;
   String valueEdit;
-  _NomLifestageEdit(this.lifestages, this.valueEdit);
+  _NomLifestageEdit(
+    this.lifestages,
+    this.valueEdit,
+  );
 
   @override
   State<_NomLifestageEdit> createState() => _NomLifestageEditState();

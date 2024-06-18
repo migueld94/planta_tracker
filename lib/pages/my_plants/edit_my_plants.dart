@@ -1,23 +1,18 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, must_be_immutable, unrelated_type_equality_checks
 
+import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 
-import 'package:ionicons/ionicons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:planta_tracker/models/details_edit_model.dart';
 
 import 'package:planta_tracker/pages/home/home.dart';
-import 'package:planta_tracker/models/details_models.dart';
-import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/services/plants_services.dart';
-import 'package:planta_tracker/services/details_services.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/models/register_plant_models.dart';
@@ -27,38 +22,44 @@ import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
 import 'package:planta_tracker/assets/utils/widgets/animation_controller.dart';
 
-class Edit extends StatefulWidget {
+class GetApiEditInformationEnd extends StatefulWidget {
   final int id;
-  const Edit({super.key, required this.id});
+  // final List<File> pictures;
+  List<Map<String, dynamic>> valores = [
+    {"imagen": "", "name": ""}
+  ];
+
+  GetApiEditInformationEnd({
+    required this.id,
+    required this.valores,
+    // required this.pictures,
+    super.key,
+  });
 
   @override
-  State<Edit> createState() => _EditState();
+  State<GetApiEditInformationEnd> createState() =>
+      _GetApiEditInformationEndState();
 }
 
-class _EditState extends State<Edit> {
-  DetailsServices detailsServices = DetailsServices();
+class _GetApiEditInformationEndState extends State<GetApiEditInformationEnd> {
+  OptionPlantServices detailsEditServices = OptionPlantServices();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: AutoSizeText(
-          'Editar Planta',
-          style: context.theme.textTheme.titleApBar,
-        ),
-      ),
       body: FutureBuilder(
-        future: detailsServices.getDetails(context, widget.id),
-        builder: (context, AsyncSnapshot<DetailsModel> snapshot) {
+        future: detailsEditServices.getDetailsEdit(context, widget.id),
+        builder: (context, AsyncSnapshot<DetailsEditPlant> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             EasyLoading.show();
             return Container();
           } else {
             EasyLoading.dismiss();
             return EditPlant(
+              valores: widget.valores,
+              // pictures: widget.pictures,
               details: snapshot.data!,
-              images: snapshot.data!.imagenes,
+              images: snapshot.data!.imageneseditar,
             );
           }
         },
@@ -68,12 +69,19 @@ class _EditState extends State<Edit> {
 }
 
 class EditPlant extends StatefulWidget {
-  final DetailsModel details;
-  final List<Imagene>? images;
-  const EditPlant({
-    super.key,
+  // final List<File> pictures;
+  List<Map<String, dynamic>> valores = [
+    {"imagen": "", "name": ""}
+  ];
+
+  final DetailsEditPlant details;
+  final List<Imageneseditar>? images;
+  EditPlant({
+    // required this.pictures,
+    required this.valores,
     required this.details,
     required this.images,
+    super.key,
   });
 
   @override
@@ -81,7 +89,6 @@ class EditPlant extends StatefulWidget {
 }
 
 class EditPlantState extends State<EditPlant> {
-  File? _image;
   List<File> imageFile = [];
   bool flag = false;
   final GlobalKey<FormState> formKey = GlobalKey();
@@ -91,39 +98,6 @@ class EditPlantState extends State<EditPlant> {
   RegisterPlant plant = RegisterPlant();
   final _lifestage = GlobalKey<ShakeWidgetState>();
 
-  Future<File?> getImage() async {
-    var cameraStatus = await Permission.camera.status;
-    var locationStatus = await Permission.location.status;
-
-    if (!cameraStatus.isGranted) {
-      await Permission.camera.request();
-    }
-
-    if (!locationStatus.isGranted) {
-      await Permission.location.request();
-    }
-
-    if (await Permission.camera.isGranted &&
-        await Permission.location.isGranted) {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
-
-      setState(() {
-        if (image != null) {
-          _image = File(image.path);
-          imageFile.add(_image!);
-          flag = true;
-        } else {
-          //print('No se seleccionó ninguna imagen.');
-        }
-      });
-
-      return _image;
-    } else {
-      return null;
-      //print('Permiso de cámara o localización no concedido.');
-    }
-  }
-
   @override
   void dispose() {
     note.dispose();
@@ -132,7 +106,20 @@ class EditPlantState extends State<EditPlant> {
 
   @override
   Widget build(BuildContext context) {
+    // List<File> filteredFiles = widget.valores['imagen']
+    //     .where((file) => file.path.split('/').last != 'De7au1t.png')
+    //     .toList();
+
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: PlantaColors.colorGreen,
+        title: AutoSizeText(
+          'Editar Planta',
+          style: context.theme.textTheme.titleApBar,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -142,73 +129,36 @@ class EditPlantState extends State<EditPlant> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                if (widget.images!.length < 6)
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => getImage(),
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          margin: allPadding8,
-                          decoration: BoxDecoration(
-                            color: PlantaColors.colorLightGrey,
-                            borderRadius: borderRadius10,
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Ionicons.camera_outline,
-                              color: PlantaColors.colorBlack,
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (_image != null)
-                        ListView.builder(
-                          itemCount: imageFile.length,
-                          itemBuilder: (context, index) => Container(
-                            width: 50,
-                            height: 50,
-                            margin: allPadding8,
-                            decoration: BoxDecoration(
-                              color: PlantaColors.colorLightGrey,
-                              borderRadius: borderRadius10,
-                            ),
-                            child: Image.file(
-                              imageFile[index],
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
                 SizedBox(
-                  height: 150,
+                  height: 200,
                   child: ListView.separated(
                     clipBehavior: Clip.none,
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (context, index) => horizontalMargin16,
-                    itemCount: widget.images!.length,
+                    itemCount: widget.valores.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        width: 100,
-                        height: 100,
-                        margin: allPadding8,
-                        decoration: BoxDecoration(
-                          color: PlantaColors.colorWhite,
-                          borderRadius: borderRadius10,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: borderRadius10,
-                          child: CachedNetworkImage(
-                            filterQuality: FilterQuality.low,
-                            fit: BoxFit.cover,
-                            imageUrl:
-                                '${Constants.baseUrl}${widget.images?[index].posterPath}',
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator()),
+                      return Column(
+                        children: [
+                          Container(
+                            width: 180,
+                            height: 140,
+                            margin: allPadding8,
+                            decoration: BoxDecoration(
+                              color: PlantaColors.colorWhite,
+                              borderRadius: borderRadius10,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: borderRadius10,
+                              child: Image.file(
+                                // filteredFiles[index],
+                                widget.valores[index]['imagen'],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
+                          AutoSizeText(widget.valores[index]['name'],
+                              style: context.theme.textTheme.text_01),
+                        ],
                       );
                     },
                   ),
@@ -259,8 +209,11 @@ class EditPlantState extends State<EditPlant> {
                     ButtomSmall(
                       color: PlantaColors.colorDarkOrange,
                       onTap: () {
-                        warning(context, 'Esta seguro de cancelar el registro?',
-                            () {
+                        warning(context,
+                            'Esta seguro de cancelar la edición de la planta?',
+                            () async {
+                          await storage.delete(key: 'lifestage');
+
                           Navigator.push(
                               context, SlideRightRoute(page: const Home()));
                         });
@@ -271,151 +224,164 @@ class EditPlantState extends State<EditPlant> {
                         color: PlantaColors.colorGreen,
                         onTap: () async {
                           var lifestage = await storage.read(key: 'lifestage');
+                          // await storage.delete(key: 'lifestage');
 
-                          log(lifestage.toString());
-                          log(widget.images!.length.toString());
+                          lifestage ??= widget.details.lifestage;
 
-                          // warning(context, 'Esta seguro de enviar el registro?',
-                          //     () async {
-                          //   if (formKey.currentState!.validate() &&
-                          //       lifestage != null) {
-                          //     formKey.currentState!.save();
+                          warning(context, 'Esta seguro de enviar el registro?',
+                              () async {
+                            if (formKey.currentState!.validate() &&
+                                lifestage != null) {
+                              formKey.currentState!.save();
 
-                          //     plant.imagenPrincipal =
-                          //         File(widget.valores[0]['imagen']);
-                          //     plant.imagenTronco =
-                          //         File(widget.valores[1]['imagen']);
-                          //     plant.imagenRamas =
-                          //         File(widget.valores[2]['imagen']);
-                          //     plant.imagenHojas =
-                          //         File(widget.valores[3]['imagen']);
-                          //     plant.imagenFlor =
-                          //         File(widget.valores[5]['imagen']);
-                          //     plant.imagenFruto =
-                          //         File(widget.valores[4]['imagen']);
-                          //     plant.notas = note.text;
-                          //     plant.lifestage = lifestage;
+                              plant.imagenPrincipal =
+                                  widget.valores[0]['imagen'];
+                              // plant.imagenPrincipal = widget.pictures[0];
+                              plant.imagenTronco = widget.valores[1]['imagen'];
+                              // plant.imagenTronco = widget.pictures[1];
+                              plant.imagenRamas = widget.valores[2]['imagen'];
+                              // plant.imagenRamas = widget.pictures[2];
+                              plant.imagenHojas = widget.valores[3]['imagen'];
+                              // plant.imagenHojas = widget.pictures[3];
+                              plant.imagenFlor = widget.valores[5]['imagen'];
+                              // plant.imagenFlor = widget.pictures[5];
+                              plant.imagenFruto = widget.valores[4]['imagen'];
+                              // plant.imagenFruto = widget.pictures[4];
 
-                          //     Navigator.pop(context);
+                              plant.notas = note.text;
+                              plant.lifestage = lifestage;
 
-                          //     EasyLoading.show();
-                          //     try {
-                          //       var res = await optionServices.register(plant);
+                              Navigator.pop(context);
 
-                          //       switch (res!.statusCode) {
-                          //         case 200:
-                          //           final parsedResponse =
-                          //               json.decode(res.body);
-                          //           final successValue =
-                          //               parsedResponse['success'];
+                              EasyLoading.show();
+                              try {
+                                var res = await optionServices.updatePlant(
+                                    plant, widget.details.id.toString());
 
-                          //           ScaffoldMessenger.of(context)
-                          //               .showSnackBar(SnackBar(
-                          //             backgroundColor: PlantaColors.colorGreen,
-                          //             content: Center(
-                          //               child: AutoSizeText(
-                          //                 successValue,
-                          //                 style: context.theme.textTheme.text_01
-                          //                     .copyWith(
-                          //                   color: PlantaColors.colorWhite,
-                          //                   fontSize: 16.0,
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ));
-                          //           EasyLoading.dismiss();
-                          //           if (!context.mounted) return;
-                          //           WidgetsBinding.instance
-                          //               .addPostFrameCallback((_) async {
-                          //             Navigator.push(context,
-                          //                 SlideRightRoute(page: const Home()));
-                          //           });
-                          //           await storage.delete(key: 'lifestage');
-                          //           break;
-                          //         case 400:
-                          //           EasyLoading.dismiss();
-                          //           Navigator.push(context,
-                          //               SlideRightRoute(page: const Home()));
-                          //           ScaffoldMessenger.of(context)
-                          //               .showSnackBar(SnackBar(
-                          //             backgroundColor: PlantaColors.colorOrange,
-                          //             content: Center(
-                          //               child: AutoSizeText(
-                          //                 res.body,
-                          //                 style: context.theme.textTheme.text_01
-                          //                     .copyWith(
-                          //                   color: PlantaColors.colorWhite,
-                          //                   fontSize: 16.0,
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ));
-                          //           break;
-                          //         case 401:
-                          //           EasyLoading.dismiss();
-                          //           if (!context.mounted) return;
-                          //           Navigator.push(context,
-                          //               SlideRightRoute(page: const Home()));
-                          //           ScaffoldMessenger.of(context)
-                          //               .showSnackBar(SnackBar(
-                          //             backgroundColor: PlantaColors.colorOrange,
-                          //             content: Center(
-                          //               child: AutoSizeText(
-                          //                 res.body,
-                          //                 style: context.theme.textTheme.text_01
-                          //                     .copyWith(
-                          //                   color: PlantaColors.colorWhite,
-                          //                   fontSize: 16.0,
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ));
-                          //           break;
-                          //         default:
-                          //           EasyLoading.dismiss();
-                          //           if (!context.mounted) return;
-                          //           Navigator.push(context,
-                          //               SlideRightRoute(page: const Home()));
-                          //           ScaffoldMessenger.of(context)
-                          //               .showSnackBar(SnackBar(
-                          //             backgroundColor: PlantaColors.colorOrange,
-                          //             content: Center(
-                          //               child: AutoSizeText(
-                          //                 res.body,
-                          //                 style: context.theme.textTheme.text_01
-                          //                     .copyWith(
-                          //                   color: PlantaColors.colorWhite,
-                          //                   fontSize: 16.0,
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ));
-                          //           break;
-                          //       }
-                          //     } on SocketException {
-                          //       EasyLoading.dismiss();
-                          //       Navigator.push(context,
-                          //           SlideRightRoute(page: const Home()));
-                          //       ScaffoldMessenger.of(context)
-                          //           .showSnackBar(SnackBar(
-                          //         backgroundColor: PlantaColors.colorOrange,
-                          //         content: Center(
-                          //           child: AutoSizeText(
-                          //             'Sin conexión',
-                          //             style: context.theme.textTheme.text_01
-                          //                 .copyWith(
-                          //               color: PlantaColors.colorWhite,
-                          //               fontSize: 16.0,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ));
-                          //     }
-                          //   } else {
-                          //     _lifestage.currentState?.shake();
-                          //     Navigator.pop(context);
-                          //   }
-                          // });
+                                switch (res!.statusCode) {
+                                  case 200:
+                                    final parsedResponse =
+                                        json.decode(res.body);
+                                    final successValue =
+                                        parsedResponse['success'];
+                                    await storage.delete(key: 'lifestage');
+
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: PlantaColors.colorGreen,
+                                      content: Center(
+                                        child: AutoSizeText(
+                                          successValue,
+                                          style: context.theme.textTheme.text_01
+                                              .copyWith(
+                                            color: PlantaColors.colorWhite,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ));
+                                    EasyLoading.dismiss();
+                                    if (!context.mounted) return;
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) async {
+                                      Navigator.push(context,
+                                          SlideRightRoute(page: const Home()));
+                                    });
+                                    await storage.delete(key: 'lifestage');
+                                    break;
+                                  case 400:
+                                    EasyLoading.dismiss();
+                                    await storage.delete(key: 'lifestage');
+
+                                    Navigator.push(context,
+                                        SlideRightRoute(page: const Home()));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: PlantaColors.colorOrange,
+                                      content: Center(
+                                        child: AutoSizeText(
+                                          res.body,
+                                          style: context.theme.textTheme.text_01
+                                              .copyWith(
+                                            color: PlantaColors.colorWhite,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ));
+                                    break;
+                                  case 401:
+                                    EasyLoading.dismiss();
+                                    await storage.delete(key: 'lifestage');
+
+                                    if (!context.mounted) return;
+                                    Navigator.push(context,
+                                        SlideRightRoute(page: const Home()));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: PlantaColors.colorOrange,
+                                      content: Center(
+                                        child: AutoSizeText(
+                                          res.body,
+                                          style: context.theme.textTheme.text_01
+                                              .copyWith(
+                                            color: PlantaColors.colorWhite,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ));
+                                    break;
+                                  default:
+                                    EasyLoading.dismiss();
+                                    await storage.delete(key: 'lifestage');
+
+                                    if (!context.mounted) return;
+                                    Navigator.push(context,
+                                        SlideRightRoute(page: const Home()));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: PlantaColors.colorOrange,
+                                      content: Center(
+                                        child: AutoSizeText(
+                                          res.body,
+                                          style: context.theme.textTheme.text_01
+                                              .copyWith(
+                                            color: PlantaColors.colorWhite,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ));
+                                    break;
+                                }
+                              } on SocketException {
+                                EasyLoading.dismiss();
+                                await storage.delete(key: 'lifestage');
+
+                                Navigator.push(context,
+                                    SlideRightRoute(page: const Home()));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: PlantaColors.colorOrange,
+                                  content: Center(
+                                    child: AutoSizeText(
+                                      'Sin conexiónes',
+                                      style: context.theme.textTheme.text_01
+                                          .copyWith(
+                                        color: PlantaColors.colorWhite,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                ));
+                              }
+                            } else {
+                              await storage.delete(key: 'lifestage');
+                              _lifestage.currentState?.shake();
+                              Navigator.pop(context);
+                            }
+                          });
                         },
                         title: AppLocalizations.of(context)!.text_buttom_send),
                   ],

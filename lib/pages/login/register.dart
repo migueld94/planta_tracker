@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
@@ -26,6 +29,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final GlobalKey<FormState> formKey = GlobalKey();
+  final GlobalKey<FormState> formKeyPassowrd = GlobalKey();
+  final GlobalKey<FormState> formKeyPassowrdConfirm = GlobalKey();
   final AuthService authService = AuthService();
   final storage = const FlutterSecureStorage();
   final name = TextEditingController();
@@ -265,35 +270,88 @@ class _RegisterState extends State<Register> {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
 
-                        EasyLoading.show();
-                        var res = await authService.register(email.text,
-                            name.text, password.text, passwordConfirm.text);
-
-                        switch (res!.statusCode) {
-                          case 200:
-                            EasyLoading.dismiss();
-                            Navigator.push(
-                              context,
-                              SlideRightRoute(
-                                page: VerifyCode(email: email.text),
+                        if (valueTerms == false) {
+                          EasyLoading.dismiss();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorDarkOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'Acepte los términos y condiciones',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
                               ),
-                            );
-                            break;
-                          case 400:
-                            EasyLoading.dismiss();
-                            // var data = jsonDecode(res.body);
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Registro fallido"),
-                            ));
-                            break;
-                          default:
-                            EasyLoading.dismiss();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Registration Failed"),
-                            ));
-                            break;
+                            ),
+                          ));
+                        } else if (password.text.toLowerCase() ==
+                            passwordConfirm.text.toLowerCase()) {
+                          EasyLoading.show();
+                          var res = await authService.register(email.text,
+                              name.text, password.text, passwordConfirm.text);
+
+                          switch (res!.statusCode) {
+                            case 200:
+                              EasyLoading.dismiss();
+                              Navigator.push(
+                                context,
+                                SlideRightRoute(
+                                  page: VerifyCode(email: email.text),
+                                ),
+                              );
+                              break;
+                            case 400:
+                              EasyLoading.dismiss();
+                              // final parsedResponse = json.decode(res.body);
+                              // final successValue = parsedResponse['data']['email'];
+                              // var data = jsonDecode(res.body);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorDarkOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    'Registro Fallido',
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ));
+                              break;
+                            default:
+                              EasyLoading.dismiss();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorDarkOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    'Registro Fallido',
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ));
+                              break;
+                          }
+                        } else {
+                          EasyLoading.dismiss();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorDarkOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                'No coinciden las contraseñas',
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ));
                         }
                       }
                     },

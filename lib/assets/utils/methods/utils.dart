@@ -3,6 +3,8 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
@@ -12,7 +14,6 @@ import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/pages/login/forgot_password.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/pages/login/register.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/pages/login/terms.dart';
@@ -219,6 +220,18 @@ Future<Object?> info(BuildContext context, String lifestage, String status,
       ),
     ),
   );
+}
+
+Future<File> urlToFile(String imageUrl) async {
+  final filename = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+  final dir = await getApplicationDocumentsDirectory();
+  final file = File('${dir.path}/$filename');
+  await http.get(Uri.parse(imageUrl)).then((response) async {
+    final bytes = response.bodyBytes;
+    await file.writeAsBytes(bytes);
+  });
+
+  return file;
 }
 
 Future<File> getImageFileFromAssets(String path) async {

@@ -69,53 +69,35 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
               children: <Widget>[
                 // Aquí va tu lista horizontal de cámaras
                 SizedBox(
-                  height: 150, // Ajusta la altura según necesites
+                  height: 200, // Ajusta la altura según necesites
                   child: ListView.separated(
                     clipBehavior: Clip.none,
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (context, index) => horizontalMargin16,
                     itemCount: widget.valores.length,
                     itemBuilder: (context, index) {
-                      return widget.valores[index] != ''
-                          ? Stack(
-                              alignment: Alignment.topRight,
-                              children: <Widget>[
-                                Column(
-                                  children: [
-                                    Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        color: PlantaColors.colorWhite,
-                                        borderRadius: borderRadius10,
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: borderRadius10,
-                                        child: Image.file(
-                                          File(widget.valores[index]['imagen']),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    verticalMargin12,
-                                    AutoSizeText(widget.valores[index]['name'],
-                                        style: context.theme.textTheme.text_01),
-                                  ],
-                                ),
-                                Positioned(
-                                  left: 75,
-                                  bottom: 115,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.loop_rounded),
-                                    color: PlantaColors.colorLightRed,
-                                    onPressed: () {
-                                      // Acción al presionar el botón de editar
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )
-                          : emptyWidget;
+                      return Column(
+                        children: [
+                          Container(
+                            width: 180,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              color: PlantaColors.colorWhite,
+                              borderRadius: borderRadius10,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: borderRadius10,
+                              child: Image.file(
+                                File(widget.valores[index]['imagen']),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          verticalMargin12,
+                          AutoSizeText(widget.valores[index]['name'],
+                              style: context.theme.textTheme.text_01),
+                        ],
+                      );
                     },
                   ),
                 ),
@@ -209,6 +191,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                                         json.decode(res.body);
                                     final successValue =
                                         parsedResponse['success'];
+                                    await storage.delete(key: 'lifestage');
 
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -231,7 +214,6 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                                       Navigator.push(context,
                                           SlideRightRoute(page: const Home()));
                                     });
-                                    await storage.delete(key: 'lifestage');
                                     break;
                                   case 400:
                                     EasyLoading.dismiss();

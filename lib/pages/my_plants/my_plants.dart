@@ -17,7 +17,7 @@ import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
-import 'package:planta_tracker/pages/my_plants/edit_my_plants.dart';
+import 'package:planta_tracker/pages/my_plants/edit/edit_plant_1.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -179,7 +179,9 @@ class _MyPlantsState extends State<MyPlants> {
                             Navigator.push(
                                 context,
                                 SlideRightRoute(
-                                    page: Edit(id: items[index]['id'])));
+                                    page: GetApiEditInformation01(
+                                  id: items[index]['id'],
+                                )));
                           },
                         );
                       } else {

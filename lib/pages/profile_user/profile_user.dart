@@ -233,7 +233,7 @@ class _UserProfileState extends State<_UserProfile> {
               child: TextFormField(
                 enabled: disabledPassword,
                 controller: passwordController,
-                obscureText: false,
+                obscureText: visibility,
                 enableSuggestions: false,
                 autocorrect: false,
                 decoration: InputDecorations.authInputDecoration(
@@ -546,9 +546,18 @@ class _UserProfileState extends State<_UserProfile> {
                         throw Exception(e);
                       }
                     } else {
-                      log('No coinciden las constrasenas');
-                      alert(context,
-                          AppLocalizations.of(context)!.match_password);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: PlantaColors.colorDarkOrange,
+                        content: Center(
+                          child: AutoSizeText(
+                            'No coinciden las contraseñas',
+                            style: context.theme.textTheme.text_01.copyWith(
+                              color: PlantaColors.colorWhite,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ));
                     }
                   }
                 }
