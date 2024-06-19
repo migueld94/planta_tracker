@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, must_be_immutable, unrelated_type_equality_checks
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -92,15 +92,29 @@ class EditPlantState extends State<EditPlant> {
   List<File> imageFile = [];
   bool flag = false;
   final GlobalKey<FormState> formKey = GlobalKey();
-  final note = TextEditingController();
+  final noteController = TextEditingController();
+  String notes = '';
   final storage = const FlutterSecureStorage();
   final OptionPlantServices optionServices = OptionPlantServices();
   RegisterPlant plant = RegisterPlant();
   final _lifestage = GlobalKey<ShakeWidgetState>();
 
+  Future<void> _loadTextFromApi() async {
+    final response = widget.details.notas;
+    setState(() {
+      noteController.text = response!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTextFromApi();
+  }
+
   @override
   void dispose() {
-    note.dispose();
+    noteController.dispose();
     super.dispose();
   }
 
@@ -137,29 +151,36 @@ class EditPlantState extends State<EditPlant> {
                     separatorBuilder: (context, index) => horizontalMargin16,
                     itemCount: widget.valores.length,
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
-                            width: 180,
-                            height: 140,
-                            margin: allPadding8,
-                            decoration: BoxDecoration(
-                              color: PlantaColors.colorWhite,
-                              borderRadius: borderRadius10,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: borderRadius10,
-                              child: Image.file(
-                                // filteredFiles[index],
-                                widget.valores[index]['imagen'],
-                                fit: BoxFit.cover,
+                      final valor = widget.valores[index];
+                      final file = valor["imagen"];
+                      final fileName = file.path.split('/').last;
+                      if (fileName.endsWith("De7au1t.png")) {
+                        return null; // or return null to not show anything
+                      } else {
+                        return Column(
+                          children: [
+                            Container(
+                              width: 180,
+                              height: 140,
+                              margin: allPadding8,
+                              decoration: BoxDecoration(
+                                color: PlantaColors.colorWhite,
+                                borderRadius: borderRadius10,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: borderRadius10,
+                                child: Image.file(
+                                  // filteredFiles[index],
+                                  widget.valores[index]['imagen'],
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          AutoSizeText(widget.valores[index]['name'],
-                              style: context.theme.textTheme.text_01),
-                        ],
-                      );
+                            AutoSizeText(widget.valores[index]['name'],
+                                style: context.theme.textTheme.text_01),
+                          ],
+                        );
+                      }
                     },
                   ),
                 ),
@@ -178,10 +199,10 @@ class EditPlantState extends State<EditPlant> {
                 AutoSizeText('Notas', style: context.theme.textTheme.h2),
                 verticalMargin8,
                 TextFormField(
+                  controller: noteController,
                   maxLines: 12,
                   maxLength: 150,
                   textAlign: TextAlign.justify,
-                  initialValue: widget.details.notas,
                   decoration: InputDecorations.authInputDecoration(
                     hintText: '',
                     labelText: 'Escriba su comentario aqui...',
@@ -191,7 +212,7 @@ class EditPlantState extends State<EditPlant> {
                     ),
                   ),
                   onChanged: (value) {
-                    note.text = value;
+                    noteController.text = value;
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -200,9 +221,7 @@ class EditPlantState extends State<EditPlant> {
                     return null;
                   },
                 ),
-                // const Expanded(child: SizedBox()),
                 verticalMargin16,
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -248,7 +267,7 @@ class EditPlantState extends State<EditPlant> {
                               plant.imagenFruto = widget.valores[4]['imagen'];
                               // plant.imagenFruto = widget.pictures[4];
 
-                              plant.notas = note.text;
+                              plant.notas = noteController.text;
                               plant.lifestage = lifestage;
 
                               Navigator.pop(context);

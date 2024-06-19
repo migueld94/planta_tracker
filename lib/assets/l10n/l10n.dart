@@ -9,10 +9,10 @@ class L10n {
   static String getFlag(String code) {
     switch (code) {
       case 'en':
-        return 'en';
+        return 'EN';
       case 'es':
       default:
-        return 'es';
+        return 'ES';
     }
   }
 }
