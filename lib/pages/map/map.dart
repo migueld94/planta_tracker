@@ -22,6 +22,7 @@ import 'package:planta_tracker/models/plants_models.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
 import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -55,7 +56,6 @@ class _MapViewState extends State<MapView> {
             listener: (context, gpsState) {
               if (gpsState is GpsPermissionDenied ||
                   gpsState is GpsPermissionDeniedForever) {
-                // final l10n = AppLocalizations.of(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('acepte los permisos')),
                 );
@@ -66,7 +66,6 @@ class _MapViewState extends State<MapView> {
                 return BlocBuilder<MapBloc, MapState>(
                   builder: (context, mapState) {
                     if (mapState is MapLoadSuccess) {
-                      //andres
                       return BlocProvider(
                         create: (_) => PlantsMapBloc(AllPlantServices()),
                         child: const AppFlutterMap(),
@@ -287,8 +286,12 @@ List<CustomMarker> createMarkers(List<Plant> plants, BuildContext context) {
       location,
       GestureDetector(
         onTap: () {
-          info(context, plant.lifestage!, plant.estadoActual!,
-              plant.especiePlanta ?? 'Determinación pendiente', getColor(), () {
+          info(
+              context,
+              plant.lifestage!,
+              plant.estadoActual!,
+              plant.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
+              getColor(), () {
             Navigator.push(
                 context, SlideRightRoute(page: Details(id: plant.id!)));
           });

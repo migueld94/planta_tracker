@@ -207,9 +207,11 @@ Future<Object?> info(BuildContext context, String lifestage, String status,
                       color: PlantaColors.colorGreen,
                     ),
                     child: Center(
-                      child: AutoSizeText('Ver mas',
-                          style: context.theme.textTheme.textButtomLarge
-                              .copyWith(fontSize: 23.0)),
+                      child: AutoSizeText(
+                        AppLocalizations.of(context)!.details,
+                        style: context.theme.textTheme.textButtomLarge
+                            .copyWith(fontSize: 20.0),
+                      ),
                     ),
                   ),
                 ),

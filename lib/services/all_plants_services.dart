@@ -39,10 +39,10 @@ class AllPlantServices {
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
 
-    // final utf = const Utf8Decoder().convert(resp.body.codeUnits);
+    final utf = const Utf8Decoder().convert(response.body.codeUnits);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final List<dynamic> data = json.decode(utf);
       plants = data.map((json) => Plant.fromJson(json)).toList();
       return plants;
     } else {
