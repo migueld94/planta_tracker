@@ -50,7 +50,7 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
       latMin,
       longMax,
       longMin,
-    ) = _obtenerLimites(state.northEast, state.southWest);
+    ) = _obtenerLimites(event.northEast, event.southWest);
 
     final response =
         await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
