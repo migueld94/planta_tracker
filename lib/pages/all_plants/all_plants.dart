@@ -1,7 +1,13 @@
+// // ignore_for_file: use_build_context_synchronously
+
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -13,6 +19,7 @@ import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AllPlants extends StatefulWidget {
   const AllPlants({super.key});
@@ -27,39 +34,56 @@ class _AllPlantsState extends State<AllPlants> {
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
-  final String noPicture =
-      'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg';
 
   _loadMore() async {
-    String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
-    String secret =
-        'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
-    String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
-
-    var resp = await http.post(secretUrl, headers: <String, String>{
-      'authorization': basicAuth
-    }, body: {
-      "grant_type": "client_credentials",
-    });
-
-    final Map<String, dynamic> data = json.decode(resp.body);
-    final accessToken = data["access_token"];
-
-    String idioma = getFlag();
-
-    final allplants =
-        Uri.parse('${Constants.baseUrl}/$idioma/api/plants_api?page=$next');
-
-    final response = await http.get(allplants,
-        headers: <String, String>{'authorization': "Bearer $accessToken"});
-
-    final utf = const Utf8Decoder().convert(response.body.codeUnits);
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(utf)['results'] as List;
-      setState(() {
-        items.addAll(json);
+    try {
+      String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
+      String secret =
+          'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
+      String basicAuth =
+          'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
+      var resp = await http.post(secretUrl, headers: <String, String>{
+        'authorization': basicAuth
+      }, body: {
+        "grant_type": "client_credentials",
       });
+
+      final Map<String, dynamic> data = json.decode(resp.body);
+      final accessToken = data["access_token"];
+
+      String idioma = getFlag();
+      final allplants =
+          Uri.parse('${Constants.baseUrl}/$idioma/api/plants_api?page=$next');
+
+      final response = await http.get(allplants,
+          headers: <String, String>{'authorization': "Bearer $accessToken"});
+
+      final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(utf)['results'] as List;
+        setState(() {
+          items.addAll(json);
+        });
+      }
+    } on SocketException {
+      EasyLoading.dismiss();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: PlantaColors.colorDarkOrange,
+        content: Center(
+          child: AutoSizeText(
+            'Sin conexión',
+            style: context.theme.textTheme.text_01.copyWith(
+              color: PlantaColors.colorWhite,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
+      ));
+    } catch (e) {
+      log('Error => $e');
+      EasyLoading.dismiss();
+      throw Exception(e);
     }
   }
 
@@ -101,14 +125,12 @@ class _AllPlantsState extends State<AllPlants> {
               separatorBuilder: (context, index) => verticalMargin4,
               itemBuilder: (context, index) {
                 EasyLoading.dismiss();
-                if (index >= items.length) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
+                if (index < items.length) {
                   final date = DateTime.parse(items[index]["fecha_registro_"]);
                   return CardPlant(
-                    picture: items[index]['imagen_principal'] ?? noPicture,
+                    picture: items[index]['imagen_principal'],
                     title: items[index]['especie_planta'] ??
-                        'Determinación pendiente',
+                        AppLocalizations.of(context)!.name_plant,
                     lifestage: items[index]['lifestage'] ?? '',
                     status: items[index]['estado_actual'] ?? '',
                     date: '${date.day} / ${date.month} / ${date.year}',
@@ -122,6 +144,26 @@ class _AllPlantsState extends State<AllPlants> {
                         ),
                       );
                     },
+                  );
+                } else if (index == items.length) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                    child: Center(
+                      child: AutoSizeText(
+                        'No more data',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.0),
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
               },
@@ -168,56 +210,15 @@ class _AllPlantsState extends State<AllPlants> {
   }
 }
 
-// class All extends StatefulWidget {
-//   const All({super.key});
+// import 'dart:convert';
 
-//   @override
-//   State<All> createState() => _AllState();
-// }
-
-// class _AllState extends State<All> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: const AllPlants(),
-//       floatingActionButton: FloatingActionButton(
-//         shape: const CircleBorder(),
-//         backgroundColor: PlantaColors.colorGreen,
-//         onPressed: () => goToRegisterPlant(context),
-//         child: Icon(
-//           Ionicons.add_outline,
-//           color: PlantaColors.colorWhite,
-//         ),
-//       ),
-//       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//       bottomNavigationBar: Ink(
-//         height: 60.0,
-//         child: ClipRRect(
-//           borderRadius: BorderRadius.only(
-//             topLeft: borderRadius10.topLeft,
-//             topRight: borderRadius10.topRight,
-//           ),
-//           child: BottomAppBar(
-//             color: PlantaColors.colorGreen,
-//             elevation: 0,
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 IconButton(
-//                   icon: Icon(
-//                     Ionicons.people_outline,
-//                     color: PlantaColors.colorWhite,
-//                   ),
-//                   onPressed: () => goToProfile(context),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+// import 'package:flutter/material.dart';
+// import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+// import 'package:planta_tracker/assets/utils/constants.dart';
+// import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
+// import 'package:planta_tracker/models/all_plants_models.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:planta_tracker/services/plants_services.dart';
 
 // class AllPlants extends StatefulWidget {
 //   const AllPlants({super.key});
@@ -227,63 +228,108 @@ class _AllPlantsState extends State<AllPlants> {
 // }
 
 // class _AllPlantsState extends State<AllPlants> {
-//   final ScrollController _scrollController = ScrollController();
-//   int currentPage = 1;
-//   List<Plant> movies = [];
-//   final AllPlantServices plantServices = AllPlantServices();
+//   static const numberOfPostsPerRequest = 10;
+//   final PagingController<int, Result> pagingController =
+//       PagingController(firstPageKey: 1);
+//   final OptionPlantServices optionServices = OptionPlantServices();
 
 //   @override
 //   void initState() {
 //     super.initState();
-//     _scrollController.addListener(() async {
-//       if (_scrollController.position.pixels ==
-//           _scrollController.position.maxScrollExtent) {
-//         currentPage++;
-//         await plantServices
-//             .getAllPlants(context, currentPage)
-//             .then((newMovies) {
-//           setState(() {
-//             movies.addAll(newMovies);
-//           });
-//         });
-//         log(movies.length.toString());
-//       }
+//     pagingController.addPageRequestListener((pageKey) {
+//       fetchPage(pageKey);
 //     });
 //   }
 
 //   @override
+//   void dispose() {
+//     pagingController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
 //   Widget build(BuildContext context) {
-//     return FutureBuilder<List<Plant>>(
-//       future: plantServices.getAllPlants(context, currentPage),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return const Center(child: CircularProgressIndicator());
-//         } else if (snapshot.hasError) {
-//           return const Text('Error loading data');
-//         } else if (snapshot.hasData) {
-//           movies.addAll(snapshot.data!);
-//           return ListView.builder(
-//             controller: _scrollController,
-//             itemCount: movies.length,
-//             itemBuilder: (context, index) {
-//               log(movies.length.toString());
-//               return CardPlant(
-//                 picture: movies[index].imagenPrincipal,
-//                 title: movies[index].name,
-//                 lifestage: movies[index].lifestage,
-//                 status: movies[index].status,
-//                 date: '17/02/90',
-//                 onTap: () {
-//                   Navigator.push(
-//                       context, SlideRightRoute(page: const Details()));
-//                 },
-//               );
-//             },
-//           );
-//         } else {
-//           return const Text('No data available');
-//         }
-//       },
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Infinite Scroll Pagination Package'),
+//       ),
+//       body: RefreshIndicator(
+//         onRefresh: () => Future.sync(pagingController.refresh),
+//         child: PagedListView<int, Result>(
+//           pagingController: pagingController,
+//           builderDelegate: PagedChildBuilderDelegate<Result>(
+//               animateTransitions: true,
+//               itemBuilder: (context, item, index) {
+//                 // final date = DateTime.parse(item.fechaRegistro.toString());
+//                 Future<File> f =
+//                     optionServices.getImageFileFromAssets(Constants.noPicture);
+
+//                 return CardPlant(
+//                   title: item.especiePlanta ?? 'Determinacion',
+//                   lifestage: item.lifestage ?? '',
+//                   status: item.estadoActual ?? '',
+//                   picture: item.imagenPrincipal ?? f.toString(),
+//                   date: '12/12/24',
+//                   onTap: () {},
+//                 );
+//               }),
+//         ),
+//       ),
 //     );
+//   }
+
+//   Future<void> fetchPage(int pageKey) async {
+//     try {
+//       var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
+//       String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
+//       String secret =
+//           'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
+//       String basicAuth =
+//           'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
+//       var resp = await http.post(secretUrl, headers: <String, String>{
+//         'authorization': basicAuth
+//       }, body: {
+//         "grant_type": "client_credentials",
+//       });
+
+//       final Map<String, dynamic> data = json.decode(resp.body);
+//       final accessToken = data["access_token"];
+
+//       final allplants =
+//           Uri.parse('${Constants.baseUrl}/en/api/plants_api?page=$pageKey');
+
+//       final response = await http.get(allplants,
+//           headers: <String, String>{'authorization': "Bearer $accessToken"});
+
+//       final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+//       List responseList = json.decode(utf)['results'];
+
+//       final post = responseList
+//           .map(
+//             (e) => Result(
+//               id: e['id'],
+//               especiePlanta: e['especiePlanta'],
+//               estadoActual: e['estadoActual'],
+//               fechaRegistro: e['fechaRegistro'],
+//               imagenPrincipal: e['imagenPrincipal'],
+//               lifestage: e['lifestage'],
+//               latitude: e['latitude'],
+//               longitude: e['longitude'],
+//             ),
+//           )
+//           .toList();
+
+//       final isLastPage = post.length < numberOfPostsPerRequest;
+//       if (isLastPage) {
+//         pagingController.appendLastPage(post);
+//       } else {
+//         final nextPageKey = pageKey + 1;
+//         pagingController.appendPage(post, nextPageKey);
+//       }
+//     } catch (error) {
+//       debugPrint('Error => $error');
+//       pagingController.error = error;
+//     }
 //   }
 // }

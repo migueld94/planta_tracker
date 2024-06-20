@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, must_be_immutable
 
 import 'dart:io';
 
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
@@ -15,9 +16,12 @@ import 'package:planta_tracker/pages/register_plants/widget/camera_widget.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 
 class RegisterPlant2 extends StatefulWidget {
-  final List<String>? pictures;
+  // final List<String>? pictures;
+  List<Map<String, dynamic>> valores = [
+    {"imagen": "", "name": ""}
+  ];
 
-  const RegisterPlant2({super.key, this.pictures});
+  RegisterPlant2({super.key, required this.valores});
 
   @override
   State<RegisterPlant2> createState() => _RegisterPlant2State();
@@ -106,15 +110,19 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
                 if (flag == true) {
                   null;
                 } else {
-                  File f = await optionServices
-                      .getImageFileFromAssets(Constants.noPicture);
-                  widget.pictures!.add(f.path);
+                  File f = await optionServices.getImageFileFromAssets(Constants.noPicture);
+
+                  // widget.pictures!.add(f.path);
+                  widget.valores.add({
+                    "imagen": f.path,
+                    "name":
+                        AppLocalizations.of(context)!.plant_register_trunk_image
+                  });
 
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              RegisterPlant3(pictures: widget.pictures)));
+                      SlideRightRoute(
+                          page: RegisterPlant3(valores: widget.valores)));
                 }
               },
               title: 'Omitir',
@@ -125,14 +133,17 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
                 color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
                 onTap: () {
                   if (flag == true) {
-                    widget.pictures!.add(_image!.path);
+                    // widget.pictures!.add(_image!.path);
+                    widget.valores.add({
+                      "imagen": _image!.path,
+                      "name": AppLocalizations.of(context)!
+                          .plant_register_trunk_image
+                    });
+
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterPlant3(
-                                pictures: widget.pictures,
-                              )),
-                    );
+                        context,
+                        SlideRightRoute(
+                            page: RegisterPlant3(valores: widget.valores)));
                   } else {
                     null;
                   }

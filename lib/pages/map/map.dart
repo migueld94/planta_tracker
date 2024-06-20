@@ -1,6 +1,5 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, use_build_context_synchronously
 
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -19,9 +18,9 @@ import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/gps/gps_state.dart';
 import 'package:planta_tracker/blocs/map/map_bloc.dart';
 import 'package:planta_tracker/blocs/map/map_state.dart';
-import 'package:http/http.dart' as http;
 import 'package:planta_tracker/models/plants_models.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
+import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
 
 class MapView extends StatefulWidget {
@@ -46,55 +45,6 @@ class _MapViewState extends State<MapView> {
   double maxLat = 0.0;
   double minLat = 0.0;
   late LatLngBounds visibleRegion;
-  final MapController _mapController = MapController();
-
-  _loadMore() async {
-    String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
-    String secret =
-        'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
-    String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
-
-    var resp = await http.post(secretUrl, headers: <String, String>{
-      'authorization': basicAuth
-    }, body: {
-      "grant_type": "client_credentials",
-    });
-
-    final Map<String, dynamic> data = json.decode(resp.body);
-    final accessToken = data["access_token"];
-
-    final allspecie =
-        Uri.parse('${Constants.baseUrl}/es/api/especie_list?page=$next');
-
-    final response = await http.get(allspecie,
-        headers: <String, String>{'authorization': "Bearer $accessToken"});
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body)['results'] as List;
-      setState(() {
-        items.addAll(json);
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    _loadMore();
-    scroll.addListener(() async {
-      if (isLoadMore == true) return;
-      if (scroll.position.pixels == scroll.position.maxScrollExtent) {
-        setState(() {
-          isLoadMore = true;
-        });
-        next++;
-        await _loadMore();
-        setState(() {
-          isLoadMore = false;
-        });
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +66,11 @@ class _MapViewState extends State<MapView> {
                 return BlocBuilder<MapBloc, MapState>(
                   builder: (context, mapState) {
                     if (mapState is MapLoadSuccess) {
-                      return _buildMap(context, mapState.location);
+                      //andres
+                      return BlocProvider(
+                        create: (_) => PlantsMapBloc(AllPlantServices()),
+                        child: const AppFlutterMap(),
+                      );
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }
@@ -253,91 +207,6 @@ class _MapViewState extends State<MapView> {
     );
   }
 
-  Widget _buildMap(BuildContext context, LatLng location) {
-    return FutureBuilder<List<Plant>>(
-      future: AllPlantServices().getAllPin(context),
-      builder: (context, AsyncSnapshot<List<Plant>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasData) {
-          List<Plant> plants = snapshot.data!;
-          return FlutterMap(
-            mapController: _mapController,
-            options: MapOptions(
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.all,
-              ),
-              initialCenter: location,
-              minZoom: 5,
-              maxZoom: 25,
-              initialZoom: 18,
-              onPositionChanged: (position, hasGesture) {
-                if (hasGesture) {
-                  setState(() {
-                    visibleRegion = LatLngBounds(
-                      position.bounds!.northEast,
-                      position.bounds!.southWest,
-                    );
-                    log('Región visible - Noroeste: ${visibleRegion.northEast}, Suroeste: ${visibleRegion.southWest}');
-                  });
-                }
-              },
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                subdomains: const ['a', 'b', 'c'],
-              ),
-              MarkerLayer(markers: [
-                Marker(
-                  point: location,
-                  child: const Icon(
-                    Icons.person_pin_circle,
-                    color: Colors.blue,
-                    size: 40,
-                  ),
-                ),
-                ...createMarkers(plants, context),
-              ]),
-            ],
-          );
-        } else if (snapshot.hasError) {
-          log(snapshot.error.toString());
-          return Text('Error: ${snapshot.error}');
-        } else {
-          return const Center(child: Text('No data available.'));
-        }
-      },
-    );
-
-    // FlutterMap(
-    //   options: MapOptions(
-    //     initialCenter: location,
-    //     minZoom: 5,
-    //     maxZoom: 25,
-    //     initialZoom: 18,
-    //   ),
-    //   children: [
-    //     TileLayer(
-    //       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    //       userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-    //     ),
-    //     MarkerLayer(markers: [
-    //       Marker(
-    //         point: location,
-    //         child: const Icon(
-    //           Icons.person_pin_circle,
-    //           color: Colors.blue,
-    //           size: 40,
-    //         ),
-    //       ),
-
-    //     ]),
-    //   ],
-    // );
-  }
-
   Widget filterButton(String text, IconData icon, String filter) {
     final bool isSelected = selectedFilter == filter;
     return ElevatedButton(
@@ -462,5 +331,60 @@ class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return maxHeight != oldDelegate.maxHeight ||
         minHeight != oldDelegate.minHeight ||
         child != oldDelegate.child;
+  }
+}
+
+//andres
+class AppFlutterMap extends StatelessWidget {
+  const AppFlutterMap({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FlutterMap(
+      mapController: MapController(),
+      options: MapOptions(
+        interactionOptions: const InteractionOptions(
+          flags: InteractiveFlag.all,
+        ),
+        initialCenter: const LatLng(23.11958, -82.397264),
+        minZoom: 5,
+        maxZoom: 25,
+        initialZoom: 18,
+        onPositionChanged: (position, hasGesture) {
+          if (hasGesture) {
+            final (northEast, southWest) = (
+              position.bounds!.northEast,
+              position.bounds!.southWest,
+            );
+
+            context.read<PlantsMapBloc>().add(
+                  PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
+                );
+
+            //log('Región visible - Noroeste: $northEast, Suroeste: $southWest');
+          }
+        },
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+          subdomains: const ['a', 'b', 'c'],
+        ),
+        BlocBuilder<PlantsMapBloc, PlantsMapState>(builder: (context, state) {
+          return MarkerLayer(markers: [
+            Marker(
+              point: state.location,
+              child: const Icon(
+                Icons.person_pin_circle,
+                color: Colors.blue,
+                size: 40,
+              ),
+            ),
+            ...createMarkers(state.plants, context),
+          ]);
+        }),
+      ],
+    );
   }
 }

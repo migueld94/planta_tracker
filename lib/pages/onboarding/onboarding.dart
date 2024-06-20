@@ -1,14 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:planta_tracker/assets/utils/assets.dart';
-import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
-import 'package:planta_tracker/assets/utils/widgets/container_onboarding.dart';
-import 'package:planta_tracker/pages/login/login.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/utils/widgets/language.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'package:planta_tracker/pages/login/login.dart';
+import 'package:planta_tracker/assets/utils/assets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
+import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
+import 'package:planta_tracker/assets/utils/widgets/container_onboarding.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -45,7 +49,7 @@ class _OnboardingState extends State<Onboarding> {
               urlImage: Assets.logo,
               title: 'Planta! Tracker',
               subtitle_00: AppLocalizations.of(context)!.text_onboarding_first,
-              // icon: const LanguagePickerWidget(),
+              icon: const LanguagePickerWidget(),
             ),
             ContainerOnboarding(
               color: PlantaColors.colorWhite,
@@ -75,9 +79,7 @@ class _OnboardingState extends State<Onboarding> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.setBool('showHome', true);
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const Login(),
-                  ));
+                  Navigator.push(context, SlideRightRoute(page: const Login()));
                 },
                 title: AppLocalizations.of(context)!.text_buttom_continue,
               ),

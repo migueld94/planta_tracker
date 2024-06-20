@@ -32,7 +32,10 @@ class LanguagePickerWidget extends StatelessWidget {
                     Provider.of<ThemeProvider>(context, listen: false);
                 provider.setLocale(locale);
               },
-              child: AutoSizeText(flag),
+              child: AutoSizeText(
+                flag,
+                style: context.theme.textTheme.text_01,
+              ),
               // child: flag == 'en'
               //     ? Image.asset(
               //         'icons/flags/png/2.5x/us.png',
