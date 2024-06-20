@@ -24,18 +24,22 @@ class AllPlantServices {
     final Map<String, dynamic> data = json.decode(resp.body);
     final accessToken = data["access_token"];
 
-    final allPinPlant =
-        Uri.https('${Constants.baseUrl}/en/api/plants_map_api', '', {
-      "longitud_maxima": '$longMax',
-      "longitud_minima": '$longMin',
-      "latitud_maxima": '$latMax',
-      "latitud_minima": '$latMin',
+    final allPinPlant = Uri.parse('${Constants.baseUrl}/en/api/plants_map_api');
+
+    final request = http.MultipartRequest('GET', allPinPlant);
+    request.headers['Authorization'] = 'Bearer $accessToken';
+
+    request.fields.addAll({
+      'longitud_maxima': longMax.toString(),
+      'longitud_minima': longMin.toString(),
+      'latitud_maxima': latMax.toString(),
+      'latitud_minima': latMin.toString(),
     });
 
-    final response = await http.get(
-      allPinPlant,
-      headers: <String, String>{'authorization': "Bearer $accessToken"},
-    );
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    // final utf = const Utf8Decoder().convert(resp.body.codeUnits);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
