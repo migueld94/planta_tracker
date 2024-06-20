@@ -3,6 +3,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -80,6 +81,7 @@ class _AllPlantsState extends State<AllPlants> {
         ),
       ));
     } catch (e) {
+      log('Error => $e');
       EasyLoading.dismiss();
       throw Exception(e);
     }
