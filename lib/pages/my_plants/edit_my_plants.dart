@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, must_be_immutable, unrelated_type_equality_checks
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
@@ -130,7 +129,7 @@ class EditPlantState extends State<EditPlant> {
         centerTitle: true,
         backgroundColor: PlantaColors.colorGreen,
         title: AutoSizeText(
-          'Editar Planta',
+          AppLocalizations.of(context)!.edit_plant,
           style: context.theme.textTheme.titleApBar,
         ),
       ),
@@ -196,7 +195,8 @@ class EditPlantState extends State<EditPlant> {
                 ),
                 verticalMargin16,
                 //TextField para las notas
-                AutoSizeText('Notas', style: context.theme.textTheme.h2),
+                AutoSizeText(AppLocalizations.of(context)!.note,
+                    style: context.theme.textTheme.h2),
                 verticalMargin8,
                 TextFormField(
                   controller: noteController,
@@ -205,7 +205,7 @@ class EditPlantState extends State<EditPlant> {
                   textAlign: TextAlign.justify,
                   decoration: InputDecorations.authInputDecoration(
                     hintText: '',
-                    labelText: 'Escriba su comentario aqui...',
+                    labelText: AppLocalizations.of(context)!.write_comments,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: PlantaColors.colorGreen),
                       borderRadius: borderRadius10,
@@ -228,8 +228,8 @@ class EditPlantState extends State<EditPlant> {
                     ButtomSmall(
                       color: PlantaColors.colorDarkOrange,
                       onTap: () {
-                        warning(context,
-                            'Esta seguro de cancelar la edición de la planta?',
+                        warning(
+                            context, AppLocalizations.of(context)!.cancel_edit,
                             () async {
                           await storage.delete(key: 'lifestage');
 
@@ -247,7 +247,8 @@ class EditPlantState extends State<EditPlant> {
 
                           lifestage ??= widget.details.lifestage;
 
-                          warning(context, 'Esta seguro de enviar el registro?',
+                          warning(context,
+                              AppLocalizations.of(context)!.cancel_update,
                               () async {
                             if (formKey.currentState!.validate() &&
                                 lifestage != null) {
@@ -385,7 +386,7 @@ class EditPlantState extends State<EditPlant> {
                                   backgroundColor: PlantaColors.colorOrange,
                                   content: Center(
                                     child: AutoSizeText(
-                                      'Sin conexiónes',
+                                      AppLocalizations.of(context)!.no_internet,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                         color: PlantaColors.colorWhite,

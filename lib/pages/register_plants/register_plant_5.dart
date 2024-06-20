@@ -128,7 +128,7 @@ class _RegisterPlant5State extends State<RegisterPlant5> {
                           page: RegisterPlant6(valores: widget.valores)));
                 }
               },
-              title: 'Omitir',
+              title: AppLocalizations.of(context)!.skip,
               colorText:
                   flag ? PlantaColors.colorGrey : PlantaColors.colorBlack,
             ),

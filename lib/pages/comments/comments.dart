@@ -61,169 +61,176 @@ class _CommentsState extends State<Comments> {
         padding: allPadding24,
         child: Form(
           key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: comment,
-                maxLines: 12,
-                maxLength: 150,
-                textAlign: TextAlign.justify,
-                decoration: InputDecorations.authInputDecoration(
-                  hintText: AppLocalizations.of(context)!.write_comments,
-                  labelText: AppLocalizations.of(context)!.write_comments,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: PlantaColors.colorGreen),
-                    borderRadius: borderRadius10,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: comment,
+                  maxLines: 12,
+                  maxLength: 150,
+                  textAlign: TextAlign.justify,
+                  decoration: InputDecorations.authInputDecoration(
+                    hintText: AppLocalizations.of(context)!.write_comments,
+                    labelText: AppLocalizations.of(context)!.write_comments,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: PlantaColors.colorGreen),
+                      borderRadius: borderRadius10,
+                    ),
                   ),
+                  onChanged: (value) {
+                    comment.text = value;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return AppLocalizations.of(context)!.obligatory_camp;
+                    }
+                    return null;
+                  },
                 ),
-                onChanged: (value) {
-                  comment.text = value;
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return AppLocalizations.of(context)!.obligatory_camp;
-                  }
-                  return null;
-                },
-              ),
-              verticalMargin16,
-              ButtomLarge(
-                color: PlantaColors.colorGreen,
-                onTap: () {
-                  if (formKey.currentState!.validate()) {
-                    setState(() {
-                      comments = comment.text;
-                    });
+                verticalMargin16,
+                ButtomLarge(
+                  color: PlantaColors.colorGreen,
+                  onTap: () {
+                    if (formKey.currentState!.validate()) {
+                      setState(() {
+                        comments = comment.text;
+                      });
 
-                    warning(context,
-                        AppLocalizations.of(context)!.message_add_comments,
-                        () async {
-                      EasyLoading.show();
+                      warning(context,
+                          AppLocalizations.of(context)!.message_add_comments,
+                          () async {
+                        EasyLoading.show();
 
-                      comentario.id = widget.id.toString();
-                      comentario.notas = comments;
+                        comentario.id = widget.id.toString();
+                        comentario.notas = comments;
 
-                      try {
-                        var res = await sendComments.addComment(comentario);
+                        try {
+                          var res = await sendComments.addComment(comentario);
 
-                        switch (res!.statusCode) {
-                          case 200:
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorGreen,
-                              content: Center(
-                                child: AutoSizeText(
-                                  AppLocalizations.of(context)!.publish,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                          switch (res!.statusCode) {
+                            case 200:
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorGreen,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    AppLocalizations.of(context)!.publish,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ));
-                            EasyLoading.dismiss();
-                            if (!context.mounted) return;
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((_) async {
-                              Navigator.push(
-                                  context, SlideRightRoute(page: const Home()));
-                            });
-                            break;
-                          case 406:
-                            EasyLoading.dismiss();
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  AppLocalizations.of(context)!
-                                      .publish_repetitive,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                              ));
+                              EasyLoading.dismiss();
+                              if (!context.mounted) return;
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) async {
+                                Navigator.push(context,
+                                    SlideRightRoute(page: const Home()));
+                              });
+                              break;
+                            case 406:
+                              EasyLoading.dismiss();
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    AppLocalizations.of(context)!
+                                        .publish_repetitive,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ));
-                            break;
-                          case 400:
-                            EasyLoading.dismiss();
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  res.body,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                              ));
+                              break;
+                            case 400:
+                              EasyLoading.dismiss();
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    res.body,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ));
-                            break;
-                          case 401:
-                            EasyLoading.dismiss();
-                            Navigator.pop(context);
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  res.body,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                              ));
+                              break;
+                            case 401:
+                              EasyLoading.dismiss();
+                              Navigator.pop(context);
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    res.body,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ));
-                            break;
-                          default:
-                            EasyLoading.dismiss();
-                            Navigator.pop(context);
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  res.body,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                              ));
+                              break;
+                            default:
+                              EasyLoading.dismiss();
+                              Navigator.pop(context);
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    res.body,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ));
-                            break;
-                        }
-                      } on SocketException {
-                        EasyLoading.dismiss();
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: PlantaColors.colorOrange,
-                          content: Center(
-                            child: AutoSizeText(
-                              AppLocalizations.of(context)!.no_internet,
-                              style: context.theme.textTheme.text_01.copyWith(
-                                color: PlantaColors.colorWhite,
-                                fontSize: 16.0,
+                              ));
+                              break;
+                          }
+                        } on SocketException {
+                          EasyLoading.dismiss();
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                AppLocalizations.of(context)!.no_internet,
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
                               ),
                             ),
-                          ),
-                        ));
-                      }
-                    });
-                  }
-                },
-                title: AppLocalizations.of(context)!.text_buttom_send,
-              )
-            ],
+                          ));
+                        }
+                      });
+                    }
+                  },
+                  title: AppLocalizations.of(context)!.text_buttom_send,
+                )
+              ],
+            ),
           ),
         ),
       ),

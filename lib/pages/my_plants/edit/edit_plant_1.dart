@@ -129,7 +129,7 @@ class _EditPlants01State extends State<EditPlants01> {
           children: [
             Flexible(
               child: AutoSizeText(
-                'Para volver a tomar la foto pulse la imagén',
+                AppLocalizations.of(context)!.take_photo,
                 style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
                 textAlign: TextAlign.center,
               ),

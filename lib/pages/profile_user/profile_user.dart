@@ -52,7 +52,7 @@ class _ProfileUserState extends State<ProfileUser> {
             return Container();
           } else {
             EasyLoading.dismiss();
-            return _UserProfile(user: snapshot.data!);
+            return _UserProfile(user: snapshot.data);
           }
         },
       ),
@@ -61,7 +61,7 @@ class _ProfileUserState extends State<ProfileUser> {
 }
 
 class _UserProfile extends StatefulWidget {
-  final User user;
+  final User? user;
   const _UserProfile({required this.user});
 
   @override
@@ -111,7 +111,7 @@ class _UserProfileState extends State<_UserProfile> {
                     children: [
                       Flexible(
                         child: AutoSizeText(
-                          widget.user.fullName,
+                          widget.user!.fullName,
                           style: context.theme.textTheme.h2,
                           textAlign: TextAlign.center,
                         ),
@@ -170,7 +170,7 @@ class _UserProfileState extends State<_UserProfile> {
                   ),
             verticalMargin24,
             AutoSizeText(
-              '${AppLocalizations.of(context)!.email}: ${widget.user.email}',
+              '${AppLocalizations.of(context)!.email}: ${widget.user!.email}',
               style: context.theme.textTheme.text_01,
             ),
             verticalMargin12,

@@ -53,7 +53,7 @@ class _MyPlantsState extends State<MyPlants> {
         final json = jsonDecode(response.body)['results'] as List;
         if (json.isEmpty) {
           EasyLoading.dismiss();
-          return alert(context, 'No existen elementos');
+          return alert(context, AppLocalizations.of(context)!.no_elements);
         } else {
           setState(() {
             items.addAll(json);
@@ -66,7 +66,7 @@ class _MyPlantsState extends State<MyPlants> {
         backgroundColor: PlantaColors.colorOrange,
         content: Center(
           child: AutoSizeText(
-            'Sin conexión',
+            AppLocalizations.of(context)!.no_internet,
             style: context.theme.textTheme.text_01.copyWith(
               color: PlantaColors.colorWhite,
               fontSize: 16.0,
@@ -145,7 +145,7 @@ class _MyPlantsState extends State<MyPlants> {
                       if ((status == 'pendiente') || (status == 'earring')) {
                         warning(
                           context,
-                          '¿Esta seguro de eliminar la planta?',
+                          AppLocalizations.of(context)!.message_delete_plant,
                           () async {
                             EasyLoading.show();
                             Navigator.pop(context);
@@ -173,7 +173,7 @@ class _MyPlantsState extends State<MyPlants> {
                       if ((status == 'pendiente') || (status == 'earring')) {
                         warning(
                           context,
-                          '¿Esta seguro de editar la planta?',
+                          AppLocalizations.of(context)!.message_edit_plant,
                           () async {
                             Navigator.pop(context);
                             Navigator.push(
@@ -190,12 +190,12 @@ class _MyPlantsState extends State<MyPlants> {
                     },
                   );
                 } else if (index == items.length) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Center(
                       child: AutoSizeText(
-                        'No more data',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.no_more,
+                        style: const TextStyle(
                           fontSize: 16.0,
                           fontFamily: 'Nunito',
                         ),

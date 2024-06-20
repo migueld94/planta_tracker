@@ -140,14 +140,13 @@ class _EditPlants05State extends State<EditPlants05> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (flag == true)
-              Flexible(
-                child: AutoSizeText(
-                  'Para volver a tomar la foto pulse la imagén',
-                  style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
-                  textAlign: TextAlign.center,
-                ),
+            Flexible(
+              child: AutoSizeText(
+                AppLocalizations.of(context)!.take_photo,
+                style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                textAlign: TextAlign.center,
               ),
+            ),
             verticalMargin57,
             if (widget.images![4].posterPath == null)
               Column(
@@ -299,7 +298,7 @@ class _EditPlants05State extends State<EditPlants05> {
                         // return PlantaColors.colorBlack;
                       }
                     },
-                    title: 'Omitir',
+                    title: AppLocalizations.of(context)!.skip,
                     colorText: getColorOmitir(),
                   ),
             ButtomSmall(
