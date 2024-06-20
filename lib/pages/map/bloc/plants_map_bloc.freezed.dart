@@ -328,8 +328,8 @@ abstract class _LoadMoreByBoundries implements PlantsMapEvent {
 /// @nodoc
 mixin _$PlantsMapState {
   LatLng get location => throw _privateConstructorUsedError;
-  LatLng? get northEast => throw _privateConstructorUsedError;
-  LatLng? get southWest => throw _privateConstructorUsedError;
+  LatLng get northEast => throw _privateConstructorUsedError;
+  LatLng get southWest => throw _privateConstructorUsedError;
   List<Plant> get plants => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -345,8 +345,8 @@ abstract class $PlantsMapStateCopyWith<$Res> {
   @useResult
   $Res call(
       {LatLng location,
-      LatLng? northEast,
-      LatLng? southWest,
+      LatLng northEast,
+      LatLng southWest,
       List<Plant> plants});
 }
 
@@ -364,8 +364,8 @@ class _$PlantsMapStateCopyWithImpl<$Res, $Val extends PlantsMapState>
   @override
   $Res call({
     Object? location = null,
-    Object? northEast = freezed,
-    Object? southWest = freezed,
+    Object? northEast = null,
+    Object? southWest = null,
     Object? plants = null,
   }) {
     return _then(_value.copyWith(
@@ -373,14 +373,14 @@ class _$PlantsMapStateCopyWithImpl<$Res, $Val extends PlantsMapState>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as LatLng,
-      northEast: freezed == northEast
+      northEast: null == northEast
           ? _value.northEast
           : northEast // ignore: cast_nullable_to_non_nullable
-              as LatLng?,
-      southWest: freezed == southWest
+              as LatLng,
+      southWest: null == southWest
           ? _value.southWest
           : southWest // ignore: cast_nullable_to_non_nullable
-              as LatLng?,
+              as LatLng,
       plants: null == plants
           ? _value.plants
           : plants // ignore: cast_nullable_to_non_nullable
@@ -399,8 +399,8 @@ abstract class _$$PlantsMapStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {LatLng location,
-      LatLng? northEast,
-      LatLng? southWest,
+      LatLng northEast,
+      LatLng southWest,
       List<Plant> plants});
 }
 
@@ -416,8 +416,8 @@ class __$$PlantsMapStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? location = null,
-    Object? northEast = freezed,
-    Object? southWest = freezed,
+    Object? northEast = null,
+    Object? southWest = null,
     Object? plants = null,
   }) {
     return _then(_$PlantsMapStateImpl(
@@ -425,14 +425,14 @@ class __$$PlantsMapStateImplCopyWithImpl<$Res>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as LatLng,
-      northEast: freezed == northEast
+      northEast: null == northEast
           ? _value.northEast
           : northEast // ignore: cast_nullable_to_non_nullable
-              as LatLng?,
-      southWest: freezed == southWest
+              as LatLng,
+      southWest: null == southWest
           ? _value.southWest
           : southWest // ignore: cast_nullable_to_non_nullable
-              as LatLng?,
+              as LatLng,
       plants: null == plants
           ? _value._plants
           : plants // ignore: cast_nullable_to_non_nullable
@@ -446,8 +446,8 @@ class __$$PlantsMapStateImplCopyWithImpl<$Res>
 class _$PlantsMapStateImpl implements _PlantsMapState {
   const _$PlantsMapStateImpl(
       {this.location = const LatLng(23.11958, -82.397264),
-      this.northEast,
-      this.southWest,
+      this.northEast = const LatLng(23.61958, -82.597264),
+      this.southWest = const LatLng(22.11958, -82.197264),
       final List<Plant> plants = const []})
       : _plants = plants;
 
@@ -455,9 +455,11 @@ class _$PlantsMapStateImpl implements _PlantsMapState {
   @JsonKey()
   final LatLng location;
   @override
-  final LatLng? northEast;
+  @JsonKey()
+  final LatLng northEast;
   @override
-  final LatLng? southWest;
+  @JsonKey()
+  final LatLng southWest;
   final List<Plant> _plants;
   @override
   @JsonKey()
@@ -501,16 +503,16 @@ class _$PlantsMapStateImpl implements _PlantsMapState {
 abstract class _PlantsMapState implements PlantsMapState {
   const factory _PlantsMapState(
       {final LatLng location,
-      final LatLng? northEast,
-      final LatLng? southWest,
+      final LatLng northEast,
+      final LatLng southWest,
       final List<Plant> plants}) = _$PlantsMapStateImpl;
 
   @override
   LatLng get location;
   @override
-  LatLng? get northEast;
+  LatLng get northEast;
   @override
-  LatLng? get southWest;
+  LatLng get southWest;
   @override
   List<Plant> get plants;
   @override
