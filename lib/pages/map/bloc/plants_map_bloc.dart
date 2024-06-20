@@ -27,32 +27,33 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
   }
 
   final AllPlantServices _allPlantServices;
-  LatLng? northEast;
-  LatLng? southWest;
 
   Future<void> _onLoad(Emitter<PlantsMapState> emit) async {
-    if (northEast != null && southWest != null) {
-      List<double> limites = obtenerLimites(northEast!, southWest!);
-      final double latMax = limites[0];
-      final double latMin = limites[1];
-      final double longMax = limites[2];
-      final double longMin = limites[3];
-      final response =
-          await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
-      emit(state.copyWith(plants: response));
-    }
+    final (
+      latMax,
+      latMin,
+      longMax,
+      longMin,
+    ) = _obtenerLimites(state.northEast, state.southWest);
+
+    final response =
+        await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
+    emit(state.copyWith(plants: response));
   }
 
   Future<void> _onLoadMoreByBoundries(
     Emitter<PlantsMapState> emit,
     _LoadMoreByBoundries event,
   ) async {
-    northEast = event.northEast;
-    southWest = event.southWest;
-    final response = await _allPlantServices.getPinsByBoundries(
-      northEast!,
-      southWest!,
-    );
+    final (
+      latMax,
+      latMin,
+      longMax,
+      longMin,
+    ) = _obtenerLimites(state.northEast, state.southWest);
+
+    final response =
+        await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
 
     emit(
       state.copyWith(
@@ -72,7 +73,8 @@ EventTransformer<E> debounceSequential<E>([
   };
 }
 
-List<double> obtenerLimites(LatLng northEast, LatLng southWest) {
+(double, double, double, double) _obtenerLimites(
+    LatLng northEast, LatLng southWest) {
   double latMax = northEast.latitude > southWest.latitude
       ? northEast.latitude
       : southWest.latitude;
@@ -86,7 +88,7 @@ List<double> obtenerLimites(LatLng northEast, LatLng southWest) {
       ? northEast.longitude
       : southWest.longitude;
 
-  return [latMax, latMin, longMax, longMin];
+  return (latMax, latMin, longMax, longMin);
 }
 
 

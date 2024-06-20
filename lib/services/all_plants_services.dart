@@ -29,10 +29,10 @@ class AllPlantServices {
     final response = await http.post(allPinPlant, headers: <String, String>{
       'authorization': "Bearer $accessToken"
     }, body: {
-      "longitud_maxima": longMax,
-      "longitud_minima": longMin,
-      "latitud_maxima": latMax,
-      "latitud_minima": latMin,
+      "longitud_maxima": '$longMax',
+      "longitud_minima": '$longMin',
+      "latitud_maxima": '$latMax',
+      "latitud_minima": '$latMin',
     });
 
     // final utf = const Utf8Decoder().convert(resp.body.codeUnits);
