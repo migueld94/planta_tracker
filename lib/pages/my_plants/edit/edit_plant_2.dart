@@ -138,13 +138,14 @@ class _EditPlants02State extends State<EditPlants02> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Flexible(
-              child: AutoSizeText(
-                AppLocalizations.of(context)!.take_photo,
-                style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
-                textAlign: TextAlign.center,
+            if (_image != null || widget.images![1].posterPath != null)
+              Flexible(
+                child: AutoSizeText(
+                  AppLocalizations.of(context)!.take_photo,
+                  style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
             verticalMargin57,
             if (widget.images![1].posterPath == null)
               Column(
@@ -206,6 +207,7 @@ class _EditPlants02State extends State<EditPlants02> {
                       ],
                     ),
                   ),
+                  verticalMargin16,
                   if (_image == null)
                     AutoSizeText(
                       '${widget.images![1].type}',

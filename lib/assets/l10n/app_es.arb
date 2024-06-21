@@ -57,7 +57,7 @@
     "name_plant": "Determinación pendiente",
     "comments": "Commentarios",
     "address": "No se registro la dirección",
-    "take_photo": "Foto tomada por:",
+    "take_photo_details": "Foto tomada por:",
     "no_notes": "No se encontraron notas",
     "add_comments": "Añadir comentario",
     "write_comments": "Escriba su comentario aqui...",

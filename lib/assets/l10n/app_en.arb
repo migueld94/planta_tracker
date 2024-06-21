@@ -247,9 +247,9 @@
         "description": "Address"
     },
 
-    "take_photo": "Picture taken by:",
-    "@take_photo": {
-        "description": "take_photo"
+    "take_photo_details": "Picture taken by:",
+    "@take_photo_details": {
+        "description": "take_photo_details"
     },
 
     "no_notes": "No notes found",
