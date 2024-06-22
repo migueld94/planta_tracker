@@ -122,7 +122,6 @@ class _MapViewState extends State<MapView> {
                               child: TextField(
                                 controller: controller,
                                 decoration: InputDecoration(
-                                  hintText: '$maxLat, $minLat',
                                   hintStyle:
                                       const TextStyle(color: Colors.blue),
                                   prefixIcon: const Icon(Icons.search,
