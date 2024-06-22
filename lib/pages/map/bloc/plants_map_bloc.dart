@@ -30,20 +30,51 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
   final AllPlantServices _allPlantServices;
 
   Future<void> _onLoad(Emitter<PlantsMapState> emit) async {
-    final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final (
-      latMax,
-      latMin,
-      longMax,
-      longMin,
-    ) = _obtenerLimites(state.northEast, state.southWest);
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
 
-    final response =
-        await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
-    emit(state.copyWith(
-        plants: response,
-        userLocation: LatLng(position.latitude, position.longitude)));
+      // Verificar si el servicio de ubicación está habilitado.
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        // El servicio de ubicación no está habilitado.
+        return Future.error('El servicio de ubicación está deshabilitado.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // Los permisos de ubicación están denegados
+          return Future.error('Los permisos de ubicación están denegados');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        // Los permisos de ubicación están permanentemente denegados, no podemos solicitar permisos.
+        return Future.error(
+            'Los permisos de ubicación están permanentemente denegados');
+      }
+
+      // Cuando llegamos aquí, tenemos los permisos de ubicación necesarios y el servicio de ubicación está habilitado.
+      final Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      final (
+        latMax,
+        latMin,
+        longMax,
+        longMin,
+      ) = _obtenerLimites(state.northEast, state.southWest);
+
+      final response =
+          await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
+      emit(state.copyWith(
+          plants: response,
+          userLocation: LatLng(position.latitude, position.longitude)));
+    } catch (e) {
+      print('Ocurrió un error al obtener la ubicación: $e');
+    }
   }
 
   Future<void> _onLoadMoreByBoundries(

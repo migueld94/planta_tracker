@@ -344,49 +344,54 @@ class AppFlutterMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlantsMapBloc, PlantsMapState>(
-        builder: (context, state) {
-      return FlutterMap(
-        mapController: MapController(),
-        options: MapOptions(
-          interactionOptions: const InteractionOptions(
-            flags: InteractiveFlag.all,
-          ),
-          initialCenter: state.userLocation ?? const LatLng(0, 0),
-          minZoom: 5,
-          maxZoom: 25,
-          initialZoom: 18,
-          onPositionChanged: (position, hasGesture) {
-            if (hasGesture) {
-              final (northEast, southWest) = (
-                position.bounds!.northEast,
-                position.bounds!.southWest,
-              );
+      builder: (context, state) {
+        if (state.userLocation == null) {
+          return const Center(child: Text('Obteniendo ubicación...'));
+        }
 
-              context.read<PlantsMapBloc>().add(
-                    PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
-                  );
-            }
-          },
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-            subdomains: const ['a', 'b', 'c'],
-          ),
-          MarkerLayer(markers: [
-            Marker(
-              point: state.userLocation ?? const LatLng(0, 0),
-              child: const Icon(
-                Icons.person_pin_circle,
-                color: Colors.blue,
-                size: 40,
-              ),
+        return FlutterMap(
+          mapController: MapController(),
+          options: MapOptions(
+            interactionOptions: const InteractionOptions(
+              flags: InteractiveFlag.all,
             ),
-            ...createMarkers(state.plants, context),
-          ]),
-        ],
-      );
-    });
+            initialCenter: state.userLocation ?? const LatLng(0, 0),
+            minZoom: 5,
+            maxZoom: 25,
+            initialZoom: 18,
+            onPositionChanged: (position, hasGesture) {
+              if (hasGesture) {
+                final (northEast, southWest) = (
+                  position.bounds!.northEast,
+                  position.bounds!.southWest,
+                );
+
+                context.read<PlantsMapBloc>().add(
+                      PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
+                    );
+              }
+            },
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+              subdomains: const ['a', 'b', 'c'],
+            ),
+            MarkerLayer(markers: [
+              Marker(
+                point: state.userLocation ?? const LatLng(0, 0),
+                child: const Icon(
+                  Icons.person_pin_circle,
+                  color: Colors.blue,
+                  size: 40,
+                ),
+              ),
+              ...createMarkers(state.plants, context),
+            ]),
+          ],
+        );
+      },
+    );
   }
 }
