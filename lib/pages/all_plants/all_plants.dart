@@ -146,12 +146,12 @@ class _AllPlantsState extends State<AllPlants> {
                     },
                   );
                 } else if (index == items.length) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Center(
                       child: AutoSizeText(
-                        'No more data',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.no_more,
+                        style: const TextStyle(
                           fontSize: 16.0,
                           fontFamily: 'Nunito',
                         ),
@@ -209,127 +209,3 @@ class _AllPlantsState extends State<AllPlants> {
     );
   }
 }
-
-// import 'dart:convert';
-
-// import 'package:flutter/material.dart';
-// import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-// import 'package:planta_tracker/assets/utils/constants.dart';
-// import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
-// import 'package:planta_tracker/models/all_plants_models.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// import 'package:planta_tracker/services/plants_services.dart';
-
-// class AllPlants extends StatefulWidget {
-//   const AllPlants({super.key});
-
-//   @override
-//   State<AllPlants> createState() => _AllPlantsState();
-// }
-
-// class _AllPlantsState extends State<AllPlants> {
-//   static const numberOfPostsPerRequest = 10;
-//   final PagingController<int, Result> pagingController =
-//       PagingController(firstPageKey: 1);
-//   final OptionPlantServices optionServices = OptionPlantServices();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     pagingController.addPageRequestListener((pageKey) {
-//       fetchPage(pageKey);
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     pagingController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Infinite Scroll Pagination Package'),
-//       ),
-//       body: RefreshIndicator(
-//         onRefresh: () => Future.sync(pagingController.refresh),
-//         child: PagedListView<int, Result>(
-//           pagingController: pagingController,
-//           builderDelegate: PagedChildBuilderDelegate<Result>(
-//               animateTransitions: true,
-//               itemBuilder: (context, item, index) {
-//                 // final date = DateTime.parse(item.fechaRegistro.toString());
-//                 Future<File> f =
-//                     optionServices.getImageFileFromAssets(Constants.noPicture);
-
-//                 return CardPlant(
-//                   title: item.especiePlanta ?? 'Determinacion',
-//                   lifestage: item.lifestage ?? '',
-//                   status: item.estadoActual ?? '',
-//                   picture: item.imagenPrincipal ?? f.toString(),
-//                   date: '12/12/24',
-//                   onTap: () {},
-//                 );
-//               }),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Future<void> fetchPage(int pageKey) async {
-//     try {
-//       var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
-//       String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
-//       String secret =
-//           'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
-//       String basicAuth =
-//           'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
-//       var resp = await http.post(secretUrl, headers: <String, String>{
-//         'authorization': basicAuth
-//       }, body: {
-//         "grant_type": "client_credentials",
-//       });
-
-//       final Map<String, dynamic> data = json.decode(resp.body);
-//       final accessToken = data["access_token"];
-
-//       final allplants =
-//           Uri.parse('${Constants.baseUrl}/en/api/plants_api?page=$pageKey');
-
-//       final response = await http.get(allplants,
-//           headers: <String, String>{'authorization': "Bearer $accessToken"});
-
-//       final utf = const Utf8Decoder().convert(response.body.codeUnits);
-
-//       List responseList = json.decode(utf)['results'];
-
-//       final post = responseList
-//           .map(
-//             (e) => Result(
-//               id: e['id'],
-//               especiePlanta: e['especiePlanta'],
-//               estadoActual: e['estadoActual'],
-//               fechaRegistro: e['fechaRegistro'],
-//               imagenPrincipal: e['imagenPrincipal'],
-//               lifestage: e['lifestage'],
-//               latitude: e['latitude'],
-//               longitude: e['longitude'],
-//             ),
-//           )
-//           .toList();
-
-//       final isLastPage = post.length < numberOfPostsPerRequest;
-//       if (isLastPage) {
-//         pagingController.appendLastPage(post);
-//       } else {
-//         final nextPageKey = pageKey + 1;
-//         pagingController.appendPage(post, nextPageKey);
-//       }
-//     } catch (error) {
-//       debugPrint('Error => $error');
-//       pagingController.error = error;
-//     }
-//   }
-// }

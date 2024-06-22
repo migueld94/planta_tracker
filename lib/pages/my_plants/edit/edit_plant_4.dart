@@ -137,10 +137,10 @@ class _EditPlants04State extends State<EditPlants04> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (flag == true)
+            if (_image != null || widget.images![1].posterPath != null)
               Flexible(
                 child: AutoSizeText(
-                  'Para volver a tomar la foto pulse la imagén',
+                  AppLocalizations.of(context)!.take_photo,
                   style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
                   textAlign: TextAlign.center,
                 ),
@@ -206,6 +206,7 @@ class _EditPlants04State extends State<EditPlants04> {
                       ],
                     ),
                   ),
+                  verticalMargin16,
                   if (_image == null)
                     AutoSizeText(
                       '${widget.images![3].type}',
@@ -296,7 +297,7 @@ class _EditPlants04State extends State<EditPlants04> {
                         // return PlantaColors.colorBlack;
                       }
                     },
-                    title: 'Omitir',
+                    title: AppLocalizations.of(context)!.skip,
                     colorText: getColorOmitir(),
                   ),
             ButtomSmall(

@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -141,80 +140,81 @@ Future<Object?> info(BuildContext context, String lifestage, String status,
       ),
       child: ClipRRect(
         borderRadius: borderRadius10,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            width: 250,
-            height: 150,
-            padding: allMargin16,
-            color: PlantaColors.colorWhite.withOpacity(0.3),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AutoSizeText(
-                  name,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.theme.textTheme.text_02.copyWith(
-                    fontSize: 14.0,
-                  ),
+        child: Container(
+          width: 250,
+          height: 150,
+          padding: allMargin16,
+          color: PlantaColors.colorWhite.withOpacity(0.3),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AutoSizeText(
+                name,
+                overflow: TextOverflow.ellipsis,
+                style: context.theme.textTheme.text_02.copyWith(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
                 ),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: borderRadius20,
-                        color: color,
-                      ),
-                      child: Center(
-                        child: AutoSizeText(
-                          status,
-                          style: context.theme.textTheme.text_02.copyWith(
-                            color: PlantaColors.colorWhite,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    horizontalMargin8,
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: borderRadius20,
-                        border: Border.all(color: PlantaColors.colorOrange),
-                      ),
-                      child: Center(
-                        child: AutoSizeText(
-                          lifestage,
-                          style: context.theme.textTheme.text_02.copyWith(
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: onTap,
-                  child: Container(
-                    width: double.infinity,
-                    height: 40.0,
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
-                      borderRadius: borderRadius10,
-                      color: PlantaColors.colorGreen,
+                      borderRadius: borderRadius20,
+                      color: color,
                     ),
                     child: Center(
-                      child: AutoSizeText('Ver mas',
-                          style: context.theme.textTheme.textButtomLarge
-                              .copyWith(fontSize: 23.0)),
+                      child: AutoSizeText(
+                        status,
+                        style: context.theme.textTheme.text_02.copyWith(
+                          color: PlantaColors.colorWhite,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  horizontalMargin8,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      borderRadius: borderRadius20,
+                      border: Border.all(color: PlantaColors.colorOrange),
+                    ),
+                    child: Center(
+                      child: AutoSizeText(
+                        lifestage,
+                        style: context.theme.textTheme.text_02.copyWith(
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: onTap,
+                child: Container(
+                  width: double.infinity,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    borderRadius: borderRadius10,
+                    color: PlantaColors.colorGreen,
+                  ),
+                  child: Center(
+                    child: AutoSizeText(
+                      AppLocalizations.of(context)!.details,
+                      style: context.theme.textTheme.textButtomLarge
+                          .copyWith(fontSize: 20.0),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -255,8 +255,10 @@ goToRegister(BuildContext context) =>
 goToLogin(BuildContext context) =>
     Navigator.push(context, SlideRightRoute(page: const Login()));
 
-goToProfile(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const ProfileUser()));
+goToProfile(BuildContext context) => Navigator.push(
+      context,
+      SlideRightRoute(page: const ProfileUser()),
+    );
 
 goToRegisterPlant(BuildContext context) =>
     Navigator.push(context, SlideRightRoute(page: const RegisterPlant()));

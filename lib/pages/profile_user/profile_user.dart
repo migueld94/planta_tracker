@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/models/user_models.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
 import 'package:planta_tracker/assets/utils/widgets/language.dart';
+import 'package:planta_tracker/pages/home/home.dart';
 import 'package:planta_tracker/services/user_services.dart';
 
 class ProfileUser extends StatefulWidget {
@@ -32,7 +34,10 @@ class _ProfileUserState extends State<ProfileUser> {
       appBar: AppBar(
         centerTitle: true,
         leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () => Navigator.push(
+            context,
+            SlideRightRoute(page: const Home()),
+          ),
           child: Icon(
             Ionicons.arrow_back_outline,
             color: PlantaColors.colorWhite,
@@ -52,7 +57,7 @@ class _ProfileUserState extends State<ProfileUser> {
             return Container();
           } else {
             EasyLoading.dismiss();
-            return _UserProfile(user: snapshot.data!);
+            return _UserProfile(user: snapshot.data);
           }
         },
       ),
@@ -61,7 +66,7 @@ class _ProfileUserState extends State<ProfileUser> {
 }
 
 class _UserProfile extends StatefulWidget {
-  final User user;
+  final User? user;
   const _UserProfile({required this.user});
 
   @override
@@ -111,7 +116,7 @@ class _UserProfileState extends State<_UserProfile> {
                     children: [
                       Flexible(
                         child: AutoSizeText(
-                          widget.user.fullName,
+                          widget.user!.fullName,
                           style: context.theme.textTheme.h2,
                           textAlign: TextAlign.center,
                         ),
@@ -170,7 +175,7 @@ class _UserProfileState extends State<_UserProfile> {
                   ),
             verticalMargin24,
             AutoSizeText(
-              '${AppLocalizations.of(context)!.email}: ${widget.user.email}',
+              '${AppLocalizations.of(context)!.email}: ${widget.user!.email}',
               style: context.theme.textTheme.text_01,
             ),
             verticalMargin12,

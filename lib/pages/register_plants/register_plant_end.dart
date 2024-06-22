@@ -76,28 +76,35 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                     separatorBuilder: (context, index) => horizontalMargin16,
                     itemCount: widget.valores.length,
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
-                            width: 180,
-                            height: 140,
-                            decoration: BoxDecoration(
-                              color: PlantaColors.colorWhite,
-                              borderRadius: borderRadius10,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: borderRadius10,
-                              child: Image.file(
-                                File(widget.valores[index]['imagen']),
-                                fit: BoxFit.cover,
+                      final valor = widget.valores[index];
+                      final file = valor["imagen"];
+                      final fileName = file.path.split('/').last;
+                      if (fileName.endsWith("De7au1t.png")) {
+                        return null; // or return null to not show anything
+                      } else {
+                        return Column(
+                          children: [
+                            Container(
+                              width: 180,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                color: PlantaColors.colorWhite,
+                                borderRadius: borderRadius10,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: borderRadius10,
+                                child: Image.file(
+                                  File(widget.valores[index]['imagen']),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          verticalMargin12,
-                          AutoSizeText(widget.valores[index]['name'],
-                              style: context.theme.textTheme.text_01),
-                        ],
-                      );
+                            verticalMargin12,
+                            AutoSizeText(widget.valores[index]['name'],
+                                style: context.theme.textTheme.text_01),
+                          ],
+                        );
+                      }
                     },
                   ),
                 ),
@@ -111,7 +118,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                 ),
                 verticalMargin16,
                 //TextField para las notas
-                AutoSizeText('Notas', style: context.theme.textTheme.h2),
+                AutoSizeText(AppLocalizations.of(context)!.note,
+                    style: context.theme.textTheme.h2),
                 verticalMargin8,
                 TextFormField(
                   controller: note,

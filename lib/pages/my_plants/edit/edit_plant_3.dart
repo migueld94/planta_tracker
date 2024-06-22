@@ -139,10 +139,10 @@ class _EditPlants03State extends State<EditPlants03> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (flag == true)
+            if (_image != null || widget.images![1].posterPath != null)
               Flexible(
                 child: AutoSizeText(
-                  'Para volver a tomar la foto pulse la imagén',
+                  AppLocalizations.of(context)!.take_photo,
                   style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
                   textAlign: TextAlign.center,
                 ),
@@ -208,6 +208,7 @@ class _EditPlants03State extends State<EditPlants03> {
                       ],
                     ),
                   ),
+                  verticalMargin16,
                   if (_image == null)
                     AutoSizeText(
                       '${widget.images![2].type}',
@@ -284,8 +285,8 @@ class _EditPlants03State extends State<EditPlants03> {
                         // widget.pictures.add(f);
                         // log(widget.pictures.toString());
 
-                        widget.valores.add(
-                            {"imagen": f, "name": widget.images![2].type});
+                        widget.valores
+                            .add({"imagen": f, "name": widget.images![2].type});
 
                         Navigator.push(
                             context,
@@ -297,7 +298,7 @@ class _EditPlants03State extends State<EditPlants03> {
                         // return PlantaColors.colorBlack;
                       }
                     },
-                    title: 'Omitir',
+                    title: AppLocalizations.of(context)!.skip,
                     colorText: getColorOmitir(),
                   ),
             ButtomSmall(

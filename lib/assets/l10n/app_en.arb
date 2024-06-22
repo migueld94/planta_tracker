@@ -124,7 +124,7 @@
     "@register": {
         "description": "register"
     },
-    "search": "Search plant!...",
+    "search": "Search species...",
     "@search": {
         "description": "search"
     },
@@ -247,9 +247,9 @@
         "description": "Address"
     },
 
-    "take_photo": "Picture taken by:",
-    "@take_photo": {
-        "description": "take_photo"
+    "take_photo_details": "Picture taken by:",
+    "@take_photo_details": {
+        "description": "take_photo_details"
     },
 
     "no_notes": "No notes found",
@@ -280,5 +280,60 @@
     "publish_repetitive": "Repeat Post",
     "@publish_repetitive": {
         "description": "publish_repetitive"
+    },
+
+    "message_delete_plant": "Are you sure about removing the plant?",
+    "@message_delete_plant": {
+        "description": "message_delete_plant"
+    },
+
+    "message_edit_plant": "Are you sure about editing the plant?",
+    "@message_edit_plant": {
+        "description": "message_edit_plant"
+    },
+
+    "no_more": "No more data",
+    "@no_more": {
+        "description": "no_more"
+    },
+
+    "edit_plant": "Edit Plant",
+    "@edit_plant": {
+        "description": "edit_plant"
+    },
+
+    "cancel_edit": "Are you sure about canceling the plant edition?",
+    "@cancel_edit": {
+        "description": "cancel_edit"
+    },
+
+    "cancel_update": "Are you sure to send the update?",
+    "@cancel_update": {
+        "description": "cancel_update"
+    },
+
+    "take_photo": "To take the photo again, press the image",
+    "@take_photo": {
+        "description": "take_photo"
+    },
+
+    "skip": "Skip",
+    "@skip": {
+        "description": "skip"
+    },
+
+    "get_location": "Getting location...",
+    "@get_location": {
+        "description": "get_location"
     }
 }
+
+
+
+
+
+
+
+
+
+

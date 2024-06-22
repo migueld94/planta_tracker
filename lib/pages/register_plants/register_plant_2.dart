@@ -110,7 +110,8 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
                 if (flag == true) {
                   null;
                 } else {
-                  File f = await optionServices.getImageFileFromAssets(Constants.noPicture);
+                  File f = await optionServices
+                      .getImageFileFromAssets(Constants.noPicture);
 
                   // widget.pictures!.add(f.path);
                   widget.valores.add({
@@ -125,7 +126,7 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
                           page: RegisterPlant3(valores: widget.valores)));
                 }
               },
-              title: 'Omitir',
+              title: AppLocalizations.of(context)!.skip,
               colorText:
                   flag ? PlantaColors.colorGrey : PlantaColors.colorBlack,
             ),

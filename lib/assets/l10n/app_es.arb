@@ -29,7 +29,7 @@
     "polices_warning": "Debe de aceptar los terminos y condiciones",
     "recover_password": "Recuperar contraseña",
     "register": "Registrar",
-    "search": "Buscar planta!...",
+    "search": "Buscar especie...",
     "terms": "Acepto las políticas y acuerdos.",
     "terms_conditions": "Términos y condiciones",
     "text_buttom_accept": "Aceptar",
@@ -57,11 +57,25 @@
     "name_plant": "Determinación pendiente",
     "comments": "Commentarios",
     "address": "No se registro la dirección",
-    "take_photo": "Foto tomada por:",
+    "take_photo_details": "Foto tomada por:",
     "no_notes": "No se encontraron notas",
     "add_comments": "Añadir comentario",
     "write_comments": "Escriba su comentario aqui...",
     "message_add_comments": "¿Esta seguro de enviar su comentario?",
     "publish": "Publicado con éxito",
-    "publish_repetitive": "Publicación repetida"
+    "publish_repetitive": "Publicación repetida",
+
+    "message_delete_plant": "¿Estás seguro de eliminar la planta?",
+    "message_edit_plant": "¿Estás seguro de editar la planta?",
+    "no_more": "No más datos",
+
+    "edit_plant": "Editar Planta",
+
+    "cancel_edit": "¿Estás segura de cancelar la edición de la planta?",
+
+    "cancel_update": "¿Estás seguro de enviar la actualización?",
+
+    "take_photo": "Para volver a tomar la foto pulse la imagén",
+    "skip": "Omitir",
+    "get_location": "Obteniendo ubicación..."
 }

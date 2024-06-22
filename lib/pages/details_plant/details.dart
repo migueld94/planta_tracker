@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -47,7 +45,6 @@ class _DetailsState extends State<Details> {
             padding: const EdgeInsets.only(right: 24.0),
             child: GestureDetector(
               onTap: () {
-                log(widget.id.toString());
                 Navigator.push(
                     context,
                     SlideRightRoute(
@@ -238,7 +235,7 @@ class DetailsWidget extends StatelessWidget {
             ),
             verticalMargin16,
             AutoSizeText(
-              '${AppLocalizations.of(context)!.take_photo} ${details.nombreUser}',
+              '${AppLocalizations.of(context)!.take_photo_details} ${details.nombreUser}',
               style: context.theme.textTheme.text_01.copyWith(fontSize: 16),
             ),
             verticalMargin8,
