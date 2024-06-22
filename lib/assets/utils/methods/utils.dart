@@ -256,8 +256,10 @@ goToRegister(BuildContext context) =>
 goToLogin(BuildContext context) =>
     Navigator.push(context, SlideRightRoute(page: const Login()));
 
-goToProfile(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const ProfileUser()));
+goToProfile(BuildContext context) => Navigator.push(
+      context,
+      SlideRightRoute(page: const ProfileUser()),
+    );
 
 goToRegisterPlant(BuildContext context) =>
     Navigator.push(context, SlideRightRoute(page: const RegisterPlant()));
