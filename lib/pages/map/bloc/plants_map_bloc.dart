@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -73,7 +75,7 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
           plants: response,
           userLocation: LatLng(position.latitude, position.longitude)));
     } catch (e) {
-      print('Ocurrió un error al obtener la ubicación: $e');
+      log('Ocurrió un error al obtener la ubicación: $e');
     }
   }
 

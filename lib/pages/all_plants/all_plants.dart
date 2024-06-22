@@ -34,7 +34,6 @@ class _AllPlantsState extends State<AllPlants> {
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
-  late Locale _locale;
 
   _loadMore() async {
     try {

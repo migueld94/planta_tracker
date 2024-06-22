@@ -124,7 +124,7 @@
     "@register": {
         "description": "register"
     },
-    "search": "Search plant!...",
+    "search": "Search species...",
     "@search": {
         "description": "search"
     },
@@ -320,6 +320,11 @@
     "skip": "Skip",
     "@skip": {
         "description": "skip"
+    },
+
+    "get_location": "Getting location...",
+    "@get_location": {
+        "description": "get_location"
     }
 }
 
