@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:planta_tracker/models/plants_models.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
@@ -29,6 +30,8 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
   final AllPlantServices _allPlantServices;
 
   Future<void> _onLoad(Emitter<PlantsMapState> emit) async {
+    final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     final (
       latMax,
       latMin,
@@ -38,7 +41,9 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
 
     final response =
         await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
-    emit(state.copyWith(plants: response));
+    emit(state.copyWith(
+        plants: response,
+        userLocation: LatLng(position.latitude, position.longitude)));
   }
 
   Future<void> _onLoadMoreByBoundries(

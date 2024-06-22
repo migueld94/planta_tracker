@@ -343,41 +343,40 @@ class AppFlutterMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      mapController: MapController(),
-      options: MapOptions(
-        interactionOptions: const InteractionOptions(
-          flags: InteractiveFlag.all,
-        ),
-        initialCenter: const LatLng(23.11958, -82.397264),
-        minZoom: 5,
-        maxZoom: 25,
-        initialZoom: 18,
-        onPositionChanged: (position, hasGesture) {
-          if (hasGesture) {
-            final (northEast, southWest) = (
-              position.bounds!.northEast,
-              position.bounds!.southWest,
-            );
+    return BlocBuilder<PlantsMapBloc, PlantsMapState>(
+        builder: (context, state) {
+      return FlutterMap(
+        mapController: MapController(),
+        options: MapOptions(
+          interactionOptions: const InteractionOptions(
+            flags: InteractiveFlag.all,
+          ),
+          initialCenter: state.userLocation ?? const LatLng(0, 0),
+          minZoom: 5,
+          maxZoom: 25,
+          initialZoom: 18,
+          onPositionChanged: (position, hasGesture) {
+            if (hasGesture) {
+              final (northEast, southWest) = (
+                position.bounds!.northEast,
+                position.bounds!.southWest,
+              );
 
-            context.read<PlantsMapBloc>().add(
-                  PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
-                );
-
-            //log('Región visible - Noroeste: $northEast, Suroeste: $southWest');
-          }
-        },
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-          subdomains: const ['a', 'b', 'c'],
+              context.read<PlantsMapBloc>().add(
+                    PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
+                  );
+            }
+          },
         ),
-        BlocBuilder<PlantsMapBloc, PlantsMapState>(builder: (context, state) {
-          return MarkerLayer(markers: [
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+            subdomains: const ['a', 'b', 'c'],
+          ),
+          MarkerLayer(markers: [
             Marker(
-              point: state.location,
+              point: state.userLocation ?? const LatLng(0, 0),
               child: const Icon(
                 Icons.person_pin_circle,
                 color: Colors.blue,
@@ -385,9 +384,9 @@ class AppFlutterMap extends StatelessWidget {
               ),
             ),
             ...createMarkers(state.plants, context),
-          ]);
-        }),
-      ],
-    );
+          ]),
+        ],
+      );
+    });
   }
 }
