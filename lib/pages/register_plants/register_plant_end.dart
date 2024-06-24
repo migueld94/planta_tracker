@@ -69,7 +69,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
               children: <Widget>[
                 // Aquí va tu lista horizontal de cámaras
                 SizedBox(
-                  height: 200, // Ajusta la altura según necesites
+                  height: 200,
                   child: ListView.separated(
                     clipBehavior: Clip.none,
                     scrollDirection: Axis.horizontal,
@@ -78,9 +78,9 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                     itemBuilder: (context, index) {
                       final valor = widget.valores[index];
                       final file = valor["imagen"];
-                      final fileName = file.path.split('/').last;
+                      final fileName = file.split('/').last;
                       if (fileName.endsWith("De7au1t.png")) {
-                        return null; // or return null to not show anything
+                        return null;
                       } else {
                         return Column(
                           children: [
@@ -153,8 +153,10 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                     ButtomSmall(
                       color: PlantaColors.colorDarkOrange,
                       onTap: () {
-                        warning(context, 'Esta seguro de cancelar el registro?',
-                            () {
+                        warning(
+                            context,
+                            AppLocalizations.of(context)!
+                                .message_cancel_register, () {
                           Navigator.push(
                               context, SlideRightRoute(page: const Home()));
                         });
@@ -166,8 +168,10 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                         onTap: () async {
                           var lifestage = await storage.read(key: 'lifestage');
 
-                          warning(context, 'Esta seguro de enviar el registro?',
-                              () async {
+                          warning(
+                              context,
+                              AppLocalizations.of(context)!
+                                  .message_send_register, () async {
                             if (formKey.currentState!.validate() &&
                                 lifestage != null) {
                               formKey.currentState!.save();

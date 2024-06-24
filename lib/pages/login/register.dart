@@ -233,9 +233,21 @@ class _RegisterState extends State<Register> {
                         onTap: () {
                           goTerms(context);
                         },
-                        child: AutoSizeText(
-                          AppLocalizations.of(context)!.terms,
-                          style: context.theme.textTheme.text_01,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AutoSizeText(
+                              AppLocalizations.of(context)!.terms,
+                              style: context.theme.textTheme.text_01,
+                            ),
+                            horizontalMargin8,
+                            AutoSizeText(
+                              AppLocalizations.of(context)!.see,
+                              style: context.theme.textTheme.text_01.copyWith(
+                                color: PlantaColors.colorGreen,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

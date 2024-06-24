@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:planta_tracker/models/nom_lifestage.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/services/nom_lifestage_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyDropButtom extends StatefulWidget {
   const MyDropButtom({
@@ -67,7 +68,7 @@ class _NomLifestageState extends State<_NomLifestage> {
           ),
           isExpanded: true,
           hint: AutoSizeText(
-            'Lifestage',
+            AppLocalizations.of(context)!.lifestage,
             style: context.theme.textTheme.text_01.copyWith(fontSize: 16.0),
           ),
           items: widget.lifestages.map((e) {

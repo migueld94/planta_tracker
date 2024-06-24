@@ -12,6 +12,7 @@ class ContainerOnboarding extends StatelessWidget {
     required this.subtitle_00,
     this.subtitle_01,
     this.subtitle_02,
+    this.action,
     this.icon,
   });
 
@@ -21,6 +22,7 @@ class ContainerOnboarding extends StatelessWidget {
   final String subtitle_00;
   final String? subtitle_01;
   final String? subtitle_02;
+  final String? action;
   final Widget? icon;
 
   @override
@@ -68,6 +70,15 @@ class ContainerOnboarding extends StatelessWidget {
                   width: 242.0,
                   child: AutoSizeText(
                     subtitle_02 ?? '',
+                    style: context.theme.textTheme.text_01,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                verticalMargin16,
+                SizedBox(
+                  width: 242.0,
+                  child: AutoSizeText(
+                    action ?? '',
                     style: context.theme.textTheme.text_01,
                     textAlign: TextAlign.center,
                   ),

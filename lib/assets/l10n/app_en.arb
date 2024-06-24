@@ -34,6 +34,12 @@
     "@forget": {
         "description": "forget password"
     },
+
+    "recover": "Recover",
+    "@recover": {
+        "description": "recover"
+    },
+
     "full_name": "Full name",
     "@full_name": {
         "description": "full_name"
@@ -103,7 +109,7 @@
     "@plant_register_sheet_image": {
         "description": "Text"
     },
-    "plant_register_trunk_image": "Trunk Image",
+    "plant_register_trunk_image": "Stem Image",
     "@plant_register_trunk_image": {
         "description": "Text"
     },
@@ -158,7 +164,7 @@
         "description": "Text Buttom"
     },
 
-    "text_onboarding_first": "Join Plant! with our mobile app and contribute to plant conservation while exploring cities and countryside!",
+    "text_onboarding_first": "Join Planta! with our mobile app and contribute to plant conservation while exploring cities and countryside!",
     "@text_onboarding_first": {
         "description": "Text"
     },
@@ -325,8 +331,36 @@
     "get_location": "Getting location...",
     "@get_location": {
         "description": "get_location"
+    },
+
+    "message_cancel_register": "Are you sure about canceling the registration?",
+    "@message_cancel_register": {
+        "description": "message_cancel_register"
+    },
+
+    "message_send_register": "Are you sure to send the registration?",
+    "@message_send_register": {
+        "description": "message_send_register"
+    },
+
+    "slide": "Slide to continue >",
+    "@slide": {
+        "description": "slide"
+    },
+
+    "see": "See",
+    "@see": {
+        "description": "see"
+    },
+
+    "lifestage": "Lifestage",
+    "@lifestage": {
+        "description": "lifestage"
     }
 }
+
+
+
 
 
 
