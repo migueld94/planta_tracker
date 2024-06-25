@@ -28,8 +28,7 @@ class LanguagePickerWidget extends StatelessWidget {
               alignment: Alignment.center,
               value: flag,
               onTap: () {
-                final provider =
-                    Provider.of<ThemeProvider>(context, listen: false);
+                final provider = Provider.of<ThemeProvider>(context, listen: false);
                 provider.setLocale(locale);
               },
               child: AutoSizeText(

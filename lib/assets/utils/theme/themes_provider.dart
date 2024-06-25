@@ -1,32 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'theme_data.dart';
 part 'theme_colors.dart';
 part 'common.dart';
 
-class ThemeProvider extends ChangeNotifier {
-  //============== Cambio de Modo ============
-  // ThemeMode themeMode = ThemeMode.light;
-  // bool get isDarkTheme => themeMode == ThemeMode.light;
-
-  // void toogleTheme(bool isOn) {
-  //   themeMode = isOn ? ThemeMode.light : ThemeMode.dark;
-  //   notifyListeners();
-  // }
-
-  //============== Internacionalizacion ============
+class ThemeProvider with ChangeNotifier {
   Locale? _locale;
   Locale? get locale => _locale;
+
+  ThemeProvider() {
+    _loadLocaleFromSharedPreferences();
+  }
+
   void setLocale(Locale locale) {
     if (!L10n.all.contains(locale)) return;
     _locale = locale;
     notifyListeners();
+    _saveLocaleToSharedPreferences(locale);
   }
 
   void clearLocale() {
     _locale = null;
     notifyListeners();
+    _clearLocaleFromSharedPreferences();
+  }
+
+  Future<void> _saveLocaleToSharedPreferences(Locale locale) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('locale', locale.languageCode);
+  }
+
+  Future<void> _clearLocaleFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('locale');
+  }
+
+  Future<void> _loadLocaleFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final localeCode = prefs.getString('locale');
+    if (localeCode != null) {
+      _locale = Locale(localeCode);
+      notifyListeners();
+    }
   }
 }
 
