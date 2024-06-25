@@ -356,6 +356,11 @@
     "lifestage": "Lifestage",
     "@lifestage": {
         "description": "lifestage"
+    },
+
+    "select_lifestage": "To complete the registration you must select the lifestage",
+    "@select_lifestage": {
+        "description": "select_lifestage"
     }
 }
 

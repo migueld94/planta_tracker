@@ -76,12 +76,13 @@
 
     "cancel_update": "¿Estás seguro de enviar la actualización?",
 
-    "take_photo": "Para volver a tomar la foto pulse la imagén",
+    "take_photo": "Para volver a tomar la foto pulse la imagen",
     "skip": "Omitir",
     "get_location": "Obteniendo ubicación...",
     "message_cancel_register": "¿Esta seguro de cancelar el registro?",
     "message_send_register": "¿Esta seguro de enviar el registro?",
     "slide": "Deslizar para continuar >",
     "see": "Ver",
-    "lifestage": "Estado de vida"
+    "lifestage": "Estado de vida",
+    "select_lifestage": "Para completar el registro debe de seleccionar el estado de vida"
 }

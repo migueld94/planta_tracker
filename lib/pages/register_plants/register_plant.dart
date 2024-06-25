@@ -125,17 +125,10 @@ class _RegisterPlantState extends State<RegisterPlant> {
                     final bytes = await _image!.readAsBytes();
                     final data =
                         await readExifFromBytes(Uint8List.fromList(bytes));
-                    // final gpsData = data['GPS'];
                     final latitude = data['GPS GPSLatitude'];
                     final longitude = data['GPS GPSLongitude'];
 
                     if (longitude != null && latitude != null) {
-                      // final lat = _parseCoordinate(latitude);
-                      // final lon = _parseCoordinate(longitude);
-                      // log('Latitud: $lat, Longitud: $lon');
-
-                      // pictures!.add(_image!.path);
-
                       valores.add({
                         "imagen": _image!.path,
                         "name": AppLocalizations.of(context)!

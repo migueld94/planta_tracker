@@ -118,7 +118,11 @@ class _MyPlantsState extends State<MyPlants> {
               separatorBuilder: (context, index) => verticalMargin4,
               itemBuilder: (context, index) {
                 EasyLoading.dismiss();
-                if (index < items.length) {
+                if (index >= items.length) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
                   final date = DateTime.parse(items[index]["fecha_registro_"]);
                   return CardMyPlants(
                     id: items[index]['id'],
@@ -188,26 +192,6 @@ class _MyPlantsState extends State<MyPlants> {
                         null;
                       }
                     },
-                  );
-                } else if (index == items.length) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: Center(
-                      child: AutoSizeText(
-                        AppLocalizations.of(context)!.no_more,
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          fontFamily: 'Nunito',
-                        ),
-                      ),
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.0),
-                      child: CircularProgressIndicator(),
-                    ),
                   );
                 }
               },
