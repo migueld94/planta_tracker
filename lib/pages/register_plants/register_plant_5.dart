@@ -83,7 +83,8 @@ class _RegisterPlant5State extends State<RegisterPlant5> {
             if (flag == true)
               Flexible(
                 child: AutoSizeText(
-                  'Para volver a tomar la foto pulse la imagén',
+                  // 'Para volver a tomar la foto pulse la imagén',
+                  AppLocalizations.of(context)!.take_photo,
                   style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
                   textAlign: TextAlign.center,
                 ),

@@ -545,7 +545,7 @@ class _UserProfileState extends State<_UserProfile> {
                         backgroundColor: PlantaColors.colorDarkOrange,
                         content: Center(
                           child: AutoSizeText(
-                            'No coinciden las contraseñas',
+                            AppLocalizations.of(context)!.password_match,
                             style: context.theme.textTheme.text_01.copyWith(
                               color: PlantaColors.colorWhite,
                               fontSize: 16.0,

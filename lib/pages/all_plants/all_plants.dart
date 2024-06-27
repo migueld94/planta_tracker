@@ -72,7 +72,7 @@ class _AllPlantsState extends State<AllPlants> {
         backgroundColor: PlantaColors.colorDarkOrange,
         content: Center(
           child: AutoSizeText(
-            'Sin conexión',
+            AppLocalizations.of(context)!.no_internet,
             style: context.theme.textTheme.text_01.copyWith(
               color: PlantaColors.colorWhite,
               fontSize: 16.0,

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:planta_tracker/pages/login/change_password.dart';
 import 'package:planta_tracker/services/auth_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifyCode02 extends StatefulWidget {
   const VerifyCode02({
@@ -29,7 +30,7 @@ class VerifyCode02 extends StatefulWidget {
 class _VerifyCode02State extends State<VerifyCode02> {
   String otp = '';
   Timer? timer;
-  int countDown = 60;
+  int countDown = 240;
   bool canResend = false;
   final AuthService authService = AuthService();
   final storage = const FlutterSecureStorage();
@@ -62,7 +63,7 @@ class _VerifyCode02State extends State<VerifyCode02> {
   void resendOtp() {
     if (canResend) {
       setState(() {
-        countDown = 60;
+        countDown = 240;
         canResend = false;
         startTimer();
       });
@@ -99,7 +100,7 @@ class _VerifyCode02State extends State<VerifyCode02> {
               verticalMargin48,
               Center(
                 child: AutoSizeText(
-                  'Verificar código',
+                  AppLocalizations.of(context)!.verify_code,
                   style: context.theme.textTheme.h1,
                 ),
               ),
@@ -123,19 +124,14 @@ class _VerifyCode02State extends State<VerifyCode02> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  decimal()
-                      ? AutoSizeText(
-                          '00 : 0${countDown.toString()}',
-                          style: context.theme.textTheme.text_01,
-                        )
-                      : AutoSizeText(
-                          '00 : ${countDown.toString()}',
-                          style: context.theme.textTheme.text_01,
-                        ),
+                  AutoSizeText(
+                    '${(countDown ~/ 60).toString().padLeft(2, '0')} : ${(countDown % 60).toString().padLeft(2, '0')}',
+                    style: context.theme.textTheme.text_01,
+                  ),
                   Row(
                     children: [
                       AutoSizeText(
-                        "No he recibido el código.",
+                        AppLocalizations.of(context)!.no_receive_code,
                         style: context.theme.textTheme.text_01
                             .copyWith(color: PlantaColors.colorGrey),
                       ),
@@ -151,21 +147,31 @@ class _VerifyCode02State extends State<VerifyCode02> {
                               EasyLoading.dismiss();
                               break;
                             case 400:
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Registro fallido"),
-                              ));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: AutoSizeText(
+                                    AppLocalizations.of(context)!
+                                        .sign_up_failed,
+                                    style: context.theme.textTheme.text_01,
+                                  ),
+                                ),
+                              );
                               break;
                             default:
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Verificacion fallida"),
-                              ));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: AutoSizeText(
+                                    AppLocalizations.of(context)!
+                                        .verify_code_failed,
+                                    style: context.theme.textTheme.text_01,
+                                  ),
+                                ),
+                              );
                               break;
                           }
                         },
                         child: AutoSizeText(
-                          'Reenviar',
+                          AppLocalizations.of(context)!.text_buttom_resend,
                           style: context.theme.textTheme.text_01.copyWith(
                             color: canResend
                                 ? PlantaColors.colorGreen
@@ -198,19 +204,29 @@ class _VerifyCode02State extends State<VerifyCode02> {
                       break;
                     case 400:
                       EasyLoading.dismiss();
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Registro fallido"),
-                      ));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: AutoSizeText(
+                            AppLocalizations.of(context)!.sign_up_failed,
+                            style: context.theme.textTheme.text_01,
+                          ),
+                        ),
+                      );
                       break;
                     default:
                       EasyLoading.dismiss();
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Verificacion fallida"),
-                      ));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: AutoSizeText(
+                            AppLocalizations.of(context)!.verify_code_failed,
+                            style: context.theme.textTheme.text_01,
+                          ),
+                        ),
+                      );
                       break;
                   }
                 },
-                title: 'Enviar',
+                title: AppLocalizations.of(context)!.text_buttom_send,
               ),
             ],
           ),

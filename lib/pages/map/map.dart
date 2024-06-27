@@ -107,7 +107,11 @@ class _MapViewState extends State<MapView> {
               if (gpsState is GpsPermissionDenied ||
                   gpsState is GpsPermissionDeniedForever) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('acepte los permisos')),
+                  const SnackBar(
+                    content: Text(
+                      'acepte los permisos',
+                    ),
+                  ),
                 );
               }
             },

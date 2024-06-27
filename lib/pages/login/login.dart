@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                         } else {
                           return EmailValidator.validate(value)
                               ? null
-                              : 'Ingrese un correo valido';
+                              : AppLocalizations.of(context)!.enter_email_valid;
                         }
                       },
                     ),
@@ -240,7 +240,8 @@ class _LoginState extends State<Login> {
                                   backgroundColor: PlantaColors.colorOrange,
                                   content: Center(
                                     child: AutoSizeText(
-                                      'Credenciales incorrectas',
+                                      AppLocalizations.of(context)!
+                                          .verify_credentials,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                         color: PlantaColors.colorWhite,
@@ -258,7 +259,8 @@ class _LoginState extends State<Login> {
                                   backgroundColor: PlantaColors.colorOrange,
                                   content: Center(
                                     child: AutoSizeText(
-                                      'Credenciales incorrectas',
+                                      AppLocalizations.of(context)!
+                                          .verify_credentials,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                         color: PlantaColors.colorWhite,
@@ -276,7 +278,8 @@ class _LoginState extends State<Login> {
                                   backgroundColor: PlantaColors.colorOrange,
                                   content: Center(
                                     child: AutoSizeText(
-                                      'Credenciales incorrectas',
+                                      AppLocalizations.of(context)!
+                                          .verify_credentials,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                         color: PlantaColors.colorWhite,
@@ -293,7 +296,7 @@ class _LoginState extends State<Login> {
                               backgroundColor: PlantaColors.colorOrange,
                               content: Center(
                                 child: AutoSizeText(
-                                  'Sin conexión',
+                                  AppLocalizations.of(context)!.no_internet,
                                   style:
                                       context.theme.textTheme.text_01.copyWith(
                                     color: PlantaColors.colorWhite,

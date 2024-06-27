@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -11,7 +13,7 @@ import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/models/details_models.dart';
 import 'package:planta_tracker/pages/comments/comments.dart';
-import 'package:planta_tracker/pages/details_plant/view_image.dart';
+import 'package:planta_tracker/pages/details_plant/view_image_carrousel.dart';
 import 'package:planta_tracker/services/details_services.dart';
 
 class Details extends StatefulWidget {
@@ -120,14 +122,14 @@ class DetailsWidget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
+                      log(index.toString());
                       Navigator.push(
                           context,
                           SlideRightRoute(
-                              page: ViewImage(
+                              page: ViewImageCarousel(
                             id: images![index].id,
-                            type: images![index].type,
-                            posterPath:
-                                '${Constants.baseUrl}${images?[index].posterPath}',
+                            initialPage: index,
+                            posterPath: images!,
                           )));
                     },
                     child: Hero(

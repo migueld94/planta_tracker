@@ -273,7 +273,8 @@ class _RegisterState extends State<Register> {
                             backgroundColor: PlantaColors.colorDarkOrange,
                             content: Center(
                               child: AutoSizeText(
-                                'Acepte los términos y condiciones',
+                                // 'Acepte los términos y condiciones',
+                                AppLocalizations.of(context)!.terms,
                                 style: context.theme.textTheme.text_01.copyWith(
                                   color: PlantaColors.colorWhite,
                                   fontSize: 16.0,
@@ -284,6 +285,7 @@ class _RegisterState extends State<Register> {
                         } else if (password.text.toLowerCase() ==
                             passwordConfirm.text.toLowerCase()) {
                           EasyLoading.show();
+
                           var res = await authService.register(email.text,
                               name.text, password.text, passwordConfirm.text);
 

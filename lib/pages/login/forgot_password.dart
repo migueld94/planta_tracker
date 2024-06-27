@@ -58,8 +58,8 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                   ),
                   verticalMargin16,
                   TextFormField(
-                    style: TextStyle(color: PlantaColors.colorBlack),
                     controller: emailController,
+                    style: TextStyle(color: PlantaColors.colorBlack),
                     decoration: InputDecorations.authInputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: PlantaColors.colorGreen),
