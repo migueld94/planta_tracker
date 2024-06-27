@@ -97,9 +97,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                             ),
                     ),
                   ),
-                  onChanged: (value) {
-                    passwordController.text = value;
-                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return AppLocalizations.of(context)!.obligatory_camp;
@@ -141,9 +138,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                             ),
                     ),
                   ),
-                  onChanged: (value) {
-                    passwordConfirmController.text = value;
-                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return AppLocalizations.of(context)!.obligatory_camp;

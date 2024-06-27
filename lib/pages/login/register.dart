@@ -90,9 +90,6 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ),
-                    onChanged: (value) {
-                      name.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
@@ -115,9 +112,6 @@ class _RegisterState extends State<Register> {
                         color: PlantaColors.colorGreen,
                       ),
                     ),
-                    onChanged: (value) {
-                      email.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
@@ -159,9 +153,6 @@ class _RegisterState extends State<Register> {
                               ),
                       ),
                     ),
-                    onChanged: (value) {
-                      password.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
@@ -204,9 +195,6 @@ class _RegisterState extends State<Register> {
                               ),
                       ),
                     ),
-                    onChanged: (value) {
-                      passwordConfirm.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;

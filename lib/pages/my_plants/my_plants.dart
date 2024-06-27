@@ -53,7 +53,8 @@ class _MyPlantsState extends State<MyPlants> {
         final json = jsonDecode(response.body)['results'] as List;
         if (json.isEmpty) {
           EasyLoading.dismiss();
-          return alert(context, AppLocalizations.of(context)!.no_elements);
+          return tutorial(context);
+          // return alert(context, AppLocalizations.of(context)!.no_elements);
         } else {
           setState(() {
             items.addAll(json);

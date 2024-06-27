@@ -56,7 +56,7 @@
     "match_password": "No coinciden las contraseñas",
     "note": "Notas",
     "name_plant": "Determinación pendiente",
-    "comments": "Commentarios",
+    "comments": "Comentarios",
     "address": "No se registro la dirección",
     "take_photo_details": "Foto tomada por:",
     "no_notes": "No se encontraron notas",
@@ -84,5 +84,6 @@
     "slide": "Deslizar para continuar >",
     "see": "Ver",
     "lifestage": "Estado de vida",
-    "select_lifestage": "Para completar el registro debe de seleccionar el estado de vida"
+    "select_lifestage": "Para completar el registro debe de seleccionar el estado de vida",
+    "message_plants_empty": "Para registrar su primera planta presione el botón"
 }

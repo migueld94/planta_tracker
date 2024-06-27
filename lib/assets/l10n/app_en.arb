@@ -361,8 +361,15 @@
     "select_lifestage": "To complete the registration you must select the lifestage",
     "@select_lifestage": {
         "description": "select_lifestage"
+    },
+
+    "message_plants_empty": "To register your first plant press the button",
+    "@message_plants_empty": {
+        "description": "message_plants_empty"
     }
 }
+
+
 
 
 

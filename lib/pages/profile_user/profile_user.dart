@@ -162,9 +162,6 @@ class _UserProfileState extends State<_UserProfile> {
                           color: PlantaColors.colorGreen,
                         ),
                       ),
-                      onChanged: (value) {
-                        nameController.text = value;
-                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return AppLocalizations.of(context)!.obligatory_camp;
@@ -272,9 +269,6 @@ class _UserProfileState extends State<_UserProfile> {
                         : PlantaColors.colorGrey,
                   ),
                 ),
-                onChanged: (value) {
-                  passwordController.text = value;
-                },
                 validator: (value) {
                   if (value!.isEmpty) {
                     return AppLocalizations.of(context)!.obligatory_camp;
@@ -325,9 +319,6 @@ class _UserProfileState extends State<_UserProfile> {
                           ),
                   ),
                 ),
-                onChanged: (value2) {
-                  passwordConfirmController.text = value2;
-                },
                 validator: (value2) {
                   if (value2!.isEmpty) {
                     return AppLocalizations.of(context)!.obligatory_camp;

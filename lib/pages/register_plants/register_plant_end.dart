@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, must_be_immutable, unrelated_type_equality_checks
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -41,6 +40,13 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   RegisterPlant plant = RegisterPlant();
   final _lifestage = GlobalKey<ShakeWidgetState>();
 
+  @override
+  void initState() {
+    super.initState();
+    note.addListener(() {
+    });
+  }
+  
   @override
   void dispose() {
     note.dispose();
@@ -137,9 +143,6 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                         borderRadius: borderRadius10,
                       ),
                     ),
-                    onChanged: (value) {
-                      note.text = value;
-                    },
                   ),
                 ],
               ),

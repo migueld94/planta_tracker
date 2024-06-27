@@ -124,6 +124,67 @@ Future<Object?> alert(BuildContext context, String text) {
   );
 }
 
+Future<Object?> tutorial(BuildContext context) {
+  return showAnimatedDialog(
+    context: context,
+    barrierDismissible: true,
+    animationType: DialogTransitionType.slideFromTop,
+    curve: Curves.fastOutSlowIn,
+    duration: const Duration(seconds: 1),
+    builder: (BuildContext context) => Dialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+      ),
+      child: Container(
+        width: double.infinity,
+        height: 220,
+        padding: allPadding16,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Ionicons.close_outline,
+                    color: PlantaColors.colorBlack,
+                  ),
+                ],
+              ),
+            ),
+            AutoSizeText(
+              AppLocalizations.of(context)!.message_plants_empty,
+              style: context.theme.textTheme.text_01,
+              textAlign: TextAlign.center,
+            ),
+            Icon(
+              Ionicons.arrow_down_outline,
+              color: PlantaColors.colorBlack,
+            ),
+            CircleAvatar(
+              backgroundColor: PlantaColors.colorGreen,
+              child: Icon(
+                Ionicons.add_outline,
+                color: PlantaColors.colorWhite,
+              ),
+            ),
+            // AutoSizeText(
+            //   text,
+            //   style: context.theme.textTheme.text_01,
+            //   textAlign: TextAlign.center,
+            // ),
+            emptyWidget,
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 Future<Object?> info(BuildContext context, String lifestage, String status,
     String name, Color color, Function()? onTap) {
   return showAnimatedDialog(

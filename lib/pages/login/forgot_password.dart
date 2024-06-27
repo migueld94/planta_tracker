@@ -72,9 +72,6 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                         color: PlantaColors.colorGreen,
                       ),
                     ),
-                    onChanged: (value) {
-                      emailController.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;

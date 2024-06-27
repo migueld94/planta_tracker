@@ -32,6 +32,12 @@ class _CommentsState extends State<Comments> {
   String comments = '';
 
   @override
+  void initState() {
+    super.initState();
+    comment.addListener(() {});
+  }
+
+  @override
   void dispose() {
     comment.dispose();
     super.dispose();
@@ -77,9 +83,6 @@ class _CommentsState extends State<Comments> {
                         borderRadius: borderRadius10,
                       ),
                     ),
-                    onChanged: (value) {
-                      comment.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;

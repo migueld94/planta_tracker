@@ -202,7 +202,7 @@ class EditPlantState extends State<EditPlant> {
                   verticalMargin8,
                   TextFormField(
                     controller: noteController,
-                    maxLines: 6,
+                    maxLines: null,
                     maxLength: 150,
                     textAlign: TextAlign.justify,
                     decoration: InputDecorations.authInputDecoration(

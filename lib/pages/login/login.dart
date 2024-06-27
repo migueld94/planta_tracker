@@ -104,9 +104,6 @@ class _LoginState extends State<Login> {
                           color: PlantaColors.colorGreen,
                         ),
                       ),
-                      onChanged: (value) {
-                        email.text = value;
-                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return AppLocalizations.of(context)!.obligatory_camp;
@@ -152,9 +149,6 @@ class _LoginState extends State<Login> {
                           color: PlantaColors.colorGreen,
                         ),
                       ),
-                      onChanged: (value) {
-                        password.text = value;
-                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return AppLocalizations.of(context)!.obligatory_camp;

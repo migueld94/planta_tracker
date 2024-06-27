@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
@@ -116,60 +118,50 @@ class DetailsWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 separatorBuilder: (context, index) => horizontalMargin16,
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              SlideRightRoute(
-                                  page: ViewImage(
-                                id: images![index].id,
-                                type: images![index].type,
-                                posterPath:
-                                    '${Constants.baseUrl}${images?[index].posterPath}',
-                              )));
-                        },
-                        child: Hero(
-                          tag: images![index].id,
-                          child: Container(
-                            width: 240.0,
-                            height: 140,
-                            decoration: BoxDecoration(
-                              borderRadius: borderRadius10,
-                              color: PlantaColors.colorWhite,
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: const Offset(5, 7),
-                                  blurRadius: 10,
-                                  color:
-                                      PlantaColors.colorBlack.withOpacity(0.3),
-                                )
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: borderRadius10,
-                              child: CachedNetworkImage(
-                                filterQuality: FilterQuality.low,
-                                imageUrl:
-                                    '${Constants.baseUrl}${images?[index].posterPath}',
-                                placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator()),
-                                errorWidget: (context, url, error) => Icon(
-                                    Ionicons.image_sharp,
-                                    color: PlantaColors.colorBlack),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          SlideRightRoute(
+                              page: ViewImage(
+                            id: images![index].id,
+                            type: images![index].type,
+                            posterPath:
+                                '${Constants.baseUrl}${images?[index].posterPath}',
+                          )));
+                    },
+                    child: Hero(
+                      tag: images![index].id,
+                      child: Container(
+                        width: 240.0,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          borderRadius: borderRadius10,
+                          color: PlantaColors.colorWhite,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: const Offset(5, 7),
+                              blurRadius: 10,
+                              color: PlantaColors.colorBlack.withOpacity(0.3),
+                            )
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: borderRadius10,
+                          child: CachedNetworkImage(
+                            filterQuality: FilterQuality.low,
+                            imageUrl:
+                                '${Constants.baseUrl}${images?[index].posterPath}',
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(
+                                Ionicons.image_sharp,
+                                color: PlantaColors.colorBlack),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                      verticalMargin8,
-                      AutoSizeText(
-                        images![index].type,
-                        style: context.theme.textTheme.text_01,
-                      ),
-                    ],
+                    ),
                   );
                 },
               ),
@@ -183,11 +175,6 @@ class DetailsWidget extends StatelessWidget {
             AutoSizeText(
               details.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
               style: context.theme.textTheme.h2.copyWith(fontSize: 23.0),
-            ),
-            verticalMargin8,
-            AutoSizeText(
-              details.direccionGps ?? AppLocalizations.of(context)!.address,
-              style: context.theme.textTheme.text_02,
             ),
             verticalMargin8,
             Row(
@@ -240,12 +227,52 @@ class DetailsWidget extends StatelessWidget {
             ),
             verticalMargin8,
             AutoSizeText(
+              details.direccionGps ?? AppLocalizations.of(context)!.address,
+              style: context.theme.textTheme.text_02,
+            ),
+            verticalMargin8,
+            SizedBox(
+              height: 200,
+              child: ClipRRect(
+                borderRadius: borderRadius10,
+                child: FlutterMap(
+                  options: MapOptions(
+                    interactionOptions: const InteractionOptions(
+                      flags: InteractiveFlag.none,
+                    ),
+                    initialCenter:
+                        LatLng(details.latitude!, details.longitude!),
+                    initialZoom: 12,
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                      subdomains: const ['a', 'b', 'c'],
+                    ),
+                    MarkerLayer(markers: [
+                      Marker(
+                        point: LatLng(details.latitude!, details.longitude!),
+                        child: Icon(
+                          Ionicons.location_sharp,
+                          color: getColor(),
+                          size: 30,
+                        ),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+            ),
+            verticalMargin8,
+            AutoSizeText(
               AppLocalizations.of(context)!.note,
               style: context.theme.textTheme.h2,
             ),
             verticalMargin8,
             SizedBox(
-              height: 300,
+              // height: 300,
               child: SingleChildScrollView(
                 child: AutoSizeText(
                   details.notas ?? AppLocalizations.of(context)!.no_notes,
