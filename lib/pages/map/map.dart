@@ -26,7 +26,6 @@ import 'package:planta_tracker/pages/details_plant/details.dart';
 import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:planta_tracker/services/all_species_services.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -37,7 +36,6 @@ class MapView extends StatefulWidget {
 
 class _MapViewState extends State<MapView> {
   final AllPlantServices plantServices = AllPlantServices();
-  final AllSpeciesServices speciesServices = AllSpeciesServices();
   TextEditingController? controller;
   String search = '';
   String selectedFilter = '';
@@ -231,7 +229,12 @@ class _MapViewState extends State<MapView> {
                             } else {
                               return GestureDetector(
                                 onTap: () {
-                                  //print(items[index]);
+                                  print(items[index]['id']);
+                                  // BlocProvider(
+                                  //   create: (_) =>
+                                  //       PlantsMapBloc(plantServices.getSpeciesById(items[index]., latMax, latMin, longMax, longMin)),
+                                  //   child: const AppFlutterMap(),
+                                  // );
                                 },
                                 child: MyCustomCard(
                                   title: items[index]['nombre_especie'],
