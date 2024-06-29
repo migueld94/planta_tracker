@@ -227,18 +227,16 @@ class _MapViewState extends State<MapView> {
                               return const Center(
                                   child: CircularProgressIndicator());
                             } else {
-                              return GestureDetector(
+                              return MyCustomCard(
+                                title: items[index]['nombre_especie'],
                                 onTap: () {
-                                  print(items[index]['id']);
+                                  log(items[index]['id'].toString());
                                   // BlocProvider(
                                   //   create: (_) =>
                                   //       PlantsMapBloc(plantServices.getSpeciesById(items[index]., latMax, latMin, longMax, longMin)),
                                   //   child: const AppFlutterMap(),
                                   // );
                                 },
-                                child: MyCustomCard(
-                                  title: items[index]['nombre_especie'],
-                                ),
                               );
                             }
                           },

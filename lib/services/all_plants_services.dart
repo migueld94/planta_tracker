@@ -50,7 +50,7 @@ class AllPlantServices {
     }
   }
 
-  Future<List<Plant>> getSpeciesById(int id, double latMax, double latMin,
+  Future<List<Plant>> getSpeciesById(String id, double latMax, double latMin,
       double longMax, double longMin) async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
     String secret =
