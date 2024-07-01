@@ -16,7 +16,9 @@ import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/assets/utils/widgets/my_custom_card.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
+import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/gps/gps_state.dart';
 import 'package:planta_tracker/blocs/map/map_bloc.dart';
 import 'package:planta_tracker/blocs/map/map_state.dart';
@@ -130,129 +132,129 @@ class _MapViewState extends State<MapView> {
               }
             },
           ),
-          // NotificationListener<DraggableScrollableNotification>(
-          //   onNotification: (notification) {
-          //     final screenHeight = MediaQuery.of(context).size.height;
-          //     final bottomSheetHeight = notification.extent * screenHeight;
-          //     final bottomOffset = screenHeight - bottomSheetHeight;
-          //     setState(() {
-          //       fabBottomOffset =
-          //           screenHeight - bottomOffset - 2; // margen adicional
-          //     });
-          //     return true;
-          //   },
-          //   child: DraggableScrollableSheet(
-          //     initialChildSize: 0.2,
-          //     minChildSize: 0.1,
-          //     maxChildSize: 0.8,
-          //     builder: (context, scroll) {
-          //       return Container(
-          //         decoration: BoxDecoration(
-          //           color: PlantaColors.colorWhite,
-          //           borderRadius: const BorderRadius.only(
-          //             topLeft: Radius.circular(10.0),
-          //             topRight: Radius.circular(10.0),
-          //           ),
-          //           boxShadow: [
-          //             BoxShadow(
-          //               blurRadius: 10.0,
-          //               color: PlantaColors.colorBlack.withOpacity(0.7),
-          //             ),
-          //           ],
-          //         ),
-          //         child: CustomScrollView(
-          //           controller: scroll,
-          //           slivers: <Widget>[
-          //             SliverToBoxAdapter(
-          //               child: Column(
-          //                 children: [
-          //                   verticalMargin4,
-          //                   Container(
-          //                     width: 40.0,
-          //                     height: 5.0,
-          //                     decoration: BoxDecoration(
-          //                       borderRadius: borderRadius10,
-          //                       color:
-          //                           PlantaColors.greyDisabled.withOpacity(0.3),
-          //                     ),
-          //                   ),
-          //                   Padding(
-          //                     padding: allPadding8,
-          //                     child: TextField(
-          //                       controller: controller,
-          //                       decoration: InputDecoration(
-          //                         hintText:
-          //                             AppLocalizations.of(context)!.search,
-          //                         prefixIcon: const Icon(Icons.search),
-          //                         border: OutlineInputBorder(
-          //                           borderRadius: borderRadius10,
-          //                           borderSide: BorderSide(
-          //                             color: PlantaColors.colorBlack,
-          //                           ),
-          //                         ),
-          //                         contentPadding: const EdgeInsets.symmetric(
-          //                             vertical: 10.0),
-          //                         filled: true,
-          //                         fillColor: Colors.white,
-          //                         enabledBorder: OutlineInputBorder(
-          //                           borderRadius: borderRadius10,
-          //                           borderSide: BorderSide(
-          //                             color: PlantaColors.colorBlack,
-          //                           ),
-          //                         ),
-          //                         focusedBorder: OutlineInputBorder(
-          //                           borderRadius: borderRadius10,
-          //                           borderSide: BorderSide(
-          //                             color: PlantaColors.colorBlack,
-          //                           ),
-          //                         ),
-          //                       ),
-          //                       onSubmitted: (String value) {
-          //                         setState(() {
-          //                           search = controller!.text;
-          //                         });
-          //                       },
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //             SliverList(
-          //               delegate: SliverChildBuilderDelegate(
-          //                 childCount:
-          //                     isLoadMore ? items.length + 1 : items.length,
-          //                 (BuildContext context, int index) {
-          //                   if (index >= items.length) {
-          //                     return const Center(
-          //                         child: CircularProgressIndicator());
-          //                   } else {
-          //                     return MyCustomCard(
-          //                       title: items[index]['nombre_especie'],
-          //                     );
-          //                   }
-          //                 },
-          //               ),
-          //             )
-          //           ],
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
-          // Positioned(
-          //   right: 20,
-          //   bottom: fabBottomOffset,
-          //   child: FloatingActionButton(
-          //     onPressed: () {
-          //       context.read<GpsBloc>().add(GpsStarted());
-          //     },
-          //     backgroundColor: PlantaColors.colorGreen,
-          //     child: Icon(
-          //       Icons.my_location,
-          //       color: PlantaColors.colorBlack,
-          //     ),
-          //   ),
-          // ),
+          NotificationListener<DraggableScrollableNotification>(
+            onNotification: (notification) {
+              final screenHeight = MediaQuery.of(context).size.height;
+              final bottomSheetHeight = notification.extent * screenHeight;
+              final bottomOffset = screenHeight - bottomSheetHeight;
+              setState(() {
+                fabBottomOffset =
+                    screenHeight - bottomOffset - 2; // margen adicional
+              });
+              return true;
+            },
+            child: DraggableScrollableSheet(
+              initialChildSize: 0.2,
+              minChildSize: 0.1,
+              maxChildSize: 0.8,
+              builder: (context, scroll) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: PlantaColors.colorWhite,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10.0,
+                        color: PlantaColors.colorBlack.withOpacity(0.7),
+                      ),
+                    ],
+                  ),
+                  child: CustomScrollView(
+                    controller: scroll,
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            verticalMargin4,
+                            Container(
+                              width: 40.0,
+                              height: 5.0,
+                              decoration: BoxDecoration(
+                                borderRadius: borderRadius10,
+                                color:
+                                    PlantaColors.greyDisabled.withOpacity(0.3),
+                              ),
+                            ),
+                            Padding(
+                              padding: allPadding8,
+                              child: TextField(
+                                controller: controller,
+                                decoration: InputDecoration(
+                                  hintText:
+                                      AppLocalizations.of(context)!.search,
+                                  prefixIcon: const Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius: borderRadius10,
+                                    borderSide: BorderSide(
+                                      color: PlantaColors.colorBlack,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10.0),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: borderRadius10,
+                                    borderSide: BorderSide(
+                                      color: PlantaColors.colorBlack,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: borderRadius10,
+                                    borderSide: BorderSide(
+                                      color: PlantaColors.colorBlack,
+                                    ),
+                                  ),
+                                ),
+                                onSubmitted: (String value) {
+                                  setState(() {
+                                    search = controller!.text;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          childCount:
+                              isLoadMore ? items.length + 1 : items.length,
+                          (BuildContext context, int index) {
+                            if (index >= items.length) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else {
+                              return MyCustomCard(
+                                title: items[index]['nombre_especie'],
+                              );
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            right: 20,
+            bottom: fabBottomOffset,
+            child: FloatingActionButton(
+              onPressed: () {
+                context.read<GpsBloc>().add(GpsStarted());
+              },
+              backgroundColor: PlantaColors.colorGreen,
+              child: Icon(
+                Icons.my_location,
+                color: PlantaColors.colorBlack,
+              ),
+            ),
+          ),
         ],
       ),
     );
