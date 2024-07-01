@@ -436,7 +436,11 @@
     "search_without_results": "No results found",
     "@search_without_results": {
         "description": "search_without_results"
-    }
+    },
+
+    "nSLocationWhenInUseUsageDescription": "We need access to your location to show your position on the map",
+    "nSLocationAlwaysAndWhenInUseUsageDescription": "We need access to your location in the background to provide a better experience",
+    "nSCameraUsageDescription": "This app needs access to your camera in order to take pictures."
 }
 
 
