@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               icon: Icon(Icons.logout, color: PlantaColors.colorWhite),
-              tooltip: 'Sign Out',
+              tooltip: AppLocalizations.of(context)!.logout,
               onPressed: () async {
                 warning(
                   context,
@@ -66,26 +66,38 @@ class _HomeState extends State<Home> {
                         break;
                       case 400:
                         EasyLoading.dismiss();
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Wrong email or password!"),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: AutoSizeText(
+                              AppLocalizations.of(context)!.verify_credentials,
+                              style: context.theme.textTheme.text_01,
+                            ),
+                          ),
+                        );
                         break;
                       case 401:
                         EasyLoading.dismiss();
                         if (!context.mounted) return;
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Wrong email or password!"),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: AutoSizeText(
+                              AppLocalizations.of(context)!.verify_credentials,
+                              style: context.theme.textTheme.text_01,
+                            ),
+                          ),
+                        );
                         break;
                       default:
                         EasyLoading.dismiss();
                         if (!context.mounted) return;
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Wrong email or password!"),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: AutoSizeText(
+                              AppLocalizations.of(context)!.verify_credentials,
+                              style: context.theme.textTheme.text_01,
+                            ),
+                          ),
+                        );
                         break;
                     }
                   },

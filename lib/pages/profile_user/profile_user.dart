@@ -162,9 +162,6 @@ class _UserProfileState extends State<_UserProfile> {
                           color: PlantaColors.colorGreen,
                         ),
                       ),
-                      onChanged: (value) {
-                        nameController.text = value;
-                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return AppLocalizations.of(context)!.obligatory_camp;
@@ -272,9 +269,6 @@ class _UserProfileState extends State<_UserProfile> {
                         : PlantaColors.colorGrey,
                   ),
                 ),
-                onChanged: (value) {
-                  passwordController.text = value;
-                },
                 validator: (value) {
                   if (value!.isEmpty) {
                     return AppLocalizations.of(context)!.obligatory_camp;
@@ -325,9 +319,6 @@ class _UserProfileState extends State<_UserProfile> {
                           ),
                   ),
                 ),
-                onChanged: (value2) {
-                  passwordConfirmController.text = value2;
-                },
                 validator: (value2) {
                   if (value2!.isEmpty) {
                     return AppLocalizations.of(context)!.obligatory_camp;
@@ -554,7 +545,7 @@ class _UserProfileState extends State<_UserProfile> {
                         backgroundColor: PlantaColors.colorDarkOrange,
                         content: Center(
                           child: AutoSizeText(
-                            'No coinciden las contraseñas',
+                            AppLocalizations.of(context)!.password_match,
                             style: context.theme.textTheme.text_01.copyWith(
                               color: PlantaColors.colorWhite,
                               fontSize: 16.0,

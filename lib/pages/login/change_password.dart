@@ -59,7 +59,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 verticalMargin48,
                 Center(
                   child: AutoSizeText(
-                    'Cambiar contraseña',
+                    AppLocalizations.of(context)!.change_password,
                     style: context.theme.textTheme.h1,
                   ),
                 ),
@@ -74,8 +74,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                       borderSide: BorderSide(color: PlantaColors.colorGreen),
                       borderRadius: borderRadius10,
                     ),
-                    hintText: 'Ingrese su nueva contraseña',
-                    labelText: 'Nueva contraseña',
+                    hintText: AppLocalizations.of(context)!.write_new_password,
+                    labelText: AppLocalizations.of(context)!.new_password,
                     icon: Icon(
                       Ionicons.key_outline,
                       color: PlantaColors.colorGreen,
@@ -97,9 +97,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                             ),
                     ),
                   ),
-                  onChanged: (value) {
-                    passwordController.text = value;
-                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return AppLocalizations.of(context)!.obligatory_camp;
@@ -118,8 +115,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                       borderSide: BorderSide(color: PlantaColors.colorGreen),
                       borderRadius: borderRadius10,
                     ),
-                    hintText: 'Confirmar contraseña',
-                    labelText: 'Confirmar contraseña',
+                    hintText: AppLocalizations.of(context)!.confirm_password,
+                    labelText: AppLocalizations.of(context)!.confirm_password,
                     icon: Icon(
                       Ionicons.key_outline,
                       color: PlantaColors.colorGreen,
@@ -141,9 +138,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                             ),
                     ),
                   ),
-                  onChanged: (value) {
-                    passwordConfirmController.text = value;
-                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return AppLocalizations.of(context)!.obligatory_camp;
@@ -188,17 +182,26 @@ class _ChangePasswordState extends State<ChangePassword> {
                           break;
                         case 400:
                           EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Registro fallido"),
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: AutoSizeText(
+                                AppLocalizations.of(context)!.sign_up_failed,
+                                style: context.theme.textTheme.text_01,
+                              ),
+                            ),
+                          );
                           break;
                         default:
                           EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Verificacion fallida"),
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: AutoSizeText(
+                                AppLocalizations.of(context)!
+                                    .verify_code_failed,
+                                style: context.theme.textTheme.text_01,
+                              ),
+                            ),
+                          );
                           break;
                       }
                     }

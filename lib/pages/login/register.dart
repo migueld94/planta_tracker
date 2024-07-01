@@ -90,9 +90,6 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ),
-                    onChanged: (value) {
-                      name.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
@@ -115,9 +112,6 @@ class _RegisterState extends State<Register> {
                         color: PlantaColors.colorGreen,
                       ),
                     ),
-                    onChanged: (value) {
-                      email.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
@@ -159,9 +153,6 @@ class _RegisterState extends State<Register> {
                               ),
                       ),
                     ),
-                    onChanged: (value) {
-                      password.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
@@ -204,9 +195,6 @@ class _RegisterState extends State<Register> {
                               ),
                       ),
                     ),
-                    onChanged: (value) {
-                      passwordConfirm.text = value;
-                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
@@ -233,9 +221,21 @@ class _RegisterState extends State<Register> {
                         onTap: () {
                           goTerms(context);
                         },
-                        child: AutoSizeText(
-                          AppLocalizations.of(context)!.terms,
-                          style: context.theme.textTheme.text_01,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AutoSizeText(
+                              AppLocalizations.of(context)!.terms,
+                              style: context.theme.textTheme.text_01,
+                            ),
+                            horizontalMargin8,
+                            AutoSizeText(
+                              AppLocalizations.of(context)!.see,
+                              style: context.theme.textTheme.text_01.copyWith(
+                                color: PlantaColors.colorGreen,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -273,7 +273,8 @@ class _RegisterState extends State<Register> {
                             backgroundColor: PlantaColors.colorDarkOrange,
                             content: Center(
                               child: AutoSizeText(
-                                'Acepte los términos y condiciones',
+                                // 'Acepte los términos y condiciones',
+                                AppLocalizations.of(context)!.terms,
                                 style: context.theme.textTheme.text_01.copyWith(
                                   color: PlantaColors.colorWhite,
                                   fontSize: 16.0,
@@ -284,6 +285,7 @@ class _RegisterState extends State<Register> {
                         } else if (password.text.toLowerCase() ==
                             passwordConfirm.text.toLowerCase()) {
                           EasyLoading.show();
+
                           var res = await authService.register(email.text,
                               name.text, password.text, passwordConfirm.text);
 

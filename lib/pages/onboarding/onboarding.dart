@@ -50,12 +50,14 @@ class _OnboardingState extends State<Onboarding> {
               title: 'Planta! Tracker',
               subtitle_00: AppLocalizations.of(context)!.text_onboarding_first,
               icon: const LanguagePickerWidget(),
+              action: AppLocalizations.of(context)!.slide_to_continue,
             ),
             ContainerOnboarding(
               color: PlantaColors.colorWhite,
               urlImage: Assets.logo,
               title: AppLocalizations.of(context)!.title_onboarding_second,
               subtitle_00: AppLocalizations.of(context)!.text_onboarding_second,
+              action: AppLocalizations.of(context)!.slide_to_continue,
             ),
             ContainerOnboarding(
               color: PlantaColors.colorWhite,

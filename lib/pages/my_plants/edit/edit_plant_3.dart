@@ -139,7 +139,7 @@ class _EditPlants03State extends State<EditPlants03> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_image != null || widget.images![1].posterPath != null)
+            if ((_image != null) || (widget.images![2].posterPath != null))
               Flexible(
                 child: AutoSizeText(
                   AppLocalizations.of(context)!.take_photo,

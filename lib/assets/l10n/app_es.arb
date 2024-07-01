@@ -6,7 +6,8 @@
     "email_enter": "Ingrese su correo electrónico",
     "enter_full_name": "Ingrese su nombre completo",
     "enter_password_confirm": "Ingrese su contraseña a confirmar",
-    "forget": "Olvide mi contraseña.",
+    "forget": "Olvidé mi contraseña.",
+    "recover": "Recuperar",
     "full_name": "Nombre completo",
     "log_in": "Iniciar sesión",
     "map": "Mapa",
@@ -19,12 +20,12 @@
     "password_enter": "Ingrese su contraseña",
     "password_match": "No coinciden las contraseñas.",
     "plant_register": "Registrar planta",
-    "plant_register_full_image": "Imagén completa",
-    "plant_register_image_branches": "Imagén Ramas",
-    "plant_register_trunk_image": "Imagén Tronco",
-    "plant_register_sheet_image": "Imagén Hoja",
-    "plant_register_fruit_image": "Imagén Fruto",
-    "plant_register_image_flower": "Imagén Flor",
+    "plant_register_full_image": "Imagen completa",
+    "plant_register_image_branches": "Imagen Ramas",
+    "plant_register_trunk_image": "Imagen Tallo",
+    "plant_register_sheet_image": "Imagen Hoja",
+    "plant_register_fruit_image": "Imagen Fruto",
+    "plant_register_image_flower": "Imagen Flor",
     "plants": "Plantas",
     "polices_warning": "Debe de aceptar los terminos y condiciones",
     "recover_password": "Recuperar contraseña",
@@ -55,7 +56,7 @@
     "match_password": "No coinciden las contraseñas",
     "note": "Notas",
     "name_plant": "Determinación pendiente",
-    "comments": "Commentarios",
+    "comments": "Comentarios",
     "address": "No se registro la dirección",
     "take_photo_details": "Foto tomada por:",
     "no_notes": "No se encontraron notas",
@@ -75,7 +76,42 @@
 
     "cancel_update": "¿Estás seguro de enviar la actualización?",
 
-    "take_photo": "Para volver a tomar la foto pulse la imagén",
+    "take_photo": "Para volver a tomar la foto pulse la imagen",
     "skip": "Omitir",
-    "get_location": "Obteniendo ubicación..."
+    "get_location": "Obteniendo ubicación...",
+    "message_cancel_register": "¿Esta seguro de cancelar el registro?",
+    "message_send_register": "¿Esta seguro de enviar el registro?",
+    "slide_to_continue": "Deslizar para continuar >",
+    "see": "Ver",
+    "lifestage": "Estado de vida",
+    "select_lifestage": "Para completar el registro debe de seleccionar el estado de vida",
+    "message_plants_empty": "Para registrar su primera planta presione el botón",
+
+    "verify_code": "Verificar código",
+
+    "verify_code_failed": "Verificación fallida",
+
+    "no_receive_code": "No he recibido el código.",
+
+    "sign_up_failed": "Registro fallido",
+
+    "text_buttom_resend": "Reenviar",
+
+    "enter_email_valid": "Ingrese un correo valido",
+
+    "change_password": "Cambiar contraseña",
+
+    "write_new_password": "Ingrese su nueva contraseña",
+
+    "new_password": "Nueva contraseña",
+
+    "confirm_password": "Confirmar contraseña",
+
+    "logout": "Desconectar",
+
+    "slide": "Deslizar",
+
+    "carousel": "Carrusel de imágenes",
+
+    "search_without_results": "No se encontraron resultados"
 }

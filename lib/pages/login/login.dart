@@ -104,16 +104,13 @@ class _LoginState extends State<Login> {
                           color: PlantaColors.colorGreen,
                         ),
                       ),
-                      onChanged: (value) {
-                        email.text = value;
-                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return AppLocalizations.of(context)!.obligatory_camp;
                         } else {
                           return EmailValidator.validate(value)
                               ? null
-                              : 'Ingrese un correo valido';
+                              : AppLocalizations.of(context)!.enter_email_valid;
                         }
                       },
                     ),
@@ -152,9 +149,6 @@ class _LoginState extends State<Login> {
                           color: PlantaColors.colorGreen,
                         ),
                       ),
-                      onChanged: (value) {
-                        password.text = value;
-                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return AppLocalizations.of(context)!.obligatory_camp;
@@ -167,9 +161,21 @@ class _LoginState extends State<Login> {
                       onTap: () {
                         goToRecovery(context);
                       },
-                      child: AutoSizeText(
-                        AppLocalizations.of(context)!.forget,
-                        style: context.theme.textTheme.text_01,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          AutoSizeText(
+                            AppLocalizations.of(context)!.forget,
+                            style: context.theme.textTheme.text_01,
+                          ),
+                          horizontalMargin8,
+                          AutoSizeText(
+                            AppLocalizations.of(context)!.recover,
+                            style: context.theme.textTheme.text_01.copyWith(
+                              color: PlantaColors.colorGreen,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     verticalMargin24,
@@ -234,7 +240,8 @@ class _LoginState extends State<Login> {
                                   backgroundColor: PlantaColors.colorOrange,
                                   content: Center(
                                     child: AutoSizeText(
-                                      'Credenciales incorrectas',
+                                      AppLocalizations.of(context)!
+                                          .verify_credentials,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                         color: PlantaColors.colorWhite,
@@ -252,7 +259,8 @@ class _LoginState extends State<Login> {
                                   backgroundColor: PlantaColors.colorOrange,
                                   content: Center(
                                     child: AutoSizeText(
-                                      'Credenciales incorrectas',
+                                      AppLocalizations.of(context)!
+                                          .verify_credentials,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                         color: PlantaColors.colorWhite,
@@ -270,7 +278,8 @@ class _LoginState extends State<Login> {
                                   backgroundColor: PlantaColors.colorOrange,
                                   content: Center(
                                     child: AutoSizeText(
-                                      'Credenciales incorrectas',
+                                      AppLocalizations.of(context)!
+                                          .verify_credentials,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                         color: PlantaColors.colorWhite,
@@ -287,7 +296,7 @@ class _LoginState extends State<Login> {
                               backgroundColor: PlantaColors.colorOrange,
                               content: Center(
                                 child: AutoSizeText(
-                                  'Sin conexión',
+                                  AppLocalizations.of(context)!.no_internet,
                                   style:
                                       context.theme.textTheme.text_01.copyWith(
                                     color: PlantaColors.colorWhite,

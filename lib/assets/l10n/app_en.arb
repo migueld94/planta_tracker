@@ -34,6 +34,12 @@
     "@forget": {
         "description": "forget password"
     },
+
+    "recover": "Recover",
+    "@recover": {
+        "description": "recover"
+    },
+
     "full_name": "Full name",
     "@full_name": {
         "description": "full_name"
@@ -103,7 +109,7 @@
     "@plant_register_sheet_image": {
         "description": "Text"
     },
-    "plant_register_trunk_image": "Trunk Image",
+    "plant_register_trunk_image": "Stem Image",
     "@plant_register_trunk_image": {
         "description": "Text"
     },
@@ -158,7 +164,7 @@
         "description": "Text Buttom"
     },
 
-    "text_onboarding_first": "Join Plant! with our mobile app and contribute to plant conservation while exploring cities and countryside!",
+    "text_onboarding_first": "Join Planta! with our mobile app and contribute to plant conservation while exploring cities and countryside!",
     "@text_onboarding_first": {
         "description": "Text"
     },
@@ -325,8 +331,126 @@
     "get_location": "Getting location...",
     "@get_location": {
         "description": "get_location"
+    },
+
+    "message_cancel_register": "Are you sure about canceling the registration?",
+    "@message_cancel_register": {
+        "description": "message_cancel_register"
+    },
+
+    "message_send_register": "Are you sure to send the registration?",
+    "@message_send_register": {
+        "description": "message_send_register"
+    },
+
+    "slide_to_continue": "Slide to continue >",
+    "@slide_to_continue": {
+        "description": "slide_to_continue"
+    },
+
+    "see": "See",
+    "@see": {
+        "description": "see"
+    },
+
+    "lifestage": "Lifestage",
+    "@lifestage": {
+        "description": "lifestage"
+    },
+
+    "select_lifestage": "To complete the registration you must select the lifestage",
+    "@select_lifestage": {
+        "description": "select_lifestage"
+    },
+
+    "message_plants_empty": "To register your first plant press the button",
+    "@message_plants_empty": {
+        "description": "message_plants_empty"
+    },
+
+    "verify_code": "Verify code",
+    "@verify_code": {
+        "description": "verify_code"
+    },
+
+    "verify_code_failed": "Verification failed",
+    "@verify_code_failed": {
+        "description": "verify_code_failed"
+    },
+
+    "no_receive_code": "I have not received the code.",
+    "@no_receive_code": {
+        "description": "no_receive_code"
+    },
+
+    "sign_up_failed": "Sign up failed",
+    "@sign_up_failed": {
+        "description": "sign_up_failed"
+    },
+
+    "text_buttom_resend": "Resend",
+    "@text_buttom_resend": {
+        "description": "text_buttom_resend"
+    },
+
+    "enter_email_valid": "Enter a valid email",
+    "@enter_email_valid": {
+        "description": "enter_email_valid"
+    },
+
+    "change_password": "Change Password",
+    "@change_password": {
+        "description": "change_password"
+    },
+
+    "write_new_password": "Enter your new password",
+    "@write_new_password": {
+        "description": "write_new_password"
+    },
+
+    "new_password": "New Password",
+    "@new_password": {
+        "description": "new_password"
+    },
+
+    "confirm_password": "Confirm Password",
+    "@confirm_password": {
+        "description": "confirm_password"
+    },
+
+    "logout": "Sign Out",
+    "@logout": {
+        "description": "logout"
+    },
+
+    "slide": "Slide",
+    "@slide": {
+        "description": "slide"
+    },
+
+    "carousel": "Image carousel",
+    "@carousel": {
+        "description": "carousel"
+    },
+
+    "search_without_results": "No results found",
+    "@search_without_results": {
+        "description": "search_without_results"
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
