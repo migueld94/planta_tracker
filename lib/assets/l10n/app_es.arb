@@ -113,5 +113,9 @@
 
     "carousel": "Carrusel de imágenes",
 
-    "search_without_results": "No se encontraron resultados"
+    "search_without_results": "No se encontraron resultados",
+
+    "nSLocationWhenInUseUsageDescription": "Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa",
+    "nSLocationAlwaysAndWhenInUseUsageDescription": "Necesitamos acceder a tu ubicación en segundo plano para proporcionar una mejor experiencia",
+    "nSCameraUsageDescription": "Esta aplicación necesita acceso a su cámara para poder tomar fotografías."
 }
