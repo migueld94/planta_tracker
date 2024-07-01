@@ -431,6 +431,11 @@
     "carousel": "Image carousel",
     "@carousel": {
         "description": "carousel"
+    },
+
+    "search_without_results": "No results found",
+    "@search_without_results": {
+        "description": "search_without_results"
     }
 }
 

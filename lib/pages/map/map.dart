@@ -6,10 +6,12 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:planta_tracker/assets/utils/constants.dart';
@@ -40,12 +42,14 @@ class _MapViewState extends State<MapView> {
   TextEditingController? controller;
   String search = '';
   String selectedFilter = '';
-  double fabBottomOffset = 140; // Offset inicial para el botón flotante
+  double fabBottomOffset = 110; // Offset inicial para el botón flotante
   List items = [];
   int next = 1;
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
   ScrollController scroll = ScrollController();
   bool isLoadMore = false;
+  List copy = [];
+  final debouncer = Debouncer();
 
   double maxLat = 0.0;
   double minLat = 0.0;
@@ -72,8 +76,10 @@ class _MapViewState extends State<MapView> {
     final response = await http.get(allspecie,
         headers: <String, String>{'authorization': "Bearer $accessToken"});
 
+    final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
     if (response.statusCode == 200) {
-      final json = jsonDecode(response.body)['results'] as List;
+      final json = jsonDecode(utf)['results'] as List;
       setState(() {
         items.addAll(json);
       });
@@ -83,6 +89,7 @@ class _MapViewState extends State<MapView> {
   @override
   void initState() {
     super.initState();
+    EasyLoading.show();
     _loadMore();
     scroll.addListener(() async {
       if (isLoadMore == true) return;
@@ -103,6 +110,47 @@ class _MapViewState extends State<MapView> {
         }
       }
     });
+  }
+
+  updateList(String value) async {
+    if (copy.isEmpty) {
+      copy = items;
+    } else {
+      items = copy;
+    }
+
+    String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
+    String secret =
+        'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
+    String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
+
+    var resp = await http.post(secretUrl, headers: <String, String>{
+      'authorization': basicAuth
+    }, body: {
+      "grant_type": "client_credentials",
+    });
+
+    final Map<String, dynamic> data = json.decode(resp.body);
+    final accessToken = data["access_token"];
+
+    final searchSpecie =
+        Uri.parse('${Constants.baseUrl}/en/api/especie_list/search?q=$value');
+
+    final response = await http.get(searchSpecie,
+        headers: <String, String>{'authorization': "Bearer $accessToken"});
+
+    final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+    log(utf.toString());
+
+    if (response.statusCode == 200) {
+      setState(() {
+        items = jsonDecode(utf)['results'] as List;
+      });
+      EasyLoading.dismiss();
+    } else {
+      log('Error: ${response.statusCode}');
+    }
   }
 
   @override
@@ -218,10 +266,29 @@ class _MapViewState extends State<MapView> {
                                     ),
                                   ),
                                 ),
-                                onSubmitted: (String value) {
-                                  setState(() {
-                                    search = controller!.text;
-                                  });
+                                onChanged: (value) {
+                                  if (value.toLowerCase().length >= 3) {
+                                    debouncer.debounce(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      onDebounce: () {
+                                        EasyLoading.show();
+                                        updateList(value);
+                                      },
+                                    );
+                                  } else {
+                                    debouncer.debounce(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      onDebounce: () {
+                                        EasyLoading.show();
+                                        setState(() {
+                                          items.clear();
+                                        });
+                                        _loadMore();
+                                      },
+                                    );
+                                  }
                                 },
                               ),
                             ),
@@ -237,13 +304,28 @@ class _MapViewState extends State<MapView> {
                               return const Center(
                                   child: CircularProgressIndicator());
                             } else {
+                              EasyLoading.dismiss();
                               return MyCustomCard(
                                 title: items[index]['nombre_especie'],
                               );
                             }
                           },
                         ),
-                      )
+                      ),
+                      if (items.isEmpty)
+                        SliverToBoxAdapter(
+                          child: Center(
+                            child: AutoSizeText(
+                              AppLocalizations.of(context)!
+                                  .search_without_results,
+                              style: context.theme.textTheme.text_01.copyWith(
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 );
@@ -251,7 +333,7 @@ class _MapViewState extends State<MapView> {
             ),
           ),
           Positioned(
-            right: 20,
+            right: 10,
             bottom: fabBottomOffset,
             child: FloatingActionButton(
               onPressed: () {

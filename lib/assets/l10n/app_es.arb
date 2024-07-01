@@ -111,5 +111,7 @@
 
     "slide": "Deslizar",
 
-    "carousel": "Carrusel de imágenes"
+    "carousel": "Carrusel de imágenes",
+
+    "search_without_results": "No se encontraron resultados"
 }
