@@ -141,8 +141,6 @@ class _MapViewState extends State<MapView> {
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
 
-    log(utf.toString());
-
     if (response.statusCode == 200) {
       setState(() {
         items = jsonDecode(utf)['results'] as List;
