@@ -39,6 +39,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   final OptionPlantServices optionServices = OptionPlantServices();
   RegisterPlant plant = RegisterPlant();
   final _lifestage = GlobalKey<ShakeWidgetState>();
+  bool avaliable = false;
 
   @override
   void initState() {
