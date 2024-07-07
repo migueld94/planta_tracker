@@ -177,7 +177,7 @@ class _MapViewState extends State<MapView> {
                   builder: (context, mapState) {
                     if (mapState is MapLoadSuccess) {
                       return BlocProvider(
-                        create: (_) => PlantsMapBloc(AllPlantServices()),
+                        create: (_) => PlantsMapBloc(AllPlantServices(), context),
                         child: const AppFlutterMap(),
                       );
                     } else {
