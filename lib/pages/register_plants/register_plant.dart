@@ -37,6 +37,14 @@ class _RegisterPlantState extends State<RegisterPlant> {
 
     if (!cameraStatus.isGranted) {
       await Permission.camera.request();
+      if (!await Permission.camera.isGranted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Permiso de cámara no concedido'),
+          ),
+        );
+        return null;
+      }
     }
 
     if (!locationStatus.isGranted) {
