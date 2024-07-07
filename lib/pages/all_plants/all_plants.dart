@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:http/http.dart' as http;
