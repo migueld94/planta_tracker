@@ -262,7 +262,7 @@ class _EditPlants06State extends State<EditPlants06> {
         ),
       ),
       bottomSheet: Padding(
-        padding: allPadding24,
+        padding: allPadding16,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

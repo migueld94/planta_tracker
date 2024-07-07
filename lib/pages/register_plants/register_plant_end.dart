@@ -39,14 +39,14 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   final OptionPlantServices optionServices = OptionPlantServices();
   RegisterPlant plant = RegisterPlant();
   final _lifestage = GlobalKey<ShakeWidgetState>();
+  bool avaliable = false;
 
   @override
   void initState() {
     super.initState();
-    note.addListener(() {
-    });
+    note.addListener(() {});
   }
-  
+
   @override
   void dispose() {
     note.dispose();
@@ -65,86 +65,91 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
           style: context.theme.textTheme.titleApBar,
         ),
       ),
-      body: Padding(
-        padding: allPadding16,
-        child: Form(
-          key: formKey,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // Aquí va tu lista horizontal de cámaras
-                  SizedBox(
-                    height: 150,
-                    child: ListView.separated(
-                      clipBehavior: Clip.none,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) => horizontalMargin16,
-                      itemCount: widget.valores.length,
-                      itemBuilder: (context, index) {
-                        final valor = widget.valores[index];
-                        final file = valor["imagen"];
-                        final fileName = file.split('/').last;
-                        if (fileName.endsWith("De7au1t.png")) {
-                          return null;
-                        } else {
-                          return Column(
-                            children: [
-                              Container(
-                                width: 180,
-                                height: 110,
-                                decoration: BoxDecoration(
-                                  color: PlantaColors.colorWhite,
-                                  borderRadius: borderRadius10,
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: borderRadius10,
-                                  child: Image.file(
-                                    File(widget.valores[index]['imagen']),
-                                    fit: BoxFit.cover,
+      body: PopScope(
+        canPop: false,
+        child: Padding(
+          padding: allPadding16,
+          child: Form(
+            key: formKey,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // Aquí va tu lista horizontal de cámaras
+                    SizedBox(
+                      height: 150,
+                      child: ListView.separated(
+                        clipBehavior: Clip.none,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) =>
+                            horizontalMargin16,
+                        itemCount: widget.valores.length,
+                        itemBuilder: (context, index) {
+                          final valor = widget.valores[index];
+                          final file = valor["imagen"];
+                          final fileName = file.split('/').last;
+                          if (fileName.endsWith("De7au1t.png")) {
+                            return null;
+                          } else {
+                            return Column(
+                              children: [
+                                Container(
+                                  width: 180,
+                                  height: 110,
+                                  decoration: BoxDecoration(
+                                    color: PlantaColors.colorWhite,
+                                    borderRadius: borderRadius10,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: borderRadius10,
+                                    child: Image.file(
+                                      File(widget.valores[index]['imagen']),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              AutoSizeText(widget.valores[index]['name'],
-                                  style: context.theme.textTheme.text_01),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  //* DropdownButton
-                  ShakeWidget(
-                    key: _lifestage,
-                    duration: const Duration(seconds: 1),
-                    shakeCount: 3,
-                    shakeOffset: 2,
-                    child: const MyDropButtom(),
-                  ),
-                  verticalMargin12,
-                  //TextField para las notas
-                  AutoSizeText(
-                    AppLocalizations.of(context)!.note,
-                    style: context.theme.textTheme.h2,
-                  ),
-                  verticalMargin8,
-                  TextFormField(
-                    controller: note,
-                    maxLines: 6,
-                    maxLength: 150,
-                    textAlign: TextAlign.justify,
-                    decoration: InputDecorations.authInputDecoration(
-                      hintText: AppLocalizations.of(context)!.write_comments,
-                      labelText: AppLocalizations.of(context)!.write_comments,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PlantaColors.colorGreen),
-                        borderRadius: borderRadius10,
+                                AutoSizeText(widget.valores[index]['name'],
+                                    style: context.theme.textTheme.text_01),
+                              ],
+                            );
+                          }
+                        },
                       ),
                     ),
-                  ),
-                ],
+                    //* DropdownButton
+                    ShakeWidget(
+                      key: _lifestage,
+                      duration: const Duration(seconds: 1),
+                      shakeCount: 3,
+                      shakeOffset: 2,
+                      child: const MyDropButtom(),
+                    ),
+                    verticalMargin12,
+                    //TextField para las notas
+                    AutoSizeText(
+                      AppLocalizations.of(context)!.note,
+                      style: context.theme.textTheme.h2,
+                    ),
+                    verticalMargin8,
+                    TextFormField(
+                      controller: note,
+                      maxLines: 6,
+                      maxLength: 150,
+                      textAlign: TextAlign.justify,
+                      decoration: InputDecorations.authInputDecoration(
+                        hintText: AppLocalizations.of(context)!.write_comments,
+                        labelText: AppLocalizations.of(context)!.write_comments,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: PlantaColors.colorGreen),
+                          borderRadius: borderRadius10,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -167,139 +172,163 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
             ),
             ButtomSmall(
               color: PlantaColors.colorGreen,
-              onTap: () async {
-                var lifestage = await storage.read(key: 'lifestage');
+              onTap: avaliable
+                  ? null
+                  : () async {
+                      var lifestage = await storage.read(key: 'lifestage');
 
-                warning(context,
-                    AppLocalizations.of(context)!.message_send_register,
-                    () async {
-                  if (formKey.currentState!.validate() && lifestage != null) {
-                    formKey.currentState!.save();
+                      warning(
+                        context,
+                        AppLocalizations.of(context)!.message_send_register,
+                        () async {
+                          if (lifestage != null) {
+                            formKey.currentState!.save();
 
-                    plant.imagenPrincipal = File(widget.valores[0]['imagen']);
-                    plant.imagenTronco = File(widget.valores[1]['imagen']);
-                    plant.imagenRamas = File(widget.valores[2]['imagen']);
-                    plant.imagenHojas = File(widget.valores[3]['imagen']);
-                    plant.imagenFlor = File(widget.valores[5]['imagen']);
-                    plant.imagenFruto = File(widget.valores[4]['imagen']);
+                            setState(() {
+                              avaliable = true;
+                            });
 
-                    plant.notas = note.text;
-                    plant.lifestage = lifestage;
+                            plant.imagenPrincipal =
+                                File(widget.valores[0]['imagen']);
+                            plant.imagenTronco =
+                                File(widget.valores[1]['imagen']);
+                            plant.imagenRamas =
+                                File(widget.valores[2]['imagen']);
+                            plant.imagenHojas =
+                                File(widget.valores[3]['imagen']);
+                            plant.imagenFlor =
+                                File(widget.valores[5]['imagen']);
+                            plant.imagenFruto =
+                                File(widget.valores[4]['imagen']);
 
-                    Navigator.pop(context);
+                            plant.notas = note.text;
+                            plant.lifestage = lifestage;
 
-                    EasyLoading.show();
-                    try {
-                      var res = await optionServices.register(plant);
+                            Navigator.pop(context);
 
-                      switch (res!.statusCode) {
-                        case 200:
-                          final parsedResponse = json.decode(res.body);
-                          final successValue = parsedResponse['success'];
-                          await storage.delete(key: 'lifestage');
+                            EasyLoading.show();
+                            try {
+                              var res = await optionServices.register(plant);
 
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorGreen,
-                            content: Center(
-                              child: AutoSizeText(
-                                successValue,
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                              switch (res!.statusCode) {
+                                case 200:
+                                  final parsedResponse = json.decode(res.body);
+                                  final successValue =
+                                      parsedResponse['success'];
+                                  await storage.delete(key: 'lifestage');
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: PlantaColors.colorGreen,
+                                    content: Center(
+                                      child: AutoSizeText(
+                                        successValue,
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ));
+                                  EasyLoading.dismiss();
+                                  if (!context.mounted) return;
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) async {
+                                    Navigator.push(context,
+                                        SlideRightRoute(page: const Home()));
+                                  });
+                                  break;
+                                case 400:
+                                  EasyLoading.dismiss();
+                                  Navigator.push(context,
+                                      SlideRightRoute(page: const Home()));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: PlantaColors.colorOrange,
+                                    content: Center(
+                                      child: AutoSizeText(
+                                        res.body,
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ));
+                                  break;
+                                case 401:
+                                  EasyLoading.dismiss();
+                                  if (!context.mounted) return;
+                                  Navigator.push(context,
+                                      SlideRightRoute(page: const Home()));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: PlantaColors.colorOrange,
+                                    content: Center(
+                                      child: AutoSizeText(
+                                        res.body,
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ));
+                                  break;
+                                default:
+                                  EasyLoading.dismiss();
+                                  if (!context.mounted) return;
+                                  Navigator.push(context,
+                                      SlideRightRoute(page: const Home()));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: PlantaColors.colorOrange,
+                                    content: Center(
+                                      child: AutoSizeText(
+                                        res.body,
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ));
+                                  break;
+                              }
+                            } on SocketException {
+                              EasyLoading.dismiss();
+                              Navigator.push(
+                                  context, SlideRightRoute(page: const Home()));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    AppLocalizations.of(context)!.no_internet,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                      color: PlantaColors.colorWhite,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ));
-                          EasyLoading.dismiss();
-                          if (!context.mounted) return;
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) async {
-                            Navigator.push(
-                                context, SlideRightRoute(page: const Home()));
-                          });
-                          break;
-                        case 400:
-                          EasyLoading.dismiss();
-                          Navigator.push(
-                              context, SlideRightRoute(page: const Home()));
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                res.body,
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ));
-                          break;
-                        case 401:
-                          EasyLoading.dismiss();
-                          if (!context.mounted) return;
-                          Navigator.push(
-                              context, SlideRightRoute(page: const Home()));
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                res.body,
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ));
-                          break;
-                        default:
-                          EasyLoading.dismiss();
-                          if (!context.mounted) return;
-                          Navigator.push(
-                              context, SlideRightRoute(page: const Home()));
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                res.body,
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ));
-                          break;
-                      }
-                    } on SocketException {
-                      EasyLoading.dismiss();
-                      Navigator.push(
-                          context, SlideRightRoute(page: const Home()));
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: PlantaColors.colorOrange,
-                        content: Center(
-                          child: AutoSizeText(
-                            AppLocalizations.of(context)!.no_internet,
-                            style: context.theme.textTheme.text_01.copyWith(
-                              color: PlantaColors.colorWhite,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ),
-                      ));
-                    }
-                  } else {
-                    Navigator.pop(context);
-
-                    _lifestage.currentState?.shake();
-                    alert(
-                      context,
-                      AppLocalizations.of(context)!.select_lifestage,
-                    );
-                  }
-                });
-              },
+                              ));
+                            }
+                          } else {
+                            Navigator.pop(context);
+                            _lifestage.currentState?.shake();
+                            alert(
+                              context,
+                              AppLocalizations.of(context)!.select_lifestage,
+                            );
+                          }
+                        },
+                      );
+                    },
               title: AppLocalizations.of(context)!.text_buttom_send,
             ),
           ],

@@ -114,7 +114,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
         ),
       ),
       bottomSheet: Padding(
-        padding: allPadding24,
+        padding: allPadding16,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

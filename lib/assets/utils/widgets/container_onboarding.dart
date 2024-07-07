@@ -31,7 +31,7 @@ class ContainerOnboarding extends StatelessWidget {
       children: [
         Container(
           color: color,
-          padding: allPadding24,
+          padding: allPadding16,
           alignment: Alignment.center,
           child: SingleChildScrollView(
             child: Column(

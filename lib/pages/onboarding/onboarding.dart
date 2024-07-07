@@ -35,7 +35,7 @@ class _OnboardingState extends State<Onboarding> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: allPadding24,
+        padding: allPadding16,
         child: PageView(
           controller: controller,
           onPageChanged: (index) {
@@ -75,7 +75,7 @@ class _OnboardingState extends State<Onboarding> {
       ),
       bottomSheet: isLastPage
           ? Padding(
-              padding: allPadding24,
+              padding: allPadding16,
               child: ButtomLarge(
                 color: PlantaColors.colorGreen,
                 onTap: () async {

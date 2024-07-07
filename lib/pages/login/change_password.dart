@@ -42,7 +42,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: allPadding24,
+          padding: allPadding16,
           child: Form(
             key: formKey,
             child: Column(

@@ -85,7 +85,7 @@ class _VerifyCodeState extends State<VerifyCode> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: allPadding24,
+          padding: allPadding16,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

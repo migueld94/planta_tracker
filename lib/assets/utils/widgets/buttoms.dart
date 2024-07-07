@@ -45,7 +45,7 @@ class ButtomSmall extends StatelessWidget {
   });
 
   final Color color;
-  final Function() onTap;
+  final Function()? onTap;
   final String title;
 
   @override

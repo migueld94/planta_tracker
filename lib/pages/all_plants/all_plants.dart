@@ -186,6 +186,13 @@ class _AllPlantsState extends State<AllPlants> {
                     color: PlantaColors.colorWhite,
                   ),
                 ),
+                // IconButton(
+                //   icon: Icon(
+                //     Ionicons.people_outline,
+                //     color: PlantaColors.colorWhite,
+                //   ),
+                //   onPressed: () => goToProfile(context),
+                // ),
               ],
             ),
           ),
