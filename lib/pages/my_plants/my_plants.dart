@@ -210,27 +210,32 @@ class _MyPlantsState extends State<MyPlants> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: Ink(
-        height: 60.0,
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: borderRadius10.topLeft,
-            topRight: borderRadius10.topRight,
-          ),
-          child: BottomAppBar(
-            color: PlantaColors.colorGreen,
-            elevation: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Ionicons.people_outline,
-                    color: PlantaColors.colorWhite,
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom, // Add this
+        ),
+        child: Ink(
+          height: 60.0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: borderRadius10.topLeft,
+              topRight: borderRadius10.topRight,
+            ),
+            child: BottomAppBar(
+              color: PlantaColors.colorGreen,
+              elevation: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Ionicons.people_outline,
+                      color: PlantaColors.colorWhite,
+                    ),
+                    onPressed: () => goToProfile(context),
                   ),
-                  onPressed: () => goToProfile(context),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
