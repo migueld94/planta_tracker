@@ -105,10 +105,10 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value!.trim().isEmpty) {
                           return AppLocalizations.of(context)!.obligatory_camp;
                         } else {
-                          return EmailValidator.validate(value)
+                          return EmailValidator.validate(value.trim())
                               ? null
                               : AppLocalizations.of(context)!.enter_email_valid;
                         }
@@ -210,10 +210,11 @@ class _LoginState extends State<Login> {
                             emails = email.text;
                             passwords = password.text;
                           });
+
                           EasyLoading.show();
                           try {
                             var res = await authService.login(
-                                email.text, password.text);
+                                email.text.trim(), password.text);
 
                             switch (res!.statusCode) {
                               case 200:

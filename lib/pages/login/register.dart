@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
@@ -113,10 +114,13 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value!.trim().isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
+                      } else {
+                        return EmailValidator.validate(value.trim())
+                            ? null
+                            : AppLocalizations.of(context)!.enter_email_valid;
                       }
-                      return null;
                     },
                   ),
                   verticalMargin16,
@@ -286,8 +290,12 @@ class _RegisterState extends State<Register> {
                             passwordConfirm.text.toLowerCase()) {
                           EasyLoading.show();
 
-                          var res = await authService.register(email.text,
-                              name.text, password.text, passwordConfirm.text);
+                          var res = await authService.register(
+                            email.text.trim(),
+                            name.text,
+                            password.text,
+                            passwordConfirm.text,
+                          );
 
                           switch (res!.statusCode) {
                             case 200:
@@ -295,7 +303,7 @@ class _RegisterState extends State<Register> {
                               Navigator.push(
                                 context,
                                 SlideRightRoute(
-                                  page: VerifyCode(email: email.text),
+                                  page: VerifyCode(email: email.text.trim()),
                                 ),
                               );
                               break;

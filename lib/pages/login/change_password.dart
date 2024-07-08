@@ -170,7 +170,11 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                       EasyLoading.show();
                       var res = await authService.changePassword(
-                          widget.email, password, passwordConfirm, widget.otp);
+                        widget.email.trim(),
+                        password,
+                        passwordConfirm,
+                        widget.otp,
+                      );
 
                       switch (res!.statusCode) {
                         case 200:

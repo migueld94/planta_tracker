@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
@@ -73,10 +74,13 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value!.trim().isEmpty) {
                         return AppLocalizations.of(context)!.obligatory_camp;
+                      } else {
+                        return EmailValidator.validate(value.trim())
+                            ? null
+                            : AppLocalizations.of(context)!.enter_email_valid;
                       }
-                      return null;
                     },
                   ),
                   verticalMargin24,
@@ -125,8 +129,9 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                     color: PlantaColors.colorGreen,
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
+
                         setState(() {
-                          email = emailController.text;
+                          email = emailController.text.trim();
                         });
 
                         EasyLoading.show();
