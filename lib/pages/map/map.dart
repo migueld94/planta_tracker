@@ -46,7 +46,7 @@ class _MapViewState extends State<MapView> {
   List items = [];
   int next = 1;
   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
-  ScrollController scroll = ScrollController();
+  DraggableScrollableController scroll = DraggableScrollableController();
   bool isLoadMore = false;
   List copy = [];
   final debouncer = Debouncer();
@@ -91,25 +91,32 @@ class _MapViewState extends State<MapView> {
     super.initState();
     EasyLoading.show();
     _loadMore();
-    scroll.addListener(() async {
-      if (isLoadMore == true) return;
-      final screenHeight = MediaQuery.of(context).size.height;
-      final threshold = screenHeight * 0.12; // 20% de la pantalla
-      if (scroll.position.pixels + threshold >=
-          scroll.position.maxScrollExtent) {
-        // Verificar si hay más elementos para cargar
-        if (items.length % 10 == 0) {
+    scroll.addListener(
+      () async {
+        if (scroll.size >= 1.0) {
+          if (isLoadMore == true) return;
           setState(() {
             isLoadMore = true;
           });
           next++;
-          await _loadMore();
-          setState(() {
-            isLoadMore = false;
+          _loadMore().then((_) {
+            setState(() {
+              isLoadMore = false;
+            });
           });
         }
-      }
-    });
+        // if (scroll. == scroll.position.maxScrollExtent) {
+        //   setState(() {
+        //     isLoadMore = true;
+        //   });
+        //   next++;
+        //   await _loadMore();
+        //   setState(() {
+        //     isLoadMore = false;
+        //   });
+        // }
+      },
+    );
   }
 
   updateList(String value) async {
@@ -140,8 +147,6 @@ class _MapViewState extends State<MapView> {
         headers: <String, String>{'authorization': "Bearer $accessToken"});
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
-
-    log(utf.toString());
 
     if (response.statusCode == 200) {
       setState(() {
@@ -177,7 +182,8 @@ class _MapViewState extends State<MapView> {
                   builder: (context, mapState) {
                     if (mapState is MapLoadSuccess) {
                       return BlocProvider(
-                        create: (_) => PlantsMapBloc(AllPlantServices(), context),
+                        create: (_) =>
+                            PlantsMapBloc(AllPlantServices(), context),
                         child: const AppFlutterMap(),
                       );
                     } else {
@@ -190,162 +196,121 @@ class _MapViewState extends State<MapView> {
               }
             },
           ),
-          NotificationListener<DraggableScrollableNotification>(
-            onNotification: (notification) {
-              final screenHeight = MediaQuery.of(context).size.height;
-              final bottomSheetHeight = notification.extent * screenHeight;
-              final bottomOffset = screenHeight - bottomSheetHeight;
-              setState(() {
-                fabBottomOffset = screenHeight - bottomOffset - 2;
-              });
-              return true;
-            },
-            child: DraggableScrollableSheet(
-              initialChildSize: 0.12,
-              minChildSize: 0.12,
-              maxChildSize: 0.5,
-              builder: (context, scroll) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: PlantaColors.colorWhite,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10.0,
-                        color: PlantaColors.colorBlack.withOpacity(0.7),
-                      ),
-                    ],
+          DraggableScrollableSheet(
+            initialChildSize: 0.4, // tamaño inicial de la hoja
+            minChildSize: 0.2, // tamaño mínimo de la hoja
+            maxChildSize: 1,
+            controller: scroll,
+            builder: (context, scroll) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: PlantaColors.colorWhite,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
                   ),
-                  child: CustomScrollView(
-                    controller: scroll,
-                    slivers: <Widget>[
-                      SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            verticalMargin4,
-                            Container(
-                              width: 40.0,
-                              height: 5.0,
-                              decoration: BoxDecoration(
-                                borderRadius: borderRadius10,
-                                color:
-                                    PlantaColors.greyDisabled.withOpacity(0.3),
-                              ),
-                            ),
-                            Padding(
-                              padding: allPadding8,
-                              child: TextField(
-                                controller: controller,
-                                decoration: InputDecoration(
-                                  hintText:
-                                      AppLocalizations.of(context)!.search,
-                                  prefixIcon: const Icon(Icons.search),
-                                  border: OutlineInputBorder(
-                                    borderRadius: borderRadius10,
-                                    borderSide: BorderSide(
-                                      color: PlantaColors.colorBlack,
-                                    ),
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: borderRadius10,
-                                    borderSide: BorderSide(
-                                      color: PlantaColors.colorBlack,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: borderRadius10,
-                                    borderSide: BorderSide(
-                                      color: PlantaColors.colorBlack,
-                                    ),
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  if (value.toLowerCase().length >= 3) {
-                                    debouncer.debounce(
-                                      duration:
-                                          const Duration(milliseconds: 500),
-                                      onDebounce: () {
-                                        EasyLoading.show();
-                                        updateList(value);
-                                      },
-                                    );
-                                  } else {
-                                    debouncer.debounce(
-                                      duration:
-                                          const Duration(milliseconds: 500),
-                                      onDebounce: () {
-                                        EasyLoading.show();
-                                        setState(() {
-                                          items.clear();
-                                        });
-                                        _loadMore();
-                                      },
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 10.0,
+                      color: PlantaColors.colorBlack.withOpacity(0.7),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    verticalMargin8,
+                    Container(
+                      width: 40.0,
+                      height: 5.0,
+                      decoration: BoxDecoration(
+                        borderRadius: borderRadius10,
+                        color: PlantaColors.greyDisabled.withOpacity(0.3),
                       ),
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          childCount:
-                              isLoadMore ? items.length + 1 : items.length,
-                          (BuildContext context, int index) {
-                            if (index >= items.length) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            } else {
-                              EasyLoading.dismiss();
-                              return MyCustomCard(
-                                title: items[index]['nombre_especie'],
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      if (items.isEmpty)
-                        SliverToBoxAdapter(
-                          child: Center(
-                            child: AutoSizeText(
-                              AppLocalizations.of(context)!
-                                  .search_without_results,
-                              style: context.theme.textTheme.text_01.copyWith(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.5,
-                                fontSize: 16,
-                              ),
+                    ),
+                    Padding(
+                      padding: allPadding8,
+                      child: TextField(
+                        controller: controller,
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.search,
+                          border: OutlineInputBorder(
+                            borderRadius: borderRadius10,
+                            borderSide: BorderSide(
+                              color: PlantaColors.colorBlack,
                             ),
                           ),
                         ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                        onChanged: (value) {
+                          if (value.toLowerCase().length >= 3) {
+                            debouncer.debounce(
+                              duration: const Duration(milliseconds: 500),
+                              onDebounce: () {
+                                EasyLoading.show();
+                                updateList(value);
+                              },
+                            );
+                          } else {
+                            debouncer.debounce(
+                              duration: const Duration(milliseconds: 500),
+                              onDebounce: () {
+                                EasyLoading.show();
+                                setState(() {
+                                  items.clear();
+                                });
+                                _loadMore();
+                              },
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    items.isEmpty
+                        ? AutoSizeText(
+                            AppLocalizations.of(context)!
+                                .search_without_results,
+                            style: context.theme.textTheme.text_01.copyWith(
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                              fontSize: 16,
+                            ),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                              controller: scroll,
+                              itemCount:
+                                  isLoadMore ? items.length + 1 : items.length,
+                              itemBuilder: (context, index) {
+                                if (index >= items.length) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  EasyLoading.dismiss();
+                                  return MyCustomCard(
+                                    title: items[index]['nombre_especie'],
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                  ],
+                ),
+              );
+            },
           ),
-          Positioned(
-            right: 10,
-            bottom: fabBottomOffset,
-            child: FloatingActionButton(
-              onPressed: () {
-                context.read<GpsBloc>().add(GpsStarted());
-              },
-              backgroundColor: PlantaColors.colorGreen,
-              child: Icon(
-                Icons.my_location,
-                color: PlantaColors.colorBlack,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   right: 10,
+          //   bottom: fabBottomOffset,
+          //   child: FloatingActionButton(
+          //     onPressed: () {
+          //       context.read<GpsBloc>().add(GpsStarted());
+          //     },
+          //     backgroundColor: PlantaColors.colorGreen,
+          //     child: Icon(
+          //       Icons.my_location,
+          //       color: PlantaColors.colorBlack,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
