@@ -237,6 +237,14 @@ extension TexThemeExtensions on TextTheme {
         letterSpacing: 1.5,
         fontSize: 20.0,
       );
+
+  TextStyle get caption => TextStyle(
+        color: PlantaColors.colorBlack,
+        fontFamily: 'Nunito',
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1.5,
+        fontSize: 25.0,
+      );
 }
 
 extension ThemeContext on BuildContext {
