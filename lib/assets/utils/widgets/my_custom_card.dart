@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 
 class MyCustomCard extends StatelessWidget {
@@ -12,7 +11,7 @@ class MyCustomCard extends StatelessWidget {
   const MyCustomCard({
     super.key,
     required this.title,
-    required this.onTap,
+    this.onTap,
     // required this.lifestage,
     // required this.status,
   });
