@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:get/get.dart';
 
 import 'package:planta_tracker/assets/l10n/l10n.dart';
@@ -24,6 +25,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final showHome = prefs.getBool('showHome') ?? false;
   configLoading();
+  clearSecureStorageOnReinstall();
   runApp(
     MultiBlocProvider(
       providers: [
@@ -34,6 +36,17 @@ void main() async {
     ),
   );
   // DependencyInjection.init();
+}
+
+void clearSecureStorageOnReinstall() async {
+  String key = 'hasRunBefore';
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  if (prefs.getBool(key) != true) {
+    FlutterSecureStorage storage = const FlutterSecureStorage();
+    await storage.deleteAll();
+    prefs.setBool(key, true);
+  }
 }
 
 void configLoading() {
