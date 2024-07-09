@@ -56,7 +56,8 @@ class AllPlantServices {
     }
   }
 
-  Future<List<Plant>> getSpeciesById(int id, double latMax, double latMin, double longMax, double longMin) async {
+  Future<List<Plant>> getSpeciesById(String id, double latMax, double latMin,
+      double longMax, double longMin) async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
     String secret =
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
@@ -71,7 +72,8 @@ class AllPlantServices {
     final Map<String, dynamic> data = json.decode(resp.body);
     final accessToken = data["access_token"];
 
-    final speciesById = Uri.parse('${Constants.baseUrl}/en/api/plants_map_api');
+    final speciesById =
+        Uri.parse('${Constants.baseUrl}/en/api/plants_map_api_filter');
 
     final request = http.MultipartRequest('GET', speciesById);
     request.headers['Authorization'] = 'Bearer $accessToken';
