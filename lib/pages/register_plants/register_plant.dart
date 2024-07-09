@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:exif/exif.dart';
+import 'package:image/image.dart' as Img;
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -49,6 +51,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
 
     if (!locationStatus.isGranted) {
       await Permission.location.request();
+      await Permission.accessMediaLocation.request();
     }
 
     if (await Permission.camera.isGranted &&
@@ -131,9 +134,14 @@ class _RegisterPlantState extends State<RegisterPlant> {
                 color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
                 onTap: () async {
                   if (flag == true) {
-                    final bytes = await _image!.readAsBytes();
-                    final data =
-                        await readExifFromBytes(Uint8List.fromList(bytes));
+                    // final bytes = await _image!.readAsBytes();
+                    // final data = await readExifFromBytes(Uint8List.fromList(bytes));
+
+                    final fileBytes = File(_image!.path).readAsBytesSync();
+                    final data = await readExifFromBytes(fileBytes);
+
+                    log(data.toString());
+
                     final latitude = data['GPS GPSLatitude'];
                     final longitude = data['GPS GPSLongitude'];
 

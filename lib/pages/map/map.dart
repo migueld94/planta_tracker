@@ -277,8 +277,7 @@ class _MapViewState extends State<MapView> {
                         : Expanded(
                             child: ListView.builder(
                               controller: scroll,
-                              itemCount:
-                                  isLoadMore ? items.length + 1 : items.length,
+                              itemCount: isLoadMore ? items.length + 1 : items.length,
                               itemBuilder: (context, index) {
                                 if (index >= items.length) {
                                   return const Center(
