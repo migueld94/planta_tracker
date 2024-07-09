@@ -56,8 +56,7 @@ class AllPlantServices {
     }
   }
 
-  Future<List<Plant>> getSpeciesById(int id, double latMax, double latMin,
-      double longMax, double longMin) async {
+  Future<List<Plant>> getSpeciesById(int id, double latMax, double latMin, double longMax, double longMin) async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
     String secret =
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
@@ -78,7 +77,7 @@ class AllPlantServices {
     request.headers['Authorization'] = 'Bearer $accessToken';
 
     request.fields.addAll({
-      'id': id.toString(),
+      'id_especie': id.toString(),
       'longitud_maxima': longMax.toString(),
       'longitud_minima': longMin.toString(),
       'latitud_maxima': latMax.toString(),
