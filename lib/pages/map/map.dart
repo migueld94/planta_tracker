@@ -196,18 +196,7 @@ class _MapViewState extends State<MapView> {
               }
             },
           ),
-          NotificationListener<DraggableScrollableNotification>(
-            onNotification: (notification) {
-              final screenHeight = MediaQuery.of(context).size.height;
-              final bottomSheetHeight = notification.extent * screenHeight;
-              final bottomOffset = screenHeight - bottomSheetHeight;
-              setState(() {
-                fabBottomOffset =
-                    screenHeight - bottomOffset - 2; // margen adicional
-              });
-              return true;
-            },
-            child: DraggableScrollableSheet(
+          DraggableScrollableSheet(
               initialChildSize: 0.2,
               minChildSize: 0.1,
               maxChildSize: 0.8,
@@ -273,47 +262,79 @@ class _MapViewState extends State<MapView> {
                                     ),
                                   ),
                                 ),
-                                onSubmitted: (String value) {
-                                  setState(() {
-                                    search = controller!.text;
-                                  });
+                                onChanged: (value) {
+                                  if (value.toLowerCase().length >= 3) {
+                                    debouncer.debounce(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      onDebounce: () {
+                                        EasyLoading.show();
+                                        updateList(value);
+                                      },
+                                    );
+                                  } else {
+                                    debouncer.debounce(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      onDebounce: () {
+                                        EasyLoading.show();
+                                        setState(() {
+                                          items.clear();
+                                        });
+                                        _loadMore();
+                                      },
+                                    );
+                                  }
                                 },
                               ),
                             ),
                           ],
                         ),
                       ),
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          childCount:
-                              isLoadMore ? items.length + 1 : items.length,
-                          (BuildContext context, int index) {
-                            if (index >= items.length) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            } else {
-                              return MyCustomCard(
-                                title: items[index]['nombre_especie'],
-                                onTap: () {
-                                  // log(items[index].toString());
-                                  // log(items[index]['id'].toString());
-                                  //! AQUI EL CODIGO PARA SETEAR POR ID
-                                  context.read<PlantsMapBloc>().add(
-                                        PlantsMapEvent.loadById(
-                                            items[index]['id'].toString()),
-                                      );
+                      items.isEmpty
+                          ? AutoSizeText(
+                              AppLocalizations.of(context)!
+                                  .search_without_results,
+                              style: context.theme.textTheme.text_01.copyWith(
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                                fontSize: 16,
+                              ),
+                            )
+                          : Expanded(
+                              child: ListView.builder(
+                                controller: scroll,
+                                itemCount: isLoadMore
+                                    ? items.length + 1
+                                    : items.length,
+                                itemBuilder: (context, index) {
+                                  if (index >= items.length) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else {
+                                    EasyLoading.dismiss();
+                                    return MyCustomCard(
+                                      title: items[index]['nombre_especie'],
+                                      onTap: () {
+                                        // log(items[index].toString());
+                                        // log(items[index]['id'].toString());
+                                        //! AQUI EL CODIGO PARA SETEAR POR ID
+                                        context.read<PlantsMapBloc>().add(
+                                              PlantsMapEvent.loadById(
+                                                  items[index]['id']
+                                                      .toString()),
+                                            );
+                                      },
+                                    );
+                                  }
                                 },
-                              );
-                            }
-                          },
-                        ),
-                      )
+                              ),
+                            ),
                     ],
                   ),
                 );
               },
             ),
-          ),
           // Positioned(
           //   right: 10,
           //   bottom: fabBottomOffset,
