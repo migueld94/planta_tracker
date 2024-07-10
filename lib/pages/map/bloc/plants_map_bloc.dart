@@ -20,6 +20,7 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
     on<PlantsMapEvent>(
       (event, emit) => event.mapOrNull(
         load: (_) => _onLoad(emit),
+        loadById: (event) => _onLoadById(emit, event),
       ),
     );
 
@@ -93,14 +94,39 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
       longMin,
     ) = _obtenerLimites(event.northEast, event.southWest);
 
-    final response = await _allPlantServices.getAllPin(
-        _context, latMax, latMin, longMax, longMin);
+    final response = state.plantSpecieId == null
+        ? await _allPlantServices.getAllPin(
+            _context, latMax, latMin, longMax, longMin)
+        : await _allPlantServices.getSpeciesById(
+            state.plantSpecieId!, latMax, latMin, longMax, longMin);
 
     emit(
       state.copyWith(
         plants: response,
         northEast: event.northEast,
         southWest: event.southWest,
+      ),
+    );
+  }
+
+  Future<void> _onLoadById(
+    Emitter<PlantsMapState> emit,
+    _LoadById event,
+  ) async {
+    final (
+      latMax,
+      latMin,
+      longMax,
+      longMin,
+    ) = _obtenerLimites(state.northEast, state.southWest);
+
+    final response = await _allPlantServices.getSpeciesById(
+        event.id, latMax, latMin, longMax, longMin);
+
+    emit(
+      state.copyWith(
+        plantSpecieId: event.id,
+        plants: response,
       ),
     );
   }

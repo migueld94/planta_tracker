@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
@@ -56,11 +57,14 @@ class AllPlantServices {
     }
   }
 
-  Future<List<Plant>> getSpeciesById(int id, double latMax, double latMin, double longMax, double longMin) async {
+  Future<List<Plant>> getSpeciesById(String id, double latMax, double latMin,
+      double longMax, double longMin) async {
     String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
     String secret =
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
+
+    log('probando llegada a la api');
 
     var resp = await http.post(secretUrl, headers: <String, String>{
       'authorization': basicAuth
@@ -71,7 +75,8 @@ class AllPlantServices {
     final Map<String, dynamic> data = json.decode(resp.body);
     final accessToken = data["access_token"];
 
-    final speciesById = Uri.parse('${Constants.baseUrl}/en/api/plants_map_api');
+    final speciesById =
+        Uri.parse('${Constants.baseUrl}/en/api/plants_map_api_filter');
 
     final request = http.MultipartRequest('GET', speciesById);
     request.headers['Authorization'] = 'Bearer $accessToken';

@@ -20,7 +20,6 @@ import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/my_custom_card.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
-import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/gps/gps_state.dart';
 import 'package:planta_tracker/blocs/map/map_bloc.dart';
 import 'package:planta_tracker/blocs/map/map_state.dart';
@@ -147,6 +146,8 @@ class _MapViewState extends State<MapView> {
         headers: <String, String>{'authorization': "Bearer $accessToken"});
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+    log(utf.toString());
 
     if (response.statusCode == 200) {
       setState(() {
@@ -277,7 +278,8 @@ class _MapViewState extends State<MapView> {
                         : Expanded(
                             child: ListView.builder(
                               controller: scroll,
-                              itemCount: isLoadMore ? items.length + 1 : items.length,
+                              itemCount:
+                                  isLoadMore ? items.length + 1 : items.length,
                               itemBuilder: (context, index) {
                                 if (index >= items.length) {
                                   return const Center(
@@ -286,6 +288,18 @@ class _MapViewState extends State<MapView> {
                                   EasyLoading.dismiss();
                                   return MyCustomCard(
                                     title: items[index]['nombre_especie'],
+                                    onTap: () {
+                                      // log(items[index].toString());
+                                      log(items[index]['id'].toString());
+                                      //! AQUI EL CODIGO PARA SETEAR POR ID
+                                      // context.read<PlantsMapBloc>().add(
+                                      //       PlantsMapEvent.loadById(
+                                      //           items[index]['id'].toString()),
+                                      //     );
+
+                                      PlantsMapEvent.loadById(
+                                          items[index]['id'].toString());
+                                    },
                                   );
                                 }
                               },
@@ -301,7 +315,7 @@ class _MapViewState extends State<MapView> {
           //   bottom: fabBottomOffset,
           //   child: FloatingActionButton(
           //     onPressed: () {
-          //       context.read<GpsBloc>().add(GpsStarted());
+          //       //context.read<GpsBloc>().add(GpsStarted());
           //     },
           //     backgroundColor: PlantaColors.colorGreen,
           //     child: Icon(

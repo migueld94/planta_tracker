@@ -1,11 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:exif/exif.dart';
-import 'package:image/image.dart' as Img;
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
