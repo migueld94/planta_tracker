@@ -94,6 +94,8 @@ class AllPlantServices {
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
 
+    log(utf.toString());
+
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(utf);
       plants = data.map((json) => Plant.fromJson(json)).toList();
