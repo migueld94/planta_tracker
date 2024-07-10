@@ -286,6 +286,15 @@ class _MapViewState extends State<MapView> {
                                   EasyLoading.dismiss();
                                   return MyCustomCard(
                                     title: items[index]['nombre_especie'],
+                                    onTap: () {
+                                      // log(items[index].toString());
+                                      // log(items[index]['id'].toString());
+                                      //! AQUI EL CODIGO PARA SETEAR POR ID
+                                      context.read<PlantsMapBloc>().add(
+                                            PlantsMapEvent.loadById(
+                                                items[index]['id'].toString()),
+                                          );
+                                    },
                                   );
                                 }
                               },
