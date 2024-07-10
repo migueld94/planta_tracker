@@ -4,12 +4,14 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 
 class MyCustomCard extends StatelessWidget {
   final String title;
+  final Function()? onTap;
   // final String lifestage;
   // final String status;
 
   const MyCustomCard({
     super.key,
     required this.title,
+    this.onTap,
     // required this.lifestage,
     // required this.status,
   });
@@ -34,17 +36,20 @@ class MyCustomCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              // titulo
-              Expanded(
-                child: AutoSizeText(
-                  title,
-                  style: context.theme.textTheme.h3,
-                  overflow: TextOverflow.ellipsis,
+          GestureDetector(
+            onTap: onTap,
+            child: Row(
+              children: [
+                // titulo
+                Expanded(
+                  child: AutoSizeText(
+                    title,
+                    style: context.theme.textTheme.h3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           // verticalMargin8,
           // Align(

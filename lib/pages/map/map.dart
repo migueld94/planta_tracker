@@ -277,7 +277,8 @@ class _MapViewState extends State<MapView> {
                         : Expanded(
                             child: ListView.builder(
                               controller: scroll,
-                              itemCount: isLoadMore ? items.length + 1 : items.length,
+                              itemCount:
+                                  isLoadMore ? items.length + 1 : items.length,
                               itemBuilder: (context, index) {
                                 if (index >= items.length) {
                                   return const Center(
@@ -288,12 +289,12 @@ class _MapViewState extends State<MapView> {
                                     title: items[index]['nombre_especie'],
                                     onTap: () {
                                       // log(items[index].toString());
-                                      // log(items[index]['id'].toString());
+                                      log(items[index]['id'].toString());
                                       //! AQUI EL CODIGO PARA SETEAR POR ID
-                                      context.read<PlantsMapBloc>().add(
-                                            PlantsMapEvent.loadById(
-                                                items[index]['id'].toString()),
-                                          );
+                                      // context.read<PlantsMapBloc>().add(
+                                      //       PlantsMapEvent.loadById(
+                                      //           items[index]['id'].toString()),
+                                      //     );
                                     },
                                   );
                                 }
