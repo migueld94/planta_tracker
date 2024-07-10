@@ -20,7 +20,6 @@ import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/my_custom_card.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
-import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/gps/gps_state.dart';
 import 'package:planta_tracker/blocs/map/map_bloc.dart';
 import 'package:planta_tracker/blocs/map/map_state.dart';
