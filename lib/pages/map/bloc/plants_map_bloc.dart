@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -15,8 +14,7 @@ part 'plants_map_state.dart';
 part 'plants_map_bloc.freezed.dart';
 
 class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
-  PlantsMapBloc(this._allPlantServices, this._context)
-      : super(const _PlantsMapState()) {
+  PlantsMapBloc(this._allPlantServices) : super(const _PlantsMapState()) {
     on<PlantsMapEvent>(
       (event, emit) => event.mapOrNull(
         load: (_) => _onLoad(emit),
@@ -33,7 +31,6 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
   }
 
   final AllPlantServices _allPlantServices;
-  final BuildContext _context;
 
   Future<void> _onLoad(Emitter<PlantsMapState> emit) async {
     try {
@@ -73,8 +70,9 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
         longMin,
       ) = _obtenerLimites(state.northEast, state.southWest);
 
-      final response = await _allPlantServices.getAllPin(
-          _context, latMax, latMin, longMax, longMin);
+      final response =
+          await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
+
       emit(state.copyWith(
           plants: response,
           userLocation: LatLng(position.latitude, position.longitude)));
@@ -95,8 +93,7 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
     ) = _obtenerLimites(event.northEast, event.southWest);
 
     final response = state.plantSpecieId == null
-        ? await _allPlantServices.getAllPin(
-            _context, latMax, latMin, longMax, longMin)
+        ? await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin)
         : await _allPlantServices.getSpeciesById(
             state.plantSpecieId!, latMax, latMin, longMax, longMin);
 
@@ -122,6 +119,8 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
 
     final response = await _allPlantServices.getSpeciesById(
         event.id, latMax, latMin, longMax, longMin);
+
+    log('Esta es la respuesta del response ${response.toString()}');
 
     emit(
       state.copyWith(

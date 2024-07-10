@@ -33,7 +33,7 @@ void main() async {
       providers: [
         BlocProvider(create: (context) => GpsBloc()..add(GpsStarted())),
         BlocProvider(create: (context) => MapBloc()..add(MapStarted())),
-        BlocProvider(create: (context) => PlantsMapBloc(AllPlantServices(), context)),
+        BlocProvider(create: (context) => PlantsMapBloc(AllPlantServices())),
       ],
       child: MyApp(showHome: showHome),
     ),
