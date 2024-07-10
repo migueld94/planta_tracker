@@ -197,144 +197,115 @@ class _MapViewState extends State<MapView> {
             },
           ),
           DraggableScrollableSheet(
-              initialChildSize: 0.2,
-              minChildSize: 0.1,
-              maxChildSize: 0.8,
-              builder: (context, scroll) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: PlantaColors.colorWhite,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
+            initialChildSize: 0.4, // tamaño inicial de la hoja
+            minChildSize: 0.2, // tamaño mínimo de la hoja
+            maxChildSize: 1,
+            controller: scroll,
+            builder: (context, scroll) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: PlantaColors.colorWhite,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 10.0,
+                      color: PlantaColors.colorBlack.withOpacity(0.7),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10.0,
-                        color: PlantaColors.colorBlack.withOpacity(0.7),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    verticalMargin8,
+                    Container(
+                      width: 40.0,
+                      height: 5.0,
+                      decoration: BoxDecoration(
+                        borderRadius: borderRadius10,
+                        color: PlantaColors.greyDisabled.withOpacity(0.3),
                       ),
-                    ],
-                  ),
-                  child: CustomScrollView(
-                    controller: scroll,
-                    slivers: <Widget>[
-                      SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            verticalMargin4,
-                            Container(
-                              width: 40.0,
-                              height: 5.0,
-                              decoration: BoxDecoration(
-                                borderRadius: borderRadius10,
-                                color:
-                                    PlantaColors.greyDisabled.withOpacity(0.3),
-                              ),
+                    ),
+                    Padding(
+                      padding: allPadding8,
+                      child: TextField(
+                        controller: controller,
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.search,
+                          border: OutlineInputBorder(
+                            borderRadius: borderRadius10,
+                            borderSide: BorderSide(
+                              color: PlantaColors.colorBlack,
                             ),
-                            Padding(
-                              padding: allPadding8,
-                              child: TextField(
-                                controller: controller,
-                                decoration: InputDecoration(
-                                  hintText:
-                                      AppLocalizations.of(context)!.search,
-                                  prefixIcon: const Icon(Icons.search),
-                                  border: OutlineInputBorder(
-                                    borderRadius: borderRadius10,
-                                    borderSide: BorderSide(
-                                      color: PlantaColors.colorBlack,
-                                    ),
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: borderRadius10,
-                                    borderSide: BorderSide(
-                                      color: PlantaColors.colorBlack,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: borderRadius10,
-                                    borderSide: BorderSide(
-                                      color: PlantaColors.colorBlack,
-                                    ),
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  if (value.toLowerCase().length >= 3) {
-                                    debouncer.debounce(
-                                      duration:
-                                          const Duration(milliseconds: 500),
-                                      onDebounce: () {
-                                        EasyLoading.show();
-                                        updateList(value);
-                                      },
-                                    );
-                                  } else {
-                                    debouncer.debounce(
-                                      duration:
-                                          const Duration(milliseconds: 500),
-                                      onDebounce: () {
-                                        EasyLoading.show();
-                                        setState(() {
-                                          items.clear();
-                                        });
-                                        _loadMore();
-                                      },
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
+                        onChanged: (value) {
+                          if (value.toLowerCase().length >= 3) {
+                            debouncer.debounce(
+                              duration: const Duration(milliseconds: 500),
+                              onDebounce: () {
+                                EasyLoading.show();
+                                updateList(value);
+                              },
+                            );
+                          } else {
+                            debouncer.debounce(
+                              duration: const Duration(milliseconds: 500),
+                              onDebounce: () {
+                                EasyLoading.show();
+                                setState(() {
+                                  items.clear();
+                                });
+                                _loadMore();
+                              },
+                            );
+                          }
+                        },
                       ),
-                      items.isEmpty
-                          ? AutoSizeText(
-                              AppLocalizations.of(context)!
-                                  .search_without_results,
-                              style: context.theme.textTheme.text_01.copyWith(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.5,
-                                fontSize: 16,
-                              ),
-                            )
-                          : Expanded(
-                              child: ListView.builder(
-                                controller: scroll,
-                                itemCount: isLoadMore
-                                    ? items.length + 1
-                                    : items.length,
-                                itemBuilder: (context, index) {
-                                  if (index >= items.length) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else {
-                                    EasyLoading.dismiss();
-                                    return MyCustomCard(
-                                      title: items[index]['nombre_especie'],
-                                      onTap: () {
-                                        // log(items[index].toString());
-                                        // log(items[index]['id'].toString());
-                                        //! AQUI EL CODIGO PARA SETEAR POR ID
-                                        context.read<PlantsMapBloc>().add(
-                                              PlantsMapEvent.loadById(
-                                                  items[index]['id']
-                                                      .toString()),
-                                            );
-                                      },
-                                    );
-                                  }
-                                },
-                              ),
+                    ),
+                    items.isEmpty
+                        ? AutoSizeText(
+                            AppLocalizations.of(context)!
+                                .search_without_results,
+                            style: context.theme.textTheme.text_01.copyWith(
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                              fontSize: 16,
                             ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                              controller: scroll,
+                              itemCount:
+                                  isLoadMore ? items.length + 1 : items.length,
+                              itemBuilder: (context, index) {
+                                if (index >= items.length) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  EasyLoading.dismiss();
+                                  return MyCustomCard(
+                                    title: items[index]['nombre_especie'],
+                                    onTap: () {
+                                      // log(items[index].toString());
+                                      log(items[index]['id'].toString());
+                                      //! AQUI EL CODIGO PARA SETEAR POR ID
+                                      context.read<PlantsMapBloc>().add(
+                                            PlantsMapEvent.loadById(
+                                                items[index]['id'].toString()),
+                                          );
+                                    },
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                  ],
+                ),
+              );
+            },
+          ),
           // Positioned(
           //   right: 10,
           //   bottom: fabBottomOffset,
