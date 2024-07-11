@@ -10,8 +10,10 @@ import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/map/map_event.dart';
+import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
 import 'package:planta_tracker/pages/onboarding/onboarding.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/services/all_plants_services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,6 +33,7 @@ void main() async {
       providers: [
         BlocProvider(create: (context) => GpsBloc()..add(GpsStarted())),
         BlocProvider(create: (context) => MapBloc()..add(MapStarted())),
+        BlocProvider(create: (context) => PlantsMapBloc(AllPlantServices())),
       ],
       child: MyApp(showHome: showHome),
     ),

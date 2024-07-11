@@ -147,8 +147,6 @@ class _MapViewState extends State<MapView> {
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
 
-    log(utf.toString());
-
     if (response.statusCode == 200) {
       setState(() {
         items = jsonDecode(utf)['results'] as List;
@@ -183,8 +181,7 @@ class _MapViewState extends State<MapView> {
                   builder: (context, mapState) {
                     if (mapState is MapLoadSuccess) {
                       return BlocProvider(
-                        create: (_) =>
-                            PlantsMapBloc(AllPlantServices(), context),
+                        create: (_) => PlantsMapBloc(AllPlantServices()),
                         child: const AppFlutterMap(),
                       );
                     } else {
@@ -292,13 +289,10 @@ class _MapViewState extends State<MapView> {
                                       // log(items[index].toString());
                                       log(items[index]['id'].toString());
                                       //! AQUI EL CODIGO PARA SETEAR POR ID
-                                      // context.read<PlantsMapBloc>().add(
-                                      //       PlantsMapEvent.loadById(
-                                      //           items[index]['id'].toString()),
-                                      //     );
-
-                                      PlantsMapEvent.loadById(
-                                          items[index]['id'].toString());
+                                      context.read<PlantsMapBloc>().add(
+                                            PlantsMapEvent.loadById(
+                                                items[index]['id'].toString()),
+                                          );
                                     },
                                   );
                                 }
