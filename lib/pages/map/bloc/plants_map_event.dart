@@ -7,5 +7,5 @@ class PlantsMapEvent with _$PlantsMapEvent {
     LatLng northEast,
     LatLng southWest,
   ) = _LoadMoreByBoundries;
-  const factory PlantsMapEvent.loadById(String id) = _LoadById;
+  const factory PlantsMapEvent.loadById(int id) = _LoadById;
 }

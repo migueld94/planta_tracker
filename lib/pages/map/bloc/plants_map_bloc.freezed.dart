@@ -21,21 +21,21 @@ mixin _$PlantsMapEvent {
     required TResult Function() load,
     required TResult Function(LatLng northEast, LatLng southWest)
         loadMoreByBoundries,
-    required TResult Function(String id) loadById,
+    required TResult Function(int id) loadById,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? load,
     TResult? Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult? Function(String id)? loadById,
+    TResult? Function(int id)? loadById,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? load,
     TResult Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult Function(String id)? loadById,
+    TResult Function(int id)? loadById,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -121,7 +121,7 @@ class _$LoadImpl implements _Load {
     required TResult Function() load,
     required TResult Function(LatLng northEast, LatLng southWest)
         loadMoreByBoundries,
-    required TResult Function(String id) loadById,
+    required TResult Function(int id) loadById,
   }) {
     return load();
   }
@@ -131,7 +131,7 @@ class _$LoadImpl implements _Load {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? load,
     TResult? Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult? Function(String id)? loadById,
+    TResult? Function(int id)? loadById,
   }) {
     return load?.call();
   }
@@ -141,7 +141,7 @@ class _$LoadImpl implements _Load {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? load,
     TResult Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult Function(String id)? loadById,
+    TResult Function(int id)? loadById,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -267,7 +267,7 @@ class _$LoadMoreByBoundriesImpl implements _LoadMoreByBoundries {
     required TResult Function() load,
     required TResult Function(LatLng northEast, LatLng southWest)
         loadMoreByBoundries,
-    required TResult Function(String id) loadById,
+    required TResult Function(int id) loadById,
   }) {
     return loadMoreByBoundries(northEast, southWest);
   }
@@ -277,7 +277,7 @@ class _$LoadMoreByBoundriesImpl implements _LoadMoreByBoundries {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? load,
     TResult? Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult? Function(String id)? loadById,
+    TResult? Function(int id)? loadById,
   }) {
     return loadMoreByBoundries?.call(northEast, southWest);
   }
@@ -287,7 +287,7 @@ class _$LoadMoreByBoundriesImpl implements _LoadMoreByBoundries {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? load,
     TResult Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult Function(String id)? loadById,
+    TResult Function(int id)? loadById,
     required TResult orElse(),
   }) {
     if (loadMoreByBoundries != null) {
@@ -349,7 +349,7 @@ abstract class _$$LoadByIdImplCopyWith<$Res> {
           _$LoadByIdImpl value, $Res Function(_$LoadByIdImpl) then) =
       __$$LoadByIdImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String id});
+  $Res call({int id});
 }
 
 /// @nodoc
@@ -369,7 +369,7 @@ class __$$LoadByIdImplCopyWithImpl<$Res>
       null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
     ));
   }
 }
@@ -380,7 +380,7 @@ class _$LoadByIdImpl implements _LoadById {
   const _$LoadByIdImpl(this.id);
 
   @override
-  final String id;
+  final int id;
 
   @override
   String toString() {
@@ -410,7 +410,7 @@ class _$LoadByIdImpl implements _LoadById {
     required TResult Function() load,
     required TResult Function(LatLng northEast, LatLng southWest)
         loadMoreByBoundries,
-    required TResult Function(String id) loadById,
+    required TResult Function(int id) loadById,
   }) {
     return loadById(id);
   }
@@ -420,7 +420,7 @@ class _$LoadByIdImpl implements _LoadById {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? load,
     TResult? Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult? Function(String id)? loadById,
+    TResult? Function(int id)? loadById,
   }) {
     return loadById?.call(id);
   }
@@ -430,7 +430,7 @@ class _$LoadByIdImpl implements _LoadById {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? load,
     TResult Function(LatLng northEast, LatLng southWest)? loadMoreByBoundries,
-    TResult Function(String id)? loadById,
+    TResult Function(int id)? loadById,
     required TResult orElse(),
   }) {
     if (loadById != null) {
@@ -475,9 +475,9 @@ class _$LoadByIdImpl implements _LoadById {
 }
 
 abstract class _LoadById implements PlantsMapEvent {
-  const factory _LoadById(final String id) = _$LoadByIdImpl;
+  const factory _LoadById(final int id) = _$LoadByIdImpl;
 
-  String get id;
+  int get id;
   @JsonKey(ignore: true)
   _$$LoadByIdImplCopyWith<_$LoadByIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -489,7 +489,7 @@ mixin _$PlantsMapState {
   LatLng? get userLocation => throw _privateConstructorUsedError;
   LatLng get northEast => throw _privateConstructorUsedError;
   LatLng get southWest => throw _privateConstructorUsedError;
-  String? get plantSpecieId => throw _privateConstructorUsedError;
+  int? get plantSpecieId => throw _privateConstructorUsedError;
   List<Plant> get plants => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -508,7 +508,7 @@ abstract class $PlantsMapStateCopyWith<$Res> {
       LatLng? userLocation,
       LatLng northEast,
       LatLng southWest,
-      String? plantSpecieId,
+      int? plantSpecieId,
       List<Plant> plants});
 }
 
@@ -552,7 +552,7 @@ class _$PlantsMapStateCopyWithImpl<$Res, $Val extends PlantsMapState>
       plantSpecieId: freezed == plantSpecieId
           ? _value.plantSpecieId
           : plantSpecieId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       plants: null == plants
           ? _value.plants
           : plants // ignore: cast_nullable_to_non_nullable
@@ -574,7 +574,7 @@ abstract class _$$PlantsMapStateImplCopyWith<$Res>
       LatLng? userLocation,
       LatLng northEast,
       LatLng southWest,
-      String? plantSpecieId,
+      int? plantSpecieId,
       List<Plant> plants});
 }
 
@@ -616,7 +616,7 @@ class __$$PlantsMapStateImplCopyWithImpl<$Res>
       plantSpecieId: freezed == plantSpecieId
           ? _value.plantSpecieId
           : plantSpecieId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       plants: null == plants
           ? _value._plants
           : plants // ignore: cast_nullable_to_non_nullable
@@ -649,7 +649,7 @@ class _$PlantsMapStateImpl implements _PlantsMapState {
   @JsonKey()
   final LatLng southWest;
   @override
-  final String? plantSpecieId;
+  final int? plantSpecieId;
   final List<Plant> _plants;
   @override
   @JsonKey()
@@ -706,7 +706,7 @@ abstract class _PlantsMapState implements PlantsMapState {
       final LatLng? userLocation,
       final LatLng northEast,
       final LatLng southWest,
-      final String? plantSpecieId,
+      final int? plantSpecieId,
       final List<Plant> plants}) = _$PlantsMapStateImpl;
 
   @override
@@ -718,7 +718,7 @@ abstract class _PlantsMapState implements PlantsMapState {
   @override
   LatLng get southWest;
   @override
-  String? get plantSpecieId;
+  int? get plantSpecieId;
   @override
   List<Plant> get plants;
   @override
