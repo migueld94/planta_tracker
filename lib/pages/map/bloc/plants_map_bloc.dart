@@ -120,7 +120,7 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
     final response = await _allPlantServices.getSpeciesById(
         event.id, latMax, latMin, longMax, longMin);
 
-    log('Esta es la respuesta del bloc onLoadByID ${response.toString()}');
+    log('Esta es la respuesta del bloc onLoadByID ${response.map((e) => e.especiePlanta)}');
 
     emit(
       state.copyWith(

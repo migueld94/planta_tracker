@@ -181,8 +181,7 @@ class _MapViewState extends State<MapView> {
                   builder: (context, mapState) {
                     if (mapState is MapLoadSuccess) {
                       return BlocProvider(
-                        create: (_) =>
-                            PlantsMapBloc(AllPlantServices()),
+                        create: (_) => PlantsMapBloc(AllPlantServices()),
                         child: const AppFlutterMap(),
                       );
                     } else {
@@ -294,9 +293,6 @@ class _MapViewState extends State<MapView> {
                                             PlantsMapEvent.loadById(
                                                 items[index]['id'].toString()),
                                           );
-
-                                      // PlantsMapEvent.loadById(
-                                      //     items[index]['id'].toString());
                                     },
                                   );
                                 }
