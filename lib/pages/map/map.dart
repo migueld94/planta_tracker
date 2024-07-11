@@ -180,10 +180,7 @@ class _MapViewState extends State<MapView> {
                 return BlocBuilder<MapBloc, MapState>(
                   builder: (context, mapState) {
                     if (mapState is MapLoadSuccess) {
-                      return BlocProvider(
-                        create: (_) => PlantsMapBloc(AllPlantServices()),
-                        child: const AppFlutterMap(),
-                      );
+                      return const AppFlutterMap();
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }
@@ -291,7 +288,8 @@ class _MapViewState extends State<MapView> {
                                       //! AQUI EL CODIGO PARA SETEAR POR ID
                                       context.read<PlantsMapBloc>().add(
                                             PlantsMapEvent.loadById(
-                                                items[index]['id'].toString()),
+                                              items[index]['id'],
+                                            ),
                                           );
                                     },
                                   );
