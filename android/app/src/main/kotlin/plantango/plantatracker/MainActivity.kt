@@ -1,4 +1,4 @@
-package com.example.planta_tracker
+package plantango.plantatracker
 
 import io.flutter.embedding.android.FlutterActivity
 

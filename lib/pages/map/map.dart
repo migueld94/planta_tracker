@@ -20,6 +20,7 @@ import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/my_custom_card.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
+import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/gps/gps_state.dart';
 import 'package:planta_tracker/blocs/map/map_bloc.dart';
 import 'package:planta_tracker/blocs/map/map_state.dart';
@@ -28,6 +29,7 @@ import 'package:planta_tracker/pages/details_plant/details.dart';
 import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -49,6 +51,8 @@ class _MapViewState extends State<MapView> {
   bool isLoadMore = false;
   List copy = [];
   final debouncer = Debouncer();
+  bool filter = false;
+  int selectedIndex = -1;
 
   double maxLat = 0.0;
   double minLat = 0.0;
@@ -116,6 +120,21 @@ class _MapViewState extends State<MapView> {
         // }
       },
     );
+    _loadSelectedIndex();
+  }
+
+  _loadSelectedIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedIndex = prefs.getInt('selected_index') ?? -1;
+      // filter = prefs.getBool('filter') ?? false;
+    });
+  }
+
+  _saveSelectedIndex(int index) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('selected_index', index);
+    // prefs.setBool('filter', filter);
   }
 
   updateList(String value) async {
@@ -192,9 +211,9 @@ class _MapViewState extends State<MapView> {
             },
           ),
           DraggableScrollableSheet(
-            initialChildSize: 0.4, // tamaño inicial de la hoja
-            minChildSize: 0.2, // tamaño mínimo de la hoja
-            maxChildSize: 1,
+            initialChildSize: 0.4,
+            minChildSize: 0.4,
+            maxChildSize: 0.4,
             controller: scroll,
             builder: (context, scroll) {
               return Container(
@@ -281,16 +300,58 @@ class _MapViewState extends State<MapView> {
                                 } else {
                                   EasyLoading.dismiss();
                                   return MyCustomCard(
+                                    backgroundColor:
+                                        selectedIndex == items[index]['id']
+                                            ? PlantaColors.colorGreen
+                                            : PlantaColors.colorWhite,
+                                    colorText:
+                                        selectedIndex == items[index]['id']
+                                            ? PlantaColors.colorWhite
+                                            : PlantaColors.colorBlack,
                                     title: items[index]['nombre_especie'],
                                     onTap: () {
-                                      // log(items[index].toString());
-                                      log(items[index]['id'].toString());
-                                      //! AQUI EL CODIGO PARA SETEAR POR ID
-                                      context.read<PlantsMapBloc>().add(
-                                            PlantsMapEvent.loadById(
-                                              items[index]['id'],
-                                            ),
-                                          );
+                                      // setState(() {
+                                      //   filter = !filter;
+                                      //   if (selectedIndex ==
+                                      //       items[index]['id']) {
+                                      //     selectedIndex = -1;
+                                      //   } else {
+                                      //     selectedIndex = items[index]['id'];
+                                      //   }
+                                      // });
+
+                                      setState(() {
+                                        if (selectedIndex ==
+                                            items[index]['id']) {
+                                          // Si el usuario vuelve a presionar el mismo elemento, deselecciónalo
+                                          context.read<PlantsMapBloc>().add(
+                                                const PlantsMapEvent.load(),
+                                              );
+                                          selectedIndex = -1;
+                                        } else {
+                                          // De lo contrario, selecciona el nuevo elemento y deselecciona el anterior
+                                          context.read<PlantsMapBloc>().add(
+                                                PlantsMapEvent.loadById(
+                                                  items[index]['id'],
+                                                ),
+                                              );
+                                          selectedIndex = items[index]['id'];
+                                        }
+                                      });
+
+                                      _saveSelectedIndex(selectedIndex);
+
+                                      // if (filter == false) {
+                                      // context.read<PlantsMapBloc>().add(
+                                      //       const PlantsMapEvent.load(),
+                                      //     );
+                                      // } else {
+                                      // context.read<PlantsMapBloc>().add(
+                                      //       PlantsMapEvent.loadById(
+                                      //         items[index]['id'],
+                                      //       ),
+                                      //     );
+                                      // }
                                     },
                                   );
                                 }
@@ -302,20 +363,20 @@ class _MapViewState extends State<MapView> {
               );
             },
           ),
-          // Positioned(
-          //   right: 10,
-          //   bottom: fabBottomOffset,
-          //   child: FloatingActionButton(
-          //     onPressed: () {
-          //       //context.read<GpsBloc>().add(GpsStarted());
-          //     },
-          //     backgroundColor: PlantaColors.colorGreen,
-          //     child: Icon(
-          //       Icons.my_location,
-          //       color: PlantaColors.colorBlack,
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+            right: 10,
+            bottom: 270,
+            child: FloatingActionButton(
+              onPressed: () {
+                context.read<GpsBloc>().add(GpsStarted());
+              },
+              backgroundColor: PlantaColors.colorGreen,
+              child: Icon(
+                Icons.my_location,
+                color: PlantaColors.colorBlack,
+              ),
+            ),
+          ),
         ],
       ),
     );
