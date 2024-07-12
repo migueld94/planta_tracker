@@ -5,13 +5,17 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 class MyCustomCard extends StatelessWidget {
   final String title;
   final Function()? onTap;
+  final Color backgroundColor;
+  final Color colorText;
   // final String lifestage;
   // final String status;
 
   const MyCustomCard({
     super.key,
-    required this.title,
     this.onTap,
+    required this.title,
+    required this.backgroundColor,
+    required this.colorText,
     // required this.lifestage,
     // required this.status,
   });
@@ -22,7 +26,7 @@ class MyCustomCard extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
@@ -44,7 +48,8 @@ class MyCustomCard extends StatelessWidget {
                 Expanded(
                   child: AutoSizeText(
                     title,
-                    style: context.theme.textTheme.h3,
+                    style:
+                        context.theme.textTheme.h3.copyWith(color: colorText),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

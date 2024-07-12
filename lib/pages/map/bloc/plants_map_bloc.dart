@@ -73,9 +73,13 @@ class PlantsMapBloc extends Bloc<PlantsMapEvent, PlantsMapState> {
       final response =
           await _allPlantServices.getAllPin(latMax, latMin, longMax, longMin);
 
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           plants: response,
-          userLocation: LatLng(position.latitude, position.longitude)));
+          userLocation: LatLng(position.latitude, position.longitude),
+          plantSpecieId: null,
+        ),
+      );
     } catch (e) {
       log('Ocurrió un error al obtener la ubicación: $e');
     }
