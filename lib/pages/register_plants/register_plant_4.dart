@@ -76,28 +76,33 @@ class _RegisterPlant4State extends State<RegisterPlant4> {
           style: context.theme.textTheme.titleApBar,
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (flag == true)
-              Flexible(
-                child: AutoSizeText(
-                  // 'Para volver a tomar la foto pulse la imagén',
-                  AppLocalizations.of(context)!.take_photo,
-                  style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
-                  textAlign: TextAlign.center,
+      body: PopScope(
+        canPop: false,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (flag == true)
+                Flexible(
+                  child: AutoSizeText(
+                    // 'Para volver a tomar la foto pulse la imagén',
+                    AppLocalizations.of(context)!.take_photo,
+                    style:
+                        context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              verticalMargin57,
+              GestureDetector(
+                onTap: () => getImage(),
+                child: CameraWidget(
+                  text:
+                      AppLocalizations.of(context)!.plant_register_sheet_image,
+                  picture: _image,
                 ),
               ),
-            verticalMargin57,
-            GestureDetector(
-              onTap: () => getImage(),
-              child: CameraWidget(
-                text: AppLocalizations.of(context)!.plant_register_sheet_image,
-                picture: _image,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomSheet: Padding(

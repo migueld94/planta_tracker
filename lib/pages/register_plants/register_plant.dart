@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -137,8 +136,6 @@ class _RegisterPlantState extends State<RegisterPlant> {
 
                     final fileBytes = File(_image!.path).readAsBytesSync();
                     final data = await readExifFromBytes(fileBytes);
-
-                    log(data.toString());
 
                     final latitude = data['GPS GPSLatitude'];
                     final longitude = data['GPS GPSLongitude'];

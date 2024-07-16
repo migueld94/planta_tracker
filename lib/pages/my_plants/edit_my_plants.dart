@@ -133,91 +133,96 @@ class EditPlantState extends State<EditPlant> {
           style: context.theme.textTheme.titleApBar,
         ),
       ),
-      body: Padding(
-        padding: allPadding16,
-        child: Form(
-          key: formKey,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 150,
-                    child: ListView.separated(
-                      clipBehavior: Clip.none,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) => horizontalMargin16,
-                      itemCount: widget.valores.length,
-                      itemBuilder: (context, index) {
-                        final valor = widget.valores[index];
-                        final file = valor["imagen"];
-                        final fileName = file.path.split('/').last;
-                        if (fileName.endsWith("De7au1t.png")) {
-                          return null; // or return null to not show anything
-                        } else {
-                          return Column(
-                            children: [
-                              Container(
-                                width: 180,
-                                height: 110,
-                                margin: allPadding8,
-                                decoration: BoxDecoration(
-                                  color: PlantaColors.colorWhite,
-                                  borderRadius: borderRadius10,
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: borderRadius10,
-                                  child: Image.file(
-                                    widget.valores[index]['imagen'],
-                                    fit: BoxFit.cover,
+      body: PopScope(
+        canPop: false,
+        child: Padding(
+          padding: allPadding16,
+          child: Form(
+            key: formKey,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 150,
+                      child: ListView.separated(
+                        clipBehavior: Clip.none,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) =>
+                            horizontalMargin16,
+                        itemCount: widget.valores.length,
+                        itemBuilder: (context, index) {
+                          final valor = widget.valores[index];
+                          final file = valor["imagen"];
+                          final fileName = file.path.split('/').last;
+                          if (fileName.endsWith("De7au1t.png")) {
+                            return emptyWidget; // or return null to not show anything
+                          } else {
+                            return Column(
+                              children: [
+                                Container(
+                                  width: 180,
+                                  height: 110,
+                                  margin: allPadding8,
+                                  decoration: BoxDecoration(
+                                    color: PlantaColors.colorWhite,
+                                    borderRadius: borderRadius10,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: borderRadius10,
+                                    child: Image.file(
+                                      widget.valores[index]['imagen'],
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              AutoSizeText(widget.valores[index]['name'],
-                                  style: context.theme.textTheme.text_01),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  //* DropdownButton
-                  ShakeWidget(
-                    key: _lifestage,
-                    duration: const Duration(seconds: 1),
-                    shakeCount: 3,
-                    shakeOffset: 2,
-                    child: MyDropButtomEdit(
-                      value: widget.details.lifestage ?? '',
-                    ),
-                  ),
-                  verticalMargin12,
-                  //TextField para las notas
-                  AutoSizeText(
-                    AppLocalizations.of(context)!.note,
-                    style: context.theme.textTheme.h2,
-                  ),
-                  verticalMargin8,
-                  TextFormField(
-                    controller: noteController,
-                    maxLines: null,
-                    maxLength: 150,
-                    textAlign: TextAlign.justify,
-                    decoration: InputDecorations.authInputDecoration(
-                      hintText: '',
-                      labelText: AppLocalizations.of(context)!.write_comments,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PlantaColors.colorGreen),
-                        borderRadius: borderRadius10,
+                                AutoSizeText(widget.valores[index]['name'],
+                                    style: context.theme.textTheme.text_01),
+                              ],
+                            );
+                          }
+                        },
                       ),
                     ),
-                    onChanged: (value) {
-                      noteController.text = value;
-                    },
-                  ),
-                ],
+                    //* DropdownButton
+                    ShakeWidget(
+                      key: _lifestage,
+                      duration: const Duration(seconds: 1),
+                      shakeCount: 3,
+                      shakeOffset: 2,
+                      child: MyDropButtomEdit(
+                        value: widget.details.lifestage ?? '',
+                      ),
+                    ),
+                    verticalMargin12,
+                    //TextField para las notas
+                    AutoSizeText(
+                      AppLocalizations.of(context)!.note,
+                      style: context.theme.textTheme.h2,
+                    ),
+                    verticalMargin8,
+                    TextFormField(
+                      controller: noteController,
+                      maxLines: null,
+                      maxLength: 150,
+                      textAlign: TextAlign.justify,
+                      decoration: InputDecorations.authInputDecoration(
+                        hintText: '',
+                        labelText: AppLocalizations.of(context)!.write_comments,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: PlantaColors.colorGreen),
+                          borderRadius: borderRadius10,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        noteController.text = value;
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -91,7 +91,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                           final file = valor["imagen"];
                           final fileName = file.split('/').last;
                           if (fileName.endsWith("De7au1t.png")) {
-                            return null;
+                            return emptyWidget;
                           } else {
                             return Column(
                               children: [

@@ -133,131 +133,135 @@ class _EditPlants04State extends State<EditPlants04> {
           style: context.theme.textTheme.titleApBar,
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if ((_image != null) || (widget.images![3].posterPath != null))
-              Flexible(
-                child: AutoSizeText(
-                  AppLocalizations.of(context)!.take_photo,
-                  style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
-                  textAlign: TextAlign.center,
+      body: PopScope(
+        canPop: false,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if ((_image != null) || (widget.images![3].posterPath != null))
+                Flexible(
+                  child: AutoSizeText(
+                    AppLocalizations.of(context)!.take_photo,
+                    style:
+                        context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-            verticalMargin57,
-            if (widget.images![3].posterPath == null)
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => getImage(),
-                    child: Stack(
-                      children: [
-                        Container(
-                          padding: allPadding16,
-                          decoration: BoxDecoration(
-                              color: _image != null
-                                  ? null
-                                  : PlantaColors.colorWhite,
-                              borderRadius: borderRadius10,
-                              boxShadow: [
-                                if (_image == null)
-                                  BoxShadow(
-                                    offset: const Offset(5, 7),
-                                    blurRadius: 12,
-                                    color: PlantaColors.colorBlack
-                                        .withOpacity(0.3),
+              verticalMargin57,
+              if (widget.images![3].posterPath == null)
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () => getImage(),
+                      child: Stack(
+                        children: [
+                          Container(
+                            padding: allPadding16,
+                            decoration: BoxDecoration(
+                                color: _image != null
+                                    ? null
+                                    : PlantaColors.colorWhite,
+                                borderRadius: borderRadius10,
+                                boxShadow: [
+                                  if (_image == null)
+                                    BoxShadow(
+                                      offset: const Offset(5, 7),
+                                      blurRadius: 12,
+                                      color: PlantaColors.colorBlack
+                                          .withOpacity(0.3),
+                                    ),
+                                ]),
+                            child: _image != null
+                                ? ClipRRect(
+                                    borderRadius: borderRadius10,
+                                    child: Image.file(
+                                      _image!,
+                                    ),
+                                  )
+                                : Icon(
+                                    Ionicons.camera_outline,
+                                    size: 40,
+                                    color: PlantaColors.colorOrange,
                                   ),
-                              ]),
-                          child: _image != null
-                              ? ClipRRect(
-                                  borderRadius: borderRadius10,
-                                  child: Image.file(
-                                    _image!,
+                          ),
+                          if (_image != null)
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _image = null;
+                                  });
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor: PlantaColors.colorWhite,
+                                  radius: 20.0,
+                                  child: Icon(
+                                    Ionicons.close_circle_outline,
+                                    color: PlantaColors.colorDarkOrange,
+                                    size: 25.0,
                                   ),
-                                )
-                              : Icon(
-                                  Ionicons.camera_outline,
-                                  size: 40,
-                                  color: PlantaColors.colorOrange,
-                                ),
-                        ),
-                        if (_image != null)
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _image = null;
-                                });
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: PlantaColors.colorWhite,
-                                radius: 20.0,
-                                child: Icon(
-                                  Ionicons.close_circle_outline,
-                                  color: PlantaColors.colorDarkOrange,
-                                  size: 25.0,
                                 ),
                               ),
                             ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  verticalMargin16,
-                  if (_image == null)
-                    AutoSizeText(
-                      '${widget.images![3].type}',
-                      style: context.theme.textTheme.text_01,
-                    ),
-                ],
-              ),
-            if (widget.images![3].posterPath != null)
-              GestureDetector(
-                onTap: () => getImage(),
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: allPadding16,
-                      child: ClipRRect(
-                        borderRadius: borderRadius10,
-                        child: CachedNetworkImage(
-                          filterQuality: FilterQuality.low,
-                          fit: BoxFit.cover,
-                          imageUrl:
-                              '${Constants.baseUrl}${widget.images![3].posterPath}',
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
+                        ],
                       ),
                     ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            widget.images![3].posterPath = null;
-                          });
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: PlantaColors.colorWhite,
-                          radius: 20.0,
-                          child: Icon(
-                            Ionicons.close_circle_outline,
-                            color: PlantaColors.colorDarkOrange,
-                            size: 25.0,
-                          ),
-                        ),
+                    verticalMargin16,
+                    if (_image == null)
+                      AutoSizeText(
+                        '${widget.images![3].type}',
+                        style: context.theme.textTheme.text_01,
                       ),
-                    ),
                   ],
                 ),
-              ),
-          ],
+              if (widget.images![3].posterPath != null)
+                GestureDetector(
+                  onTap: () => getImage(),
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: allPadding16,
+                        child: ClipRRect(
+                          borderRadius: borderRadius10,
+                          child: CachedNetworkImage(
+                            filterQuality: FilterQuality.low,
+                            fit: BoxFit.cover,
+                            imageUrl:
+                                '${Constants.baseUrl}${widget.images![3].posterPath}',
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.images![3].posterPath = null;
+                            });
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: PlantaColors.colorWhite,
+                            radius: 20.0,
+                            child: Icon(
+                              Ionicons.close_circle_outline,
+                              color: PlantaColors.colorDarkOrange,
+                              size: 25.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
       bottomSheet: Padding(

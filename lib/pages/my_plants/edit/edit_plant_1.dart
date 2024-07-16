@@ -123,43 +123,46 @@ class _EditPlants01State extends State<EditPlants01> {
           style: context.theme.textTheme.titleApBar,
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: AutoSizeText(
-                AppLocalizations.of(context)!.take_photo,
-                style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            verticalMargin57,
-            GestureDetector(
-              onTap: () => getImage(),
-              child: Container(
-                padding: allPadding16,
-                child: ClipRRect(
-                  borderRadius: borderRadius10,
-                  child: _image != null
-                      ? Image.file(
-                          File(
-                            _image!.path,
-                          ),
-                        )
-                      : CachedNetworkImage(
-                          filterQuality: FilterQuality.low,
-                          fit: BoxFit.cover,
-                          imageUrl:
-                              '${Constants.baseUrl}${widget.images![0].posterPath}',
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
+      body: PopScope(
+        canPop: false,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: AutoSizeText(
+                  AppLocalizations.of(context)!.take_photo,
+                  style: context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-          ],
+              verticalMargin57,
+              GestureDetector(
+                onTap: () => getImage(),
+                child: Container(
+                  padding: allPadding16,
+                  child: ClipRRect(
+                    borderRadius: borderRadius10,
+                    child: _image != null
+                        ? Image.file(
+                            File(
+                              _image!.path,
+                            ),
+                          )
+                        : CachedNetworkImage(
+                            filterQuality: FilterQuality.low,
+                            fit: BoxFit.cover,
+                            imageUrl:
+                                '${Constants.baseUrl}${widget.images![0].posterPath}',
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       bottomSheet: Padding(
