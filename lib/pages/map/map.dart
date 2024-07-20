@@ -212,7 +212,7 @@ class _MapViewState extends State<MapView> {
           ),
           DraggableScrollableSheet(
             initialChildSize: 0.4,
-            minChildSize: 0.4,
+            minChildSize: 0.2,
             maxChildSize: 0.4,
             controller: scroll,
             builder: (context, scroll) {
