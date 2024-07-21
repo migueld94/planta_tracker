@@ -40,7 +40,6 @@ class _MyPlantsState extends State<MyPlants> {
   _loadMore() async {
     final token = await storage.read(key: "token");
     String idioma = getFlag();
-    log(token.toString());
 
     try {
       final myPlantsUri =

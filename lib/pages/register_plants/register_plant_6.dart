@@ -116,11 +116,9 @@ class _RegisterPlant6State extends State<RegisterPlant6> {
                 if (flag == true) {
                   null;
                 } else {
-                  // log(widget.pictures!.toString());
                   File f = await optionServices
                       .getImageFileFromAssets(Constants.noPicture);
 
-                  // widget.pictures!.add(f.path);
 
                   widget.valores.add({
                     "imagen": f.path,

@@ -174,13 +174,11 @@ class _EditPlants01State extends State<EditPlants01> {
             ButtomSmall(
                 color: PlantaColors.colorGreen,
                 onTap: () async {
-                  log(widget.details.id.toString());
 
                   if (_image != null) {
                     valores.add(
                         {"imagen": _image, "name": widget.images![0].type});
                     // pictures.add(_image!);
-                    log(pictures.toString());
 
                     Navigator.push(
                         context,
@@ -200,7 +198,6 @@ class _EditPlants01State extends State<EditPlants01> {
                         "imagen": pictureFile,
                         "name": widget.images![0].type
                       });
-                      log(pictures.toString());
 
                       Navigator.push(
                           context,

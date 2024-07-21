@@ -119,8 +119,6 @@ class AuthService {
     var res = await post(logoutUri,
         headers: <String, String>{'authorization': "Token $token"});
 
-    log(res.body);
-
     return res;
   }
 
@@ -143,8 +141,6 @@ class AuthService {
     }, body: {
       "email": email,
     });
-
-    log(res.body);
 
     return res;
   }
@@ -172,8 +168,6 @@ class AuthService {
       "password2": newConfirmPassword,
       "code": code,
     });
-
-    log(res.body);
 
     return res;
   }

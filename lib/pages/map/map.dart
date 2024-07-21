@@ -422,8 +422,6 @@ class _MapViewState extends State<MapView> {
       minLat = positions.latitude;
     }
 
-    log('Max Latitud $maxLat');
-    log('Min Latitud $minLat');
   }
 }
 

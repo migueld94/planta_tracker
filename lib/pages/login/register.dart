@@ -217,7 +217,6 @@ class _RegisterState extends State<Register> {
                         onChanged: (value) {
                           setState(() {
                             valueTerms = value!;
-                            log(valueTerms.toString());
                           });
                         },
                       ),

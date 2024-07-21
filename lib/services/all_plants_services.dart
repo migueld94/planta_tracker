@@ -59,8 +59,6 @@ class AllPlantServices {
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
 
-    log('probando llegada a la api');
-
     var resp = await http.post(secretUrl, headers: <String, String>{
       'authorization': basicAuth
     }, body: {
@@ -88,8 +86,6 @@ class AllPlantServices {
     final response = await http.Response.fromStream(streamedResponse);
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
-
-    log('Esta es la respuesta del servicio ${utf.toString()}');
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(utf);

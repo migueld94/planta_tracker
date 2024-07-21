@@ -122,7 +122,6 @@ class DetailsWidget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      log(index.toString());
                       Navigator.push(
                           context,
                           SlideRightRoute(

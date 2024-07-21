@@ -128,7 +128,6 @@ class OptionPlantServices {
   }
 
   Future<http.Response?> updatePlant(RegisterPlant plant, String id) async {
-    log('prueba de servicio');
     var token = await storage.read(key: "token");
 
     final principal = await http.MultipartFile.fromPath(

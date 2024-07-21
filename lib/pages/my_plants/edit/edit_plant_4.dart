@@ -284,8 +284,6 @@ class _EditPlants04State extends State<EditPlants04> {
                         File f = await optionServices
                             .getImageFileFromAssets(Constants.noPicture);
 
-                        // widget.pictures.add(f);
-                        // log(widget.pictures.toString());
 
                         widget.valores
                             .add({"imagen": f, "name": widget.images![3].type});
@@ -311,8 +309,6 @@ class _EditPlants04State extends State<EditPlants04> {
                       (widget.images![3].posterPath == null)) {
                     // return PlantaColors.colorGreen;
                     if (flag == true) {
-                      // widget.pictures.add(_image!);
-                      // log(widget.pictures.toString());
 
                       widget.valores.add(
                           {"imagen": _image!, "name": widget.images![3].type});
@@ -332,8 +328,6 @@ class _EditPlants04State extends State<EditPlants04> {
                         final pictureFile = await urlToFile(foto);
                         EasyLoading.dismiss();
 
-                        // widget.pictures.add(pictureFile);
-                        // log(widget.pictures.toString());
                         widget.valores.add({
                           "imagen": pictureFile,
                           "name": widget.images![3].type
@@ -355,8 +349,6 @@ class _EditPlants04State extends State<EditPlants04> {
                       (widget.images![3].posterPath != null)) {
                     // return PlantaColors.colorGreen;
                     if (flag == true) {
-                      // widget.pictures.add(_image!);
-                      // log(widget.pictures.toString());
 
                       widget.valores.add(
                           {"imagen": _image!, "name": widget.images![3].type});
@@ -376,8 +368,6 @@ class _EditPlants04State extends State<EditPlants04> {
                             '${Constants.baseUrl}${widget.images?[3].posterPath}';
                         final pictureFile = await urlToFile(foto);
                         EasyLoading.show();
-                        // widget.pictures.add(pictureFile);
-                        // log(widget.pictures.toString());
 
                         widget.valores.add({
                           "imagen": pictureFile,

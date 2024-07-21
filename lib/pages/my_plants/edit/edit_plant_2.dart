@@ -285,10 +285,8 @@ class _EditPlants02State extends State<EditPlants02> {
                         File f = await optionServices
                             .getImageFileFromAssets(Constants.noPicture);
 
-                        // widget.pictures.add(f);
                         widget.valores
                             .add({"imagen": f, "name": widget.images![1].type});
-                        // log(widget.pictures.toString());
 
                         Navigator.push(
                             context,
@@ -296,9 +294,7 @@ class _EditPlants02State extends State<EditPlants02> {
                                 page: GetApiEditInformation03(
                               id: widget.details.id!,
                               valores: widget.valores,
-                              // pictures: widget.pictures,
                             )));
-                        // return PlantaColors.colorBlack;
                       }
                     },
                     title: AppLocalizations.of(context)!.skip,
@@ -309,13 +305,10 @@ class _EditPlants02State extends State<EditPlants02> {
                 onTap: () async {
                   if ((_image != null) &&
                       (widget.images![1].posterPath == null)) {
-                    // return PlantaColors.colorGreen;
                     if (flag == true) {
-                      // widget.pictures.add(_image!);
                       widget.valores.add(
                           {"imagen": _image, "name": widget.images![1].type});
 
-                      // log(widget.pictures.toString());
 
                       Navigator.push(
                           context,
@@ -332,12 +325,10 @@ class _EditPlants02State extends State<EditPlants02> {
                         final pictureFile = await urlToFile(foto);
                         EasyLoading.dismiss();
 
-                        // widget.pictures.add(pictureFile);
                         widget.valores.add({
                           "imagen": pictureFile,
                           "name": widget.images![1].type
                         });
-                        // log(widget.pictures.toString());
 
                         Navigator.push(
                             context,
@@ -353,12 +344,9 @@ class _EditPlants02State extends State<EditPlants02> {
                     }
                   } else if ((_image == null) &&
                       (widget.images![1].posterPath != null)) {
-                    // return PlantaColors.colorGreen;
                     if (flag == true) {
-                      // widget.pictures.add(_image!);
                       widget.valores.add(
                           {"imagen": _image, "name": widget.images![1].type});
-                      // log(widget.pictures.toString());
 
                       Navigator.push(
                           context,
@@ -375,13 +363,11 @@ class _EditPlants02State extends State<EditPlants02> {
                             '${Constants.baseUrl}${widget.images?[1].posterPath}';
                         final pictureFile = await urlToFile(foto);
                         EasyLoading.show();
-                        // widget.pictures.add(pictureFile);
                         widget.valores.add({
                           "imagen": pictureFile,
                           "name": widget.images![1].type
                         });
 
-                        // log(widget.pictures.toString());
 
                         Navigator.push(
                             context,
