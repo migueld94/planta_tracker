@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 // import 'package:planta_tracker/assets/l10n/l10n.dart';
