@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -22,7 +23,9 @@ class UserServices {
       var response = await http.post(userUri,
           headers: <String, String>{'authorization': "Token $token"});
 
-      return userFromJson(response.body);
+      final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
+      return userFromJson(utf);
     } on SocketException {
       throw Exception('Network Conectivity Error');
     } on Exception catch (e) {
