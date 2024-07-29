@@ -47,8 +47,10 @@ class _MyPlantsState extends State<MyPlants> {
       final response = await http.get(myPlantsUri,
           headers: <String, String>{'authorization': "Token $token"});
 
+      final utf = const Utf8Decoder().convert(response.body.codeUnits);
+
       if (response.statusCode == 200) {
-        final json = jsonDecode(response.body)['results'] as List;
+        final json = jsonDecode(utf)['results'] as List;
         if (json.isEmpty) {
           EasyLoading.dismiss();
           return tutorial(context);
