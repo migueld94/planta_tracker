@@ -14,7 +14,7 @@ import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/models/details_edit_model.dart';
 import 'package:planta_tracker/pages/my_plants/edit/edit_plant_5.dart';
@@ -284,7 +284,6 @@ class _EditPlants04State extends State<EditPlants04> {
                         File f = await optionServices
                             .getImageFileFromAssets(Constants.noPicture);
 
-
                         widget.valores
                             .add({"imagen": f, "name": widget.images![3].type});
 
@@ -309,7 +308,6 @@ class _EditPlants04State extends State<EditPlants04> {
                       (widget.images![3].posterPath == null)) {
                     // return PlantaColors.colorGreen;
                     if (flag == true) {
-
                       widget.valores.add(
                           {"imagen": _image!, "name": widget.images![3].type});
 
@@ -349,7 +347,6 @@ class _EditPlants04State extends State<EditPlants04> {
                       (widget.images![3].posterPath != null)) {
                     // return PlantaColors.colorGreen;
                     if (flag == true) {
-
                       widget.valores.add(
                           {"imagen": _image!, "name": widget.images![3].type});
 

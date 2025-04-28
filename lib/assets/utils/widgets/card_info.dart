@@ -2,7 +2,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:ionicons/ionicons.dart';
 // import 'package:portafolio/assets/utils/theme/themes_provider.dart';
-// // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// // import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 // import 'package:email_validator/email_validator.dart';
 
 // class CardInfo extends StatelessWidget {

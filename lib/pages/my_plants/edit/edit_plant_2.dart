@@ -14,7 +14,7 @@ import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/models/details_edit_model.dart';
 import 'package:planta_tracker/pages/my_plants/edit/edit_plant_3.dart';
@@ -309,7 +309,6 @@ class _EditPlants02State extends State<EditPlants02> {
                       widget.valores.add(
                           {"imagen": _image, "name": widget.images![1].type});
 
-
                       Navigator.push(
                           context,
                           SlideRightRoute(
@@ -367,7 +366,6 @@ class _EditPlants02State extends State<EditPlants02> {
                           "imagen": pictureFile,
                           "name": widget.images![1].type
                         });
-
 
                         Navigator.push(
                             context,

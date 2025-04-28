@@ -12,7 +12,7 @@ import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/pages/login/verify_code_02.dart';
 import 'package:planta_tracker/services/auth_services.dart';
 
@@ -129,7 +129,6 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                     color: PlantaColors.colorGreen,
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
-
                         setState(() {
                           email = emailController.text.trim();
                         });

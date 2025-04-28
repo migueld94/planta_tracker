@@ -9,7 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/pages/register_plants/register_plant_6.dart';
 import 'package:planta_tracker/pages/register_plants/widget/camera_widget.dart';

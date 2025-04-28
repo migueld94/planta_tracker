@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';

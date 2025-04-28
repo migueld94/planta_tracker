@@ -4,10 +4,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/models/nom_lifestage.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/services/nom_lifestage_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyDropButtom extends StatefulWidget {
   const MyDropButtom({

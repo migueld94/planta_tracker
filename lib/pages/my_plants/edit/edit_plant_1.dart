@@ -15,7 +15,7 @@ import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/models/details_edit_model.dart';
 import 'package:planta_tracker/pages/my_plants/edit/edit_plant_2.dart';
@@ -174,7 +174,6 @@ class _EditPlants01State extends State<EditPlants01> {
             ButtomSmall(
                 color: PlantaColors.colorGreen,
                 onTap: () async {
-
                   if (_image != null) {
                     valores.add(
                         {"imagen": _image, "name": widget.images![0].type});

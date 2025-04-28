@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/models/details_models.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 
 class ViewImageCarousel extends StatefulWidget {
   final int id;
@@ -24,7 +24,7 @@ class ViewImageCarousel extends StatefulWidget {
 }
 
 class _ViewImageCarouselState extends State<ViewImageCarousel> {
-  final CarouselController _controller = CarouselController();
+  // final CarouselController _controller = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class _ViewImageCarouselState extends State<ViewImageCarousel> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CarouselSlider.builder(
-              carouselController: _controller,
+              // carouselController: _controller,
               itemCount: widget.posterPath!.length,
               itemBuilder: (context, index, realIndex) {
                 return ClipRRect(

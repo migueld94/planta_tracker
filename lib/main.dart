@@ -15,9 +15,10 @@ import 'package:planta_tracker/pages/onboarding/onboarding.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
 
+import 'assets/l10n/app_localizations.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'blocs/map/map_bloc.dart';

@@ -12,7 +12,7 @@ import 'package:planta_tracker/pages/all_plants/all_plants.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/pages/map/map.dart';
 import 'package:planta_tracker/pages/my_plants/my_plants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/services/auth_services.dart';
 
 class Home extends StatefulWidget {

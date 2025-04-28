@@ -18,7 +18,7 @@ import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
 import 'package:planta_tracker/pages/my_plants/edit/edit_plant_1.dart';
 import 'package:planta_tracker/services/plants_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 
 class MyPlants extends StatefulWidget {
   const MyPlants({super.key});

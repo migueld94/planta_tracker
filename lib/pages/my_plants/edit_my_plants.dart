@@ -10,7 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:planta_tracker/models/details_edit_model.dart';
 
 import 'package:planta_tracker/pages/home/home.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';

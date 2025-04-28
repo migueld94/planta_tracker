@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:planta_tracker/pages/login/change_password.dart';
 import 'package:planta_tracker/services/auth_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 
 class VerifyCode02 extends StatefulWidget {
   const VerifyCode02({

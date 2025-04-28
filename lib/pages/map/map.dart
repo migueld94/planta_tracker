@@ -28,7 +28,7 @@ import 'package:planta_tracker/models/plants_models.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
 import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MapView extends StatefulWidget {
@@ -421,7 +421,6 @@ class _MapViewState extends State<MapView> {
     if (positions.latitude < minLat) {
       minLat = positions.latitude;
     }
-
   }
 }
 
