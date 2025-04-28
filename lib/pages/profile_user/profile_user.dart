@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/models/user_models.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
 import 'package:planta_tracker/assets/utils/widgets/language.dart';
@@ -34,10 +34,9 @@ class _ProfileUserState extends State<ProfileUser> {
       appBar: AppBar(
         centerTitle: true,
         leading: GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            SlideRightRoute(page: const Home()),
-          ),
+          onTap:
+              () =>
+                  Navigator.push(context, SlideRightRoute(page: const Home())),
           child: Icon(
             Ionicons.arrow_back_outline,
             color: PlantaColors.colorWhite,
@@ -112,64 +111,63 @@ class _UserProfileState extends State<_UserProfile> {
             verticalMargin12,
             disabledName
                 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: AutoSizeText(
-                          widget.user!.fullName,
-                          style: context.theme.textTheme.h2,
-                          textAlign: TextAlign.center,
-                        ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: AutoSizeText(
+                        widget.user!.fullName,
+                        style: context.theme.textTheme.h2,
+                        textAlign: TextAlign.center,
                       ),
-                      horizontalMargin8,
-                      GestureDetector(
-                        onTap: () {
-                          warning(
-                            context,
-                            AppLocalizations.of(context)!.message_change_name,
-                            () {
-                              setState(() {
-                                disabledName = false;
-                              });
-                              Navigator.pop(context);
-                            },
-                          );
-                        },
-                        child: Icon(
-                          Ionicons.pencil_outline,
-                          color: PlantaColors.colorBlack,
-                        ),
-                      ),
-                    ],
-                  )
-                : Form(
-                    key: formKeyName,
-                    child: TextFormField(
-                      controller: nameController,
-                      obscureText: false,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: InputDecorations.authInputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: PlantaColors.colorGreen),
-                          borderRadius: borderRadius10,
-                        ),
-                        hintText: AppLocalizations.of(context)!.enter_full_name,
-                        labelText: AppLocalizations.of(context)!.full_name,
-                        icon: Icon(
-                          Ionicons.person_sharp,
-                          color: PlantaColors.colorGreen,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return AppLocalizations.of(context)!.obligatory_camp;
-                        }
-                        return null;
-                      },
                     ),
+                    horizontalMargin8,
+                    GestureDetector(
+                      onTap: () {
+                        warning(
+                          context,
+                          AppLocalizations.of(context)!.message_change_name,
+                          () {
+                            setState(() {
+                              disabledName = false;
+                            });
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                      child: Icon(
+                        Ionicons.pencil_outline,
+                        color: PlantaColors.colorBlack,
+                      ),
+                    ),
+                  ],
+                )
+                : Form(
+                  key: formKeyName,
+                  child: TextFormField(
+                    controller: nameController,
+                    obscureText: false,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: InputDecorations.authInputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlantaColors.colorGreen),
+                        borderRadius: borderRadius10,
+                      ),
+                      hintText: AppLocalizations.of(context)!.enter_full_name,
+                      labelText: AppLocalizations.of(context)!.full_name,
+                      icon: Icon(
+                        Ionicons.person_sharp,
+                        color: PlantaColors.colorGreen,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return AppLocalizations.of(context)!.obligatory_camp;
+                      }
+                      return null;
+                    },
                   ),
+                ),
             verticalMargin24,
             AutoSizeText(
               '${AppLocalizations.of(context)!.email}: ${widget.user!.email}',
@@ -189,9 +187,7 @@ class _UserProfileState extends State<_UserProfile> {
                   // padding: allPadding12,
                   decoration: BoxDecoration(
                     borderRadius: borderRadius10,
-                    border: Border.all(
-                      color: PlantaColors.colorOrange,
-                    ),
+                    border: Border.all(color: PlantaColors.colorOrange),
                   ),
                   child: const LanguagePickerWidget(),
                 ),
@@ -250,23 +246,26 @@ class _UserProfileState extends State<_UserProfile> {
                         visibility = !visibility;
                       });
                     },
-                    icon: visibility
-                        ? Icon(
-                            Ionicons.eye_off_outline,
-                            color: disabledPassword
-                                ? PlantaColors.colorGreen
-                                : PlantaColors.colorGrey,
-                          )
-                        : Icon(
-                            Ionicons.eye_outline,
-                            color: PlantaColors.colorGreen,
-                          ),
+                    icon:
+                        visibility
+                            ? Icon(
+                              Ionicons.eye_off_outline,
+                              color:
+                                  disabledPassword
+                                      ? PlantaColors.colorGreen
+                                      : PlantaColors.colorGrey,
+                            )
+                            : Icon(
+                              Ionicons.eye_outline,
+                              color: PlantaColors.colorGreen,
+                            ),
                   ),
                   icon: Icon(
                     Ionicons.key_outline,
-                    color: disabledPassword
-                        ? PlantaColors.colorGreen
-                        : PlantaColors.colorGrey,
+                    color:
+                        disabledPassword
+                            ? PlantaColors.colorGreen
+                            : PlantaColors.colorGrey,
                   ),
                 ),
                 validator: (value) {
@@ -296,9 +295,10 @@ class _UserProfileState extends State<_UserProfile> {
                   labelText: AppLocalizations.of(context)!.password_confirm,
                   icon: Icon(
                     Ionicons.key_outline,
-                    color: disabledPassword
-                        ? PlantaColors.colorGreen
-                        : PlantaColors.colorGrey,
+                    color:
+                        disabledPassword
+                            ? PlantaColors.colorGreen
+                            : PlantaColors.colorGrey,
                   ),
                   suffix: IconButton(
                     onPressed: () {
@@ -306,17 +306,19 @@ class _UserProfileState extends State<_UserProfile> {
                         visibilityConfirm = !visibilityConfirm;
                       });
                     },
-                    icon: visibilityConfirm
-                        ? Icon(
-                            Ionicons.eye_off_outline,
-                            color: disabledPassword
-                                ? PlantaColors.colorGreen
-                                : PlantaColors.colorGrey,
-                          )
-                        : Icon(
-                            Ionicons.eye_outline,
-                            color: PlantaColors.colorGreen,
-                          ),
+                    icon:
+                        visibilityConfirm
+                            ? Icon(
+                              Ionicons.eye_off_outline,
+                              color:
+                                  disabledPassword
+                                      ? PlantaColors.colorGreen
+                                      : PlantaColors.colorGrey,
+                            )
+                            : Icon(
+                              Ionicons.eye_outline,
+                              color: PlantaColors.colorGreen,
+                            ),
                   ),
                 ),
                 validator: (value2) {
@@ -342,8 +344,10 @@ class _UserProfileState extends State<_UserProfile> {
                     });
 
                     try {
-                      var res =
-                          await userServices.changeName(context, fullName);
+                      var res = await userServices.changeName(
+                        context,
+                        fullName,
+                      );
 
                       switch (res.statusCode) {
                         case 200:
@@ -352,80 +356,95 @@ class _UserProfileState extends State<_UserProfile> {
                           setState(() {
                             disabledName = true;
                           });
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) async {
+                          WidgetsBinding.instance.addPostFrameCallback((
+                            _,
+                          ) async {
                             Navigator.pop(context);
                           });
                           break;
                         case 400:
                           EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                AppLocalizations.of(context)!
-                                    .verify_credentials,
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.verify_credentials,
+                                  style: context.theme.textTheme.text_01
+                                      .copyWith(
+                                        color: PlantaColors.colorWhite,
+                                        fontSize: 16.0,
+                                      ),
                                 ),
                               ),
                             ),
-                          ));
+                          );
                           break;
                         case 401:
                           EasyLoading.dismiss();
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                AppLocalizations.of(context)!
-                                    .verify_credentials,
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.verify_credentials,
+                                  style: context.theme.textTheme.text_01
+                                      .copyWith(
+                                        color: PlantaColors.colorWhite,
+                                        fontSize: 16.0,
+                                      ),
                                 ),
                               ),
                             ),
-                          ));
+                          );
                           break;
                         default:
                           EasyLoading.dismiss();
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                // 'Credenciales incorrectas',
-                                AppLocalizations.of(context)!
-                                    .verify_credentials,
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: PlantaColors.colorOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  // 'Credenciales incorrectas',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.verify_credentials,
 
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                                  style: context.theme.textTheme.text_01
+                                      .copyWith(
+                                        color: PlantaColors.colorWhite,
+                                        fontSize: 16.0,
+                                      ),
                                 ),
                               ),
                             ),
-                          ));
+                          );
                           break;
                       }
                     } on SocketException {
                       EasyLoading.dismiss();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: PlantaColors.colorOrange,
-                        content: Center(
-                          child: AutoSizeText(
-                            // 'Sin conexión',
-                            AppLocalizations.of(context)!.no_internet,
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: PlantaColors.colorOrange,
+                          content: Center(
+                            child: AutoSizeText(
+                              // 'Sin conexión',
+                              AppLocalizations.of(context)!.no_internet,
 
-                            style: context.theme.textTheme.text_01.copyWith(
-                              color: PlantaColors.colorWhite,
-                              fontSize: 16.0,
+                              style: context.theme.textTheme.text_01.copyWith(
+                                color: PlantaColors.colorWhite,
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
                         ),
-                      ));
+                      );
                     } catch (e) {
                       EasyLoading.dismiss();
                       throw Exception(e);
@@ -450,7 +469,10 @@ class _UserProfileState extends State<_UserProfile> {
 
                       try {
                         var res = await userServices.changePassword(
-                            context, password, passwordConfirm);
+                          context,
+                          password,
+                          passwordConfirm,
+                        );
 
                         switch (res.statusCode) {
                           case 200:
@@ -459,100 +481,114 @@ class _UserProfileState extends State<_UserProfile> {
                             setState(() {
                               disabledPassword = false;
                             });
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((_) async {
+                            WidgetsBinding.instance.addPostFrameCallback((
+                              _,
+                            ) async {
                               Navigator.pop(context);
                             });
                             break;
                           case 400:
                             EasyLoading.dismiss();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  // 'Credenciales incorrectas',
-                                  AppLocalizations.of(context)!
-                                      .verify_credentials,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    // 'Credenciales incorrectas',
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.verify_credentials,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
                                   ),
                                 ),
                               ),
-                            ));
+                            );
                             break;
                           case 401:
                             EasyLoading.dismiss();
                             if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  // 'Credenciales incorrectas',
-                                  AppLocalizations.of(context)!
-                                      .verify_credentials,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    // 'Credenciales incorrectas',
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.verify_credentials,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
                                   ),
                                 ),
                               ),
-                            ));
+                            );
                             break;
                           default:
                             EasyLoading.dismiss();
                             if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  // 'Credenciales incorrectas',
-                                  AppLocalizations.of(context)!
-                                      .verify_credentials,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    // 'Credenciales incorrectas',
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.verify_credentials,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
                                   ),
                                 ),
                               ),
-                            ));
+                            );
                             break;
                         }
                       } on SocketException {
                         EasyLoading.dismiss();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: PlantaColors.colorOrange,
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: PlantaColors.colorOrange,
+                            content: Center(
+                              child: AutoSizeText(
+                                // 'Sin conexión',
+                                AppLocalizations.of(context)!.no_internet,
+                                style: context.theme.textTheme.text_01.copyWith(
+                                  color: PlantaColors.colorWhite,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      } catch (e) {
+                        EasyLoading.dismiss();
+                        throw Exception(e);
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: PlantaColors.colorDarkOrange,
                           content: Center(
                             child: AutoSizeText(
-                              // 'Sin conexión',
-                              AppLocalizations.of(context)!.no_internet,
+                              AppLocalizations.of(context)!.password_match,
                               style: context.theme.textTheme.text_01.copyWith(
                                 color: PlantaColors.colorWhite,
                                 fontSize: 16.0,
                               ),
                             ),
                           ),
-                        ));
-                      } catch (e) {
-                        EasyLoading.dismiss();
-                        throw Exception(e);
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: PlantaColors.colorDarkOrange,
-                        content: Center(
-                          child: AutoSizeText(
-                            AppLocalizations.of(context)!.password_match,
-                            style: context.theme.textTheme.text_01.copyWith(
-                              color: PlantaColors.colorWhite,
-                              fontSize: 16.0,
-                            ),
-                          ),
                         ),
-                      ));
+                      );
                     }
                   }
                 }
