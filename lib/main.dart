@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:get/get.dart';
-
 import 'package:planta_tracker/assets/l10n/l10n.dart';
-// import 'package:planta_tracker/dependency_injection.dart';
+import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_event.dart';
@@ -14,17 +13,16 @@ import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
 import 'package:planta_tracker/pages/onboarding/onboarding.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
-
+import 'package:planta_tracker/services/plants_services.dart';
 import 'assets/l10n/app_localizations.dart';
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'blocs/map/map_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/.env");
   final prefs = await SharedPreferences.getInstance();
   final showHome = prefs.getBool('showHome') ?? false;
   configLoading();
@@ -35,6 +33,10 @@ void main() async {
         BlocProvider(create: (context) => GpsBloc()..add(GpsStarted())),
         BlocProvider(create: (context) => MapBloc()..add(MapStarted())),
         BlocProvider(create: (context) => PlantsMapBloc(AllPlantServices())),
+        BlocProvider(
+          create:
+              (context) => MyPlantsBloc(plantServices: OptionPlantServices()),
+        ),
       ],
       child: MyApp(showHome: showHome),
     ),
@@ -71,10 +73,7 @@ void configLoading() {
 
 class MyApp extends StatelessWidget {
   final bool showHome;
-  const MyApp({
-    super.key,
-    required this.showHome,
-  });
+  const MyApp({super.key, required this.showHome});
 
   @override
   Widget build(BuildContext context) {
@@ -93,9 +92,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Nunito',
             appBarTheme: AppBarTheme(
               backgroundColor: PlantaColors.colorGreen,
-              iconTheme: IconThemeData(
-                color: PlantaColors.colorWhite,
-              ),
+              iconTheme: IconThemeData(color: PlantaColors.colorWhite),
             ),
             bottomSheetTheme: BottomSheetThemeData(
               surfaceTintColor: PlantaColors.colorWhite,

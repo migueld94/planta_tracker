@@ -1,75 +1,83 @@
+// To parse this JSON data, do
+//
+//     final myPlantsModel = myPlantsModelFromJson(jsonString);
+
 import 'dart:convert';
 
-List<MyPlants> myPlantsFromJson(String str) =>
-    List<MyPlants>.from(json.decode(str).map((x) => MyPlants.fromJson(x)));
+MyPlantsModel myPlantsModelFromJson(String str) =>
+    MyPlantsModel.fromJson(json.decode(str));
 
-String myPlantsToJson(List<MyPlants> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String myPlantsModelToJson(MyPlantsModel data) => json.encode(data.toJson());
 
-class MyPlants {
+class MyPlantsModel {
+  int count;
+  dynamic next;
+  dynamic previous;
+  List<Result> results;
+
+  MyPlantsModel({
+    required this.count,
+    required this.next,
+    required this.previous,
+    required this.results,
+  });
+
+  factory MyPlantsModel.fromJson(Map<String, dynamic> json) => MyPlantsModel(
+    count: json["count"],
+    next: json["next"],
+    previous: json["previous"],
+    results: List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "count": count,
+    "next": next,
+    "previous": previous,
+    "results": List<dynamic>.from(results.map((x) => x.toJson())),
+  };
+}
+
+class Result {
   int id;
   String especiePlanta;
-  String latitude;
-  String longitude;
-  String paisGps;
-  String direccionGps;
-  String stateGps;
-  String notas;
+  double latitude;
+  double longitude;
   String imagenPrincipal;
-  String imagenTronco;
-  String imagenRamas;
-  String imagenHojas;
-  String imagenFlor;
-  String imagenFruto;
+  String lifestage;
+  String estadoActual;
+  DateTime fechaRegistro;
 
-  MyPlants({
+  Result({
     required this.id,
     required this.especiePlanta,
     required this.latitude,
     required this.longitude,
-    required this.paisGps,
-    required this.direccionGps,
-    required this.stateGps,
-    required this.notas,
     required this.imagenPrincipal,
-    required this.imagenTronco,
-    required this.imagenRamas,
-    required this.imagenHojas,
-    required this.imagenFlor,
-    required this.imagenFruto,
+    required this.lifestage,
+    required this.estadoActual,
+    required this.fechaRegistro,
   });
 
-  factory MyPlants.fromJson(Map<String, dynamic> json) => MyPlants(
-        id: json["id"],
-        especiePlanta: json["especie_planta"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-        paisGps: json["pais_gps"],
-        direccionGps: json["direccion_gps"],
-        stateGps: json["state_gps"],
-        notas: json["notas"],
-        imagenPrincipal: json["imagen_principal"],
-        imagenTronco: json["imagen_tronco"],
-        imagenRamas: json["imagen_ramas"],
-        imagenHojas: json["imagen_hojas"],
-        imagenFlor: json["imagen_flor"],
-        imagenFruto: json["imagen_fruto"],
-      );
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
+    id: json["id"],
+    especiePlanta: json["especie_planta"],
+    latitude: json["latitude"]?.toDouble(),
+    longitude: json["longitude"]?.toDouble(),
+    imagenPrincipal: json["imagen_principal"],
+    lifestage: json["lifestage"],
+    estadoActual: json["estado_actual"],
+    fechaRegistro: DateTime.parse(json["fecha_registro_"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "especie_planta": especiePlanta,
-        "latitude": latitude,
-        "longitude": longitude,
-        "pais_gps": paisGps,
-        "direccion_gps": direccionGps,
-        "state_gps": stateGps,
-        "notas": notas,
-        "imagen_principal": imagenPrincipal,
-        "imagen_tronco": imagenTronco,
-        "imagen_ramas": imagenRamas,
-        "imagen_hojas": imagenHojas,
-        "imagen_flor": imagenFlor,
-        "imagen_fruto": imagenFruto,
-      };
+    "id": id,
+    "especie_planta": especiePlanta,
+    "latitude": latitude,
+    "longitude": longitude,
+    "imagen_principal": imagenPrincipal,
+    "lifestage": lifestage,
+    "estado_actual": estadoActual,
+    "fecha_registro_":
+        "${fechaRegistro.year.toString().padLeft(4, '0')}-${fechaRegistro.month.toString().padLeft(2, '0')}-${fechaRegistro.day.toString().padLeft(2, '0')}",
+  };
 }

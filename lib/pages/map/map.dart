@@ -64,24 +64,28 @@ class _MapViewState extends State<MapView> {
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
 
-    var resp = await http.post(secretUrl, headers: <String, String>{
-      'authorization': basicAuth
-    }, body: {
-      "grant_type": "client_credentials",
-    });
+    var resp = await http.post(
+      secretUrl,
+      headers: <String, String>{'authorization': basicAuth},
+      body: {"grant_type": "client_credentials"},
+    );
 
     final Map<String, dynamic> data = json.decode(resp.body);
     final accessToken = data["access_token"];
 
-    final allspecie =
-        Uri.parse('${Constants.baseUrl}/es/api/especie_list?page=$next');
+    final allspecie = Uri.parse(
+      '${Constants.baseUrl}/es/api/especie_list?page=$next',
+    );
 
-    final response = await http.get(allspecie,
-        headers: <String, String>{'authorization': "Bearer $accessToken"});
+    final response = await http.get(
+      allspecie,
+      headers: <String, String>{'authorization': "Bearer $accessToken"},
+    );
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
 
     if (response.statusCode == 200) {
+      EasyLoading.dismiss();
       final json = jsonDecode(utf)['results'] as List;
       setState(() {
         items.addAll(json);
@@ -94,32 +98,30 @@ class _MapViewState extends State<MapView> {
     super.initState();
     EasyLoading.show();
     _loadMore();
-    scroll.addListener(
-      () async {
-        if (scroll.size >= 1.0) {
-          if (isLoadMore == true) return;
+    scroll.addListener(() async {
+      if (scroll.size >= 1.0) {
+        if (isLoadMore == true) return;
+        setState(() {
+          isLoadMore = true;
+        });
+        next++;
+        _loadMore().then((_) {
           setState(() {
-            isLoadMore = true;
+            isLoadMore = false;
           });
-          next++;
-          _loadMore().then((_) {
-            setState(() {
-              isLoadMore = false;
-            });
-          });
-        }
-        // if (scroll. == scroll.position.maxScrollExtent) {
-        //   setState(() {
-        //     isLoadMore = true;
-        //   });
-        //   next++;
-        //   await _loadMore();
-        //   setState(() {
-        //     isLoadMore = false;
-        //   });
-        // }
-      },
-    );
+        });
+      }
+      // if (scroll. == scroll.position.maxScrollExtent) {
+      //   setState(() {
+      //     isLoadMore = true;
+      //   });
+      //   next++;
+      //   await _loadMore();
+      //   setState(() {
+      //     isLoadMore = false;
+      //   });
+      // }
+    });
     _loadSelectedIndex();
   }
 
@@ -149,20 +151,23 @@ class _MapViewState extends State<MapView> {
         'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
 
-    var resp = await http.post(secretUrl, headers: <String, String>{
-      'authorization': basicAuth
-    }, body: {
-      "grant_type": "client_credentials",
-    });
+    var resp = await http.post(
+      secretUrl,
+      headers: <String, String>{'authorization': basicAuth},
+      body: {"grant_type": "client_credentials"},
+    );
 
     final Map<String, dynamic> data = json.decode(resp.body);
     final accessToken = data["access_token"];
 
-    final searchSpecie =
-        Uri.parse('${Constants.baseUrl}/en/api/especie_list/search?q=$value');
+    final searchSpecie = Uri.parse(
+      '${Constants.baseUrl}/en/api/especie_list/search?q=$value',
+    );
 
-    final response = await http.get(searchSpecie,
-        headers: <String, String>{'authorization': "Bearer $accessToken"});
+    final response = await http.get(
+      searchSpecie,
+      headers: <String, String>{'authorization': "Bearer $accessToken"},
+    );
 
     final utf = const Utf8Decoder().convert(response.body.codeUnits);
 
@@ -186,11 +191,7 @@ class _MapViewState extends State<MapView> {
               if (gpsState is GpsPermissionDenied ||
                   gpsState is GpsPermissionDeniedForever) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'acepte los permisos',
-                    ),
-                  ),
+                  const SnackBar(content: Text('acepte los permisos')),
                 );
               }
             },
@@ -280,84 +281,82 @@ class _MapViewState extends State<MapView> {
                     ),
                     items.isEmpty
                         ? AutoSizeText(
-                            AppLocalizations.of(context)!
-                                .search_without_results,
-                            style: context.theme.textTheme.text_01.copyWith(
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.5,
-                              fontSize: 16,
-                            ),
-                          )
-                        : Expanded(
-                            child: ListView.builder(
-                              controller: scroll,
-                              itemCount:
-                                  isLoadMore ? items.length + 1 : items.length,
-                              itemBuilder: (context, index) {
-                                if (index >= items.length) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  EasyLoading.dismiss();
-                                  return MyCustomCard(
-                                    backgroundColor:
-                                        selectedIndex == items[index]['id']
-                                            ? PlantaColors.colorGreen
-                                            : PlantaColors.colorWhite,
-                                    colorText:
-                                        selectedIndex == items[index]['id']
-                                            ? PlantaColors.colorWhite
-                                            : PlantaColors.colorBlack,
-                                    title: items[index]['nombre_especie'],
-                                    onTap: () {
-                                      // setState(() {
-                                      //   filter = !filter;
-                                      //   if (selectedIndex ==
-                                      //       items[index]['id']) {
-                                      //     selectedIndex = -1;
-                                      //   } else {
-                                      //     selectedIndex = items[index]['id'];
-                                      //   }
-                                      // });
-
-                                      setState(() {
-                                        if (selectedIndex ==
-                                            items[index]['id']) {
-                                          // Si el usuario vuelve a presionar el mismo elemento, deselecciónalo
-                                          context.read<PlantsMapBloc>().add(
-                                                const PlantsMapEvent.load(),
-                                              );
-                                          selectedIndex = -1;
-                                        } else {
-                                          // De lo contrario, selecciona el nuevo elemento y deselecciona el anterior
-                                          context.read<PlantsMapBloc>().add(
-                                                PlantsMapEvent.loadById(
-                                                  items[index]['id'],
-                                                ),
-                                              );
-                                          selectedIndex = items[index]['id'];
-                                        }
-                                      });
-
-                                      _saveSelectedIndex(selectedIndex);
-
-                                      // if (filter == false) {
-                                      // context.read<PlantsMapBloc>().add(
-                                      //       const PlantsMapEvent.load(),
-                                      //     );
-                                      // } else {
-                                      // context.read<PlantsMapBloc>().add(
-                                      //       PlantsMapEvent.loadById(
-                                      //         items[index]['id'],
-                                      //       ),
-                                      //     );
-                                      // }
-                                    },
-                                  );
-                                }
-                              },
-                            ),
+                          AppLocalizations.of(context)!.search_without_results,
+                          style: context.theme.textTheme.text_01.copyWith(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5,
+                            fontSize: 16,
                           ),
+                        )
+                        : Expanded(
+                          child: ListView.builder(
+                            controller: scroll,
+                            itemCount:
+                                isLoadMore ? items.length + 1 : items.length,
+                            itemBuilder: (context, index) {
+                              if (index >= items.length) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else {
+                                return MyCustomCard(
+                                  backgroundColor:
+                                      selectedIndex == items[index]['id']
+                                          ? PlantaColors.colorGreen
+                                          : PlantaColors.colorWhite,
+                                  colorText:
+                                      selectedIndex == items[index]['id']
+                                          ? PlantaColors.colorWhite
+                                          : PlantaColors.colorBlack,
+                                  title: items[index]['nombre_especie'],
+                                  onTap: () {
+                                    // setState(() {
+                                    //   filter = !filter;
+                                    //   if (selectedIndex ==
+                                    //       items[index]['id']) {
+                                    //     selectedIndex = -1;
+                                    //   } else {
+                                    //     selectedIndex = items[index]['id'];
+                                    //   }
+                                    // });
+
+                                    setState(() {
+                                      if (selectedIndex == items[index]['id']) {
+                                        // Si el usuario vuelve a presionar el mismo elemento, deselecciónalo
+                                        context.read<PlantsMapBloc>().add(
+                                          const PlantsMapEvent.load(),
+                                        );
+                                        selectedIndex = -1;
+                                      } else {
+                                        // De lo contrario, selecciona el nuevo elemento y deselecciona el anterior
+                                        context.read<PlantsMapBloc>().add(
+                                          PlantsMapEvent.loadById(
+                                            items[index]['id'],
+                                          ),
+                                        );
+                                        selectedIndex = items[index]['id'];
+                                      }
+                                    });
+
+                                    _saveSelectedIndex(selectedIndex);
+
+                                    // if (filter == false) {
+                                    // context.read<PlantsMapBloc>().add(
+                                    //       const PlantsMapEvent.load(),
+                                    //     );
+                                    // } else {
+                                    // context.read<PlantsMapBloc>().add(
+                                    //       PlantsMapEvent.loadById(
+                                    //         items[index]['id'],
+                                    //       ),
+                                    //     );
+                                    // }
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        ),
                   ],
                 ),
               );
@@ -371,10 +370,7 @@ class _MapViewState extends State<MapView> {
                 context.read<GpsBloc>().add(GpsStarted());
               },
               backgroundColor: PlantaColors.colorGreen,
-              child: Icon(
-                Icons.my_location,
-                color: PlantaColors.colorBlack,
-              ),
+              child: Icon(Icons.my_location, color: PlantaColors.colorBlack),
             ),
           ),
         ],
@@ -401,18 +397,15 @@ class _MapViewState extends State<MapView> {
         side: BorderSide(color: isSelected ? Colors.blue : Colors.grey),
       ),
       child: Row(
-        children: [
-          Icon(icon),
-          const SizedBox(width: 8.0),
-          Text(text),
-        ],
+        children: [Icon(icon), const SizedBox(width: 8.0), Text(text)],
       ),
     );
   }
 
   void getLocations() async {
     var positions = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
 
     if (positions.latitude > maxLat) {
       maxLat = positions.latitude;
@@ -427,10 +420,7 @@ class _MapViewState extends State<MapView> {
 //class CustomMaker para otros pines en el mapa
 class CustomMarker extends Marker {
   const CustomMarker(LatLng point, Widget child)
-      : super(
-          point: point,
-          child: child,
-        );
+    : super(point: point, child: child);
 }
 
 //funcion para generar lista de posiciones para el customMarker
@@ -460,20 +450,20 @@ List<CustomMarker> createMarkers(List<Plant> plants, BuildContext context) {
       GestureDetector(
         onTap: () {
           info(
-              context,
-              plant.lifestage!,
-              plant.estadoActual!,
-              plant.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
-              getColor(), () {
-            Navigator.push(
-                context, SlideRightRoute(page: Details(id: plant.id!)));
-          });
+            context,
+            plant.lifestage!,
+            plant.estadoActual!,
+            plant.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
+            getColor(),
+            () {
+              Navigator.push(
+                context,
+                SlideRightRoute(page: Details(id: plant.id!)),
+              );
+            },
+          );
         },
-        child: Icon(
-          Ionicons.location_sharp,
-          color: getColor(),
-          size: 40,
-        ),
+        child: Icon(Ionicons.location_sharp, color: getColor(), size: 40),
       ),
     );
   }).toList();
@@ -498,7 +488,10 @@ class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return SizedBox.expand(child: child);
   }
 
@@ -545,8 +538,8 @@ class AppFlutterMap extends StatelessWidget {
                 );
 
                 context.read<PlantsMapBloc>().add(
-                      PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
-                    );
+                  PlantsMapEvent.loadMoreByBoundries(northEast, southWest),
+                );
               }
             },
           ),
@@ -556,17 +549,19 @@ class AppFlutterMap extends StatelessWidget {
               userAgentPackageName: 'dev.fleaflet.flutter_map.example',
               subdomains: const ['a', 'b', 'c'],
             ),
-            MarkerLayer(markers: [
-              Marker(
-                point: state.userLocation ?? const LatLng(0, 0),
-                child: const Icon(
-                  Icons.person_pin_circle,
-                  color: Colors.blue,
-                  size: 40,
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: state.userLocation ?? const LatLng(0, 0),
+                  child: const Icon(
+                    Icons.person_pin_circle,
+                    color: Colors.blue,
+                    size: 40,
+                  ),
                 ),
-              ),
-              ...createMarkers(state.plants, context),
-            ]),
+                ...createMarkers(state.plants, context),
+              ],
+            ),
           ],
         );
       },
