@@ -83,12 +83,12 @@ class DetailsModel {
 
 class Imagene {
   String? posterPath;
-  int id;
+  int? id;
   String type;
 
   Imagene({
     this.posterPath,
-    required this.id,
+    this.id,
     required this.type,
   });
 

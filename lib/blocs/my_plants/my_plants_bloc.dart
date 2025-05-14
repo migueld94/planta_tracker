@@ -51,7 +51,7 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
         _cachedMyPlants!.results.addAll(plants.results);
         emit(MyPlantsLoaded(plants: _cachedMyPlants!));
       } else {
-        emit(MyPlantsError(error: 'No se pudo cargar las películas.'));
+        emit(MyPlantsError(error: 'No se pudo cargar las plantas.'));
       }
     } catch (e) {
       emit(MyPlantsError(error: 'Error: ${e.toString()}'));

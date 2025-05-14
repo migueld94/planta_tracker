@@ -1,9 +1,11 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 
 //* Aqui falta agregarle la foto
 class CardPlant extends StatelessWidget {
@@ -33,25 +35,28 @@ class CardPlant extends StatelessWidget {
         padding: allPadding8,
         margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
         decoration: BoxDecoration(
-            color: PlantaColors.colorWhite,
-            borderRadius: borderRadius10,
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(5, 7),
-                blurRadius: 12,
-                color: PlantaColors.colorBlack.withOpacity(0.3),
-              ),
-            ]),
+          color: PlantaColors.colorWhite,
+          borderRadius: borderRadius10,
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(5, 7),
+              blurRadius: 12,
+              color: PlantaColors.colorBlack.withOpacity(0.3),
+            ),
+          ],
+        ),
         child: Row(
           children: [
             ClipOval(
               child: CachedNetworkImage(
                 filterQuality: FilterQuality.low,
                 imageUrl: picture,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) =>
-                    Icon(Ionicons.image_sharp, color: PlantaColors.colorBlack),
+                placeholder: (context, url) => const CircularPlantaTracker(),
+                errorWidget:
+                    (context, url, error) => Icon(
+                      Ionicons.image_sharp,
+                      color: PlantaColors.colorBlack,
+                    ),
                 fit: BoxFit.cover,
                 width: 70,
                 height: 70,
@@ -67,16 +72,15 @@ class CardPlant extends StatelessWidget {
                     style: context.theme.textTheme.h3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  AutoSizeText(
-                    date,
-                    style: context.theme.textTheme.text_02,
-                  ),
+                  AutoSizeText(date, style: context.theme.textTheme.text_02),
                   spacer,
                   Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 4.0),
+                          horizontal: 8.0,
+                          vertical: 4.0,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: borderRadius20,
                           color: getColor(),
@@ -84,15 +88,18 @@ class CardPlant extends StatelessWidget {
                         child: Center(
                           child: AutoSizeText(
                             status,
-                            style: context.theme.textTheme.text_02
-                                .copyWith(color: PlantaColors.colorWhite),
+                            style: context.theme.textTheme.text_02.copyWith(
+                              color: PlantaColors.colorWhite,
+                            ),
                           ),
                         ),
                       ),
                       horizontalMargin8,
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 4.0),
+                          horizontal: 8.0,
+                          vertical: 4.0,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: borderRadius20,
                           border: Border.all(color: PlantaColors.colorOrange),
@@ -132,7 +139,7 @@ class CardMyPlants extends StatelessWidget {
     super.key,
     required this.title,
     required this.lifestage,
-    required this.status,
+    this.status,
     required this.date,
     required this.onTap,
     required this.picture,
@@ -144,7 +151,7 @@ class CardMyPlants extends StatelessWidget {
   final String title;
   final String picture;
   final String lifestage;
-  final String status;
+  final String? status;
   final String date;
   final Function()? onTap;
   final int id;
@@ -183,11 +190,13 @@ class CardMyPlants extends StatelessWidget {
                       child: CachedNetworkImage(
                         filterQuality: FilterQuality.low,
                         imageUrl: picture,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(
-                            Ionicons.image_sharp,
-                            color: PlantaColors.colorBlack),
+                        placeholder:
+                            (context, url) => const CircularPlantaTracker(),
+                        errorWidget:
+                            (context, url, error) => Icon(
+                              Ionicons.image_sharp,
+                              color: PlantaColors.colorBlack,
+                            ),
                         fit: BoxFit.cover,
                         width: 70,
                         height: 70,
@@ -216,24 +225,29 @@ class CardMyPlants extends StatelessWidget {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 4.0),
+                                    horizontal: 8.0,
+                                    vertical: 4.0,
+                                  ),
                                   decoration: BoxDecoration(
                                     borderRadius: borderRadius20,
                                     color: getColor(),
                                   ),
                                   child: Center(
                                     child: AutoSizeText(
-                                      status,
+                                      status!,
                                       style: context.theme.textTheme.text_02
                                           .copyWith(
-                                              color: PlantaColors.colorWhite),
+                                            color: PlantaColors.colorWhite,
+                                          ),
                                     ),
                                   ),
                                 ),
                                 horizontalMargin4,
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 4.0),
+                                    horizontal: 8.0,
+                                    vertical: 4.0,
+                                  ),
                                   decoration: BoxDecoration(
                                     borderRadius: borderRadius20,
                                     border: Border.all(
@@ -279,11 +293,11 @@ class CardMyPlants extends StatelessWidget {
                       child: Center(
                         child: Icon(
                           Ionicons.pencil_outline,
-                          color: ((status.toLowerCase() ==
-                                      'pendiente') ||
-                                  (status.toLowerCase() == 'earring'))
-                              ? PlantaColors.colorBlack
-                              : PlantaColors.colorGrey,
+                          color:
+                              ((status!.toLowerCase() == 'pendiente') ||
+                                      (status!.toLowerCase() == 'earring'))
+                                  ? PlantaColors.colorBlack
+                                  : PlantaColors.colorGrey,
                         ),
                       ),
                     ),
@@ -302,11 +316,11 @@ class CardMyPlants extends StatelessWidget {
                       child: Center(
                         child: Icon(
                           Ionicons.trash_outline,
-                          color: ((status.toLowerCase() ==
-                                      'pendiente') ||
-                                  (status.toLowerCase() == 'earring'))
-                              ? PlantaColors.colorBlack
-                              : PlantaColors.colorGrey,
+                          color:
+                              ((status!.toLowerCase() == 'pendiente') ||
+                                      (status!.toLowerCase() == 'earring'))
+                                  ? PlantaColors.colorBlack
+                                  : PlantaColors.colorGrey,
                         ),
                       ),
                     ),
@@ -321,8 +335,8 @@ class CardMyPlants extends StatelessWidget {
   }
 
   Color getColorOptionEdit() {
-    if ((status.toLowerCase() == 'pendiente') ||
-        (status.toLowerCase() == 'earring')) {
+    if ((status!.toLowerCase() == 'pendiente') ||
+        (status!.toLowerCase() == 'earring')) {
       return PlantaColors.colorGreen;
     } else {
       return PlantaColors.colorGrey;
@@ -330,8 +344,8 @@ class CardMyPlants extends StatelessWidget {
   }
 
   Color getColorOptionDelete() {
-    if ((status.toLowerCase() == 'pendiente') ||
-        (status.toLowerCase() == 'earring')) {
+    if ((status!.toLowerCase() == 'pendiente') ||
+        (status!.toLowerCase() == 'earring')) {
       return PlantaColors.colorOrange;
     } else {
       return PlantaColors.colorGrey;
@@ -339,13 +353,154 @@ class CardMyPlants extends StatelessWidget {
   }
 
   Color getColor() {
-    if ((status.toLowerCase() == 'aprobado') ||
-        (status.toLowerCase() == 'approved')) {
+    if ((status!.toLowerCase() == 'aprobado') ||
+        (status!.toLowerCase() == 'approved')) {
       return PlantaColors.colorDarkGreen;
-    } else if ((status.toLowerCase() == 'en revision') ||
-        (status.toLowerCase() == 'revision')) {
+    } else if ((status!.toLowerCase() == 'en revision') ||
+        (status!.toLowerCase() == 'revision')) {
       return PlantaColors.colorLightGreen;
     }
     return PlantaColors.colorDarkOrange;
+  }
+}
+
+class CardMyPlants2 extends StatelessWidget {
+  const CardMyPlants2({
+    super.key,
+    required this.title,
+    required this.lifestage,
+    this.status,
+    required this.date,
+    required this.onTap,
+    required this.onLongPress,
+    required this.picture,
+    required this.id,
+    required this.color,
+  });
+
+  final String title;
+  final String picture;
+  final String lifestage;
+  final String? status;
+  final String date;
+  final Function()? onTap;
+  final Function()? onLongPress;
+  final String id;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      decoration: BoxDecoration(
+        borderRadius: borderRadius10,
+        color: color,
+        boxShadow: [
+          BoxShadow(
+            color: PlantaColors.colorBlack.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(3, 3),
+          ),
+        ],
+      ),
+      child: ListTile(
+        leading: Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(80)),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(80)),
+            child: Image.file(File(picture), fit: BoxFit.cover),
+          ),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AutoSizeText(
+              title,
+              style: context.theme.textTheme.h3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            AutoSizeText(
+              date,
+              style: context.theme.textTheme.subtitle,
+              overflow: TextOverflow.ellipsis,
+            ),
+            verticalMargin12,
+          ],
+        ),
+        subtitle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 4.0,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: borderRadius20,
+                color: getColor(),
+              ),
+              child: Center(
+                child: AutoSizeText(
+                  status!,
+                  style: context.theme.textTheme.text_02.copyWith(
+                    color: PlantaColors.colorWhite,
+                  ),
+                ),
+              ),
+            ),
+            horizontalMargin4,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 4.0,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: borderRadius20,
+                border: Border.all(color: PlantaColors.colorOrange),
+              ),
+              child: Center(
+                child: AutoSizeText(
+                  lifestage,
+                  style: context.theme.textTheme.text_02,
+                ),
+              ),
+            ),
+          ],
+        ),
+        onTap: onTap,
+        onLongPress: onLongPress,
+      ),
+    );
+  }
+
+  Color getColorOptionEdit() {
+    if ((status!.toLowerCase() == 'pendiente') ||
+        (status!.toLowerCase() == 'earring')) {
+      return PlantaColors.colorGreen;
+    } else {
+      return PlantaColors.colorGrey;
+    }
+  }
+
+  Color getColorOptionDelete() {
+    if ((status!.toLowerCase() == 'pendiente') ||
+        (status!.toLowerCase() == 'earring')) {
+      return PlantaColors.colorOrange;
+    } else {
+      return PlantaColors.colorGrey;
+    }
+  }
+
+  Color getColor() {
+    if (status!.toLowerCase() == 'sin enviar') {
+      return PlantaColors.colorYellow;
+    } else {
+      return PlantaColors.colorDarkGreen;
+    }
   }
 }

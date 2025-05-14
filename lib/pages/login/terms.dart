@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/models/policies_models.dart';
 import 'package:planta_tracker/services/policies_services.dart';
 
@@ -32,9 +33,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         future: policiesServices.getPolicies(context),
         builder: (context, AsyncSnapshot<PoliciesModels> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularPlantaTracker());
           } else {
             return PoliciesWidget(snapshot.data!.results);
           }
@@ -63,15 +62,16 @@ class _PoliciesWidgetState extends State<PoliciesWidget> {
           Expanded(
             child: ListView.builder(
               itemCount: widget.policies.length,
-              itemBuilder: (context, index) => Html(
-                data: widget.policies[index].descripcion,
-                style: {
-                  "p": Style(
-                    color: PlantaColors.colorBlack,
-                    textAlign: TextAlign.justify,
+              itemBuilder:
+                  (context, index) => Html(
+                    data: widget.policies[index].descripcion,
+                    style: {
+                      "p": Style(
+                        color: PlantaColors.colorBlack,
+                        textAlign: TextAlign.justify,
+                      ),
+                    },
                   ),
-                },
-              ),
             ),
           ),
         ],

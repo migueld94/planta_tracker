@@ -1,5 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:planta_tracker/blocs/all_plants/all_plants_bloc.dart';
+import 'package:planta_tracker/blocs/all_plants/all_plants_event.dart';
+import 'package:planta_tracker/blocs/details_plants/details_plants_bloc.dart';
+import 'package:planta_tracker/blocs/details_plants/details_plants_event.dart';
+import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
+import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:provider/provider.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -21,34 +27,37 @@ class LanguagePickerWidget extends StatelessWidget {
           ),
         ),
         value: flag,
-        items: L10n.all.map(
-          (locale) {
-            final flag = L10n.getFlag(locale.languageCode);
-            return DropdownMenuItem(
-              alignment: Alignment.center,
-              value: flag,
-              onTap: () {
-                final provider = Provider.of<ThemeProvider>(context, listen: false);
-                provider.setLocale(locale);
-              },
-              child: AutoSizeText(
-                flag,
-                style: context.theme.textTheme.text_01,
-              ),
-              // child: flag == 'en'
-              //     ? Image.asset(
-              //         'icons/flags/png/2.5x/us.png',
-              //         package: 'country_icons',
-              //         height: 20.0,
-              //       )
-              //     : Image.asset(
-              //         'icons/flags/png/2.5x/es.png',
-              //         package: 'country_icons',
-              //         height: 20.0,
-              //       ),
-            );
-          },
-        ).toList(),
+        items:
+            L10n.all.map((locale) {
+              final flag = L10n.getFlag(locale.languageCode);
+              return DropdownMenuItem(
+                alignment: Alignment.center,
+                value: flag,
+                onTap: () {
+                  final provider = Provider.of<ThemeProvider>(
+                    context,
+                    listen: false,
+                  );
+                  provider.setLocale(locale);
+
+                  context.read<AllPlantsBloc>().add(InvalidateCacheAllPlants());
+                  context.read<AllPlantsBloc>().add(
+                    LoadAllPlants(language: flag),
+                  );
+
+                  context.read<MyPlantsBloc>().add(InvalidateCacheMyPlants());
+                  context.read<MyPlantsBloc>().add(LoadMyPlants());
+
+                  context.read<PlantDetailBloc>().add(
+                    PlantDetailInvalidateCache(),
+                  );
+                },
+                child: AutoSizeText(
+                  flag,
+                  style: context.theme.textTheme.text_01,
+                ),
+              );
+            }).toList(),
         onChanged: (_) {},
       ),
     );

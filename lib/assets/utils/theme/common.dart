@@ -131,6 +131,8 @@ const borderRadius40 = BorderRadius.all(Radius.circular(40));
 const borderRadius42 = BorderRadius.all(Radius.circular(42));
 const borderRadius45 = BorderRadius.all(Radius.circular(45));
 
+const green = Color(0xFFAED800);
+
 // Border Radius Only
 const borderRadiusOnlyRight10 = BorderRadius.only(
     topRight: Radius.circular(10), bottomRight: Radius.circular(10));

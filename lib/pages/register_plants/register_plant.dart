@@ -9,7 +9,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
-import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
@@ -38,9 +37,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
       await Permission.camera.request();
       if (!await Permission.camera.isGranted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Permiso de cámara no concedido'),
-          ),
+          const SnackBar(content: Text('Permiso de cámara no concedido')),
         );
         return null;
       }
@@ -128,38 +125,39 @@ class _RegisterPlantState extends State<RegisterPlant> {
           children: [
             emptyWidget,
             ButtomSmall(
-                color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
-                onTap: () async {
-                  if (flag == true) {
-                    // final bytes = await _image!.readAsBytes();
-                    // final data = await readExifFromBytes(Uint8List.fromList(bytes));
+              color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
+              onTap: () async {
+                if (flag == true) {
+                  // final bytes = await _image!.readAsBytes();
+                  // final data = await readExifFromBytes(Uint8List.fromList(bytes));
 
-                    final fileBytes = File(_image!.path).readAsBytesSync();
-                    final data = await readExifFromBytes(fileBytes);
+                  // final fileBytes = File(_image!.path).readAsBytesSync();
+                  // final data = await readExifFromBytes(fileBytes);
 
-                    final latitude = data['GPS GPSLatitude'];
-                    final longitude = data['GPS GPSLongitude'];
+                  // final latitude = data['GPS GPSLatitude'];
+                  // final longitude = data['GPS GPSLongitude'];
 
-                    if (longitude != null && latitude != null) {
-                      valores.add({
-                        "imagen": _image!.path,
-                        "name": AppLocalizations.of(context)!
-                            .plant_register_full_image
-                      });
+                  // if (longitude != null && latitude != null) {
+                  valores.add({
+                    "imagen": _image!.path,
+                    "name":
+                        AppLocalizations.of(context)!.plant_register_full_image,
+                  });
 
-                      Navigator.push(
-                          context,
-                          SlideRightRoute(
-                              page: RegisterPlant2(valores: valores)));
-                    } else {
-                      alert(context,
-                          'La imagen capturada no tiene informacion de GPS, por favor usted debe activar los permisos de su camara para continuar con el registro de su planta.');
-                    }
-                  } else {
-                    null;
-                  }
-                },
-                title: AppLocalizations.of(context)!.text_buttom_next),
+                  Navigator.push(
+                    context,
+                    SlideRightRoute(page: RegisterPlant2(valores: valores)),
+                  );
+                  // } else {
+                  //   alert(context,
+                  //       'La imagen capturada no tiene informacion de GPS, por favor usted debe activar los permisos de su camara para continuar con el registro de su planta.');
+                  // }
+                } else {
+                  null;
+                }
+              },
+              title: AppLocalizations.of(context)!.text_buttom_next,
+            ),
           ],
         ),
       ),

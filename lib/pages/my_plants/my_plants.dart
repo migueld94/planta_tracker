@@ -1,13 +1,17 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_state.dart';
+import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
+import 'package:planta_tracker/models/plantas_hive.dart';
+import 'package:planta_tracker/pages/my_plants/details_my_plant/detail_my_plant.dart';
+import 'package:planta_tracker/pages/my_plants/edit/edit_plant_1.dart';
 
 class MyPlants extends StatefulWidget {
   const MyPlants({super.key});
@@ -17,66 +21,343 @@ class MyPlants extends StatefulWidget {
 }
 
 class _MyPlantsState extends State<MyPlants> {
-  late ScrollController _scrollController;
+  late Future<Box<Planta>> _plantaBoxFuture;
+  bool isSelectionMode = false;
+  bool loading = false;
+  Set<String> selectedPlant = {};
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
+    _loadPlantaBox();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      context.read<MyPlantsBloc>().add(LoadMoreMyPlants());
+  void _loadPlantaBox() {
+    _plantaBoxFuture = Hive.openBox<Planta>('plantasBox');
+  }
+
+  void _toggleSelection({required String plantId}) {
+    setState(() {
+      if (selectedPlant.contains(plantId)) {
+        selectedPlant.remove(plantId);
+        if (selectedPlant.isEmpty) {
+          isSelectionMode = false;
+        }
+      } else {
+        selectedPlant.add(plantId);
+      }
+    });
+  }
+
+  void _startSelectionMode() {
+    setState(() {
+      isSelectionMode = true;
+    });
+  }
+
+  // Metodo para enviar la informacion a la api
+  Future<void> sendPlantToApi({required Planta planta}) async {
+    // Simulación de envío a la API
+    // Aquí deberías implementar la lógica para hacer la solicitud HTTP
+    // Por ejemplo, usando http.post o dio
+    await Future.delayed(Duration(seconds: 1)); // Simula un retraso de red
+    return;
+  }
+
+  void _sendSelectedPlants() async {
+    if (selectedPlant.isNotEmpty) {
+      try {
+        setState(() {
+          loading = true;
+        });
+        final plantaBox = await _plantaBoxFuture;
+        final allPlantas = plantaBox.values.toList();
+        final plantaMap = {for (var p in allPlantas) p.id: p};
+
+        List<Future> updateFutures = [];
+
+        for (var plantId in selectedPlant) {
+          if (plantaMap.containsKey(plantId)) {
+            final planta = plantaMap[plantId]!;
+
+            // Enviar planta a la API
+            await sendPlantToApi(planta: planta);
+
+            // Actualizar el estado a 'Enviado'
+            planta.status = 'Enviado';
+            updateFutures.add(
+              plantaBox.putAt(allPlantas.indexOf(planta), planta),
+            );
+
+            log('Enviado => ID: ${planta.id}, status: ${planta.status}');
+          }
+        }
+
+        // Esperar a que todas las actualizaciones se completen
+        await Future.wait(updateFutures);
+
+        setState(() {
+          selectedPlant.clear();
+          isSelectionMode = false;
+          loading = false;
+        });
+      } catch (e) {
+        log("Error al abrir la caja de plantas: $e");
+        setState(() {
+          selectedPlant.clear();
+          isSelectionMode = false;
+          loading = false;
+        });
+      }
+    } else {
+      log("No hay plantas seleccionadas.");
     }
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+  void _confirmDeleteCard({
+    required BuildContext context,
+    required int plantaIndex,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar Eliminación'),
+          content: Text('¿Estás seguro de que deseas eliminar esta Planta?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final plantaBox = await _plantaBoxFuture;
+                final plantas = plantaBox.values.toList();
+
+                // Filtrar plantas por estado
+                final plantasOrdenadas = [
+                  ...plantas.where(
+                    (planta) => planta.status?.toLowerCase() == 'sin enviar',
+                  ),
+                  ...plantas.where(
+                    (planta) => planta.status?.toLowerCase() == 'enviado',
+                  ),
+                ];
+
+                // Obtener la planta existente
+                Planta existingPlant = plantasOrdenadas[plantaIndex];
+
+                // Encontrar el índice de existingPlant en la lista original
+                int originalIndex = plantas.indexOf(existingPlant);
+
+                // Eliminar la planta usando el índice original
+                await plantaBox.deleteAt(originalIndex);
+
+                // Actualizar el estado de la interfaz
+                setState(() {});
+
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.green,
+                    content: Text(
+                      'Planta eliminada',
+                      style: TextStyle(fontFamily: 'Poppins'),
+                    ),
+                  ),
+                );
+                Navigator.of(context).pop();
+              },
+              child: Text('Eliminar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    context.read<MyPlantsBloc>().add(LoadMyPlants());
-
     return Scaffold(
-      body: BlocBuilder<MyPlantsBloc, MyPlantsState>(
-        builder: (context, state) {
-          if (state is MyPlantsLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is MyPlantsLoaded ||
-              state is MyPlantsBackgroundLoading) {
-            final movies =
-                (state is MyPlantsLoaded)
-                    ? state.plants
-                    : (state as MyPlantsBackgroundLoading).plants;
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: FutureBuilder<Box<Planta>>(
+          future: _plantaBoxFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularPlantaTracker());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error. Inténtelo de nuevo'));
+            }
 
-            return movies.results.isNotEmpty
+            final plantaBox = snapshot.data!;
+            final plantas = plantaBox.values.toList();
+            final plantasOrdenadas = [
+              ...plantas.where(
+                (planta) => planta.status?.toLowerCase() == 'sin enviar',
+              ), // Plantas 'Sin Enviar'
+              ...plantas.where(
+                (planta) => planta.status?.toLowerCase() == 'enviado',
+              ), // Otras plantas
+            ];
+
+            return plantasOrdenadas.isNotEmpty
                 ? ListView.builder(
-                  controller: _scrollController,
-                  itemCount: movies.results.length + 1,
+                  itemCount: plantasOrdenadas.length,
                   itemBuilder: (context, index) {
-                    if (index < movies.results.length) {
-                      final movie = movies.results[index];
-                      return ListTile(title: Text(movie.especiePlanta));
-                    } else if (state is MyPlantsLoadingMore) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    return SizedBox.shrink();
+                    final planta = plantasOrdenadas[index];
+                    final isSelected = selectedPlant.contains(planta.id);
+
+                    return Row(
+                      spacing: 8.0,
+                      children: [
+                        Expanded(
+                          child: CardMyPlants2(
+                            title: AppLocalizations.of(context)!.name_plant,
+                            lifestage: planta.lifestage,
+                            date:
+                                '${planta.fechaCreacion.day} / ${planta.fechaCreacion.month} / ${planta.fechaCreacion.year}',
+                            onTap: () {
+                              if (isSelectionMode) {
+                                if (planta.status!.toLowerCase() != 'enviado') {
+                                  _toggleSelection(plantId: planta.id);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor:
+                                          PlantaColors.colorDarkOrange,
+                                      content: Text(
+                                        'Esta seleccionado una planta ya enviada',
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                              color: PlantaColors.colorWhite,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  FadeTransitionRoute(
+                                    page: DetailsMyPlants(planta: planta),
+                                  ),
+                                );
+                              }
+                            },
+                            picture: File(planta.imagenPricipal).path,
+                            id: planta.id,
+                            status: planta.status,
+                            onLongPress: () {
+                              if (planta.status!.toLowerCase() != 'enviado') {
+                                _startSelectionMode();
+                                _toggleSelection(plantId: planta.id);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor:
+                                        PlantaColors.colorDarkOrange,
+                                    content: Text(
+                                      'Esta seleccionado una planta ya enviada',
+                                      style: context.theme.textTheme.text_01
+                                          .copyWith(
+                                            color: PlantaColors.colorWhite,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            color:
+                                isSelected
+                                    ? PlantaColors.colorGreen
+                                    : PlantaColors.colorWhite,
+                          ),
+                        ),
+
+                        // Botones de acción
+                        if (!isSelectionMode)
+                          SizedBox(
+                            height: 90.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                // EDITAR
+                                if (planta.status!.toLowerCase() != 'enviado')
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        FadeTransitionRoute(
+                                          page: GetApiEditInformation01(
+                                            planta: planta,
+                                            index: index,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: PlantaColors.colorGreen,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Icon(
+                                          Ionicons.pencil_outline,
+                                          color: PlantaColors.colorGreen,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                // ELIMINAR
+                                if (planta.status!.toLowerCase() != 'enviado')
+                                  GestureDetector(
+                                    onTap: () {
+                                      _confirmDeleteCard(
+                                        context: context,
+                                        plantaIndex: index,
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: PlantaColors.colorRed,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Icon(
+                                          Ionicons.trash_outline,
+                                          color: PlantaColors.colorRed,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    );
                   },
                 )
-                : Text('Usted no tiene plantas');
-          } else if (state is MyPlantsError) {
-            return Center(child: Text('Error: ${state.error}'));
-          }
-          return Container();
-        },
+                : Center(child: Text('No hay plantas registradas'));
+          },
+        ),
       ),
-
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: PlantaColors.colorGreen,
@@ -85,15 +366,13 @@ class _MyPlantsState extends State<MyPlants> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom, // Add this
-        ),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         child: Ink(
           height: 60.0,
           child: ClipRRect(
             borderRadius: BorderRadius.only(
-              topLeft: borderRadius10.topLeft,
-              topRight: borderRadius10.topRight,
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
             ),
             child: BottomAppBar(
               color: PlantaColors.colorGreen,
@@ -108,6 +387,24 @@ class _MyPlantsState extends State<MyPlants> {
                     ),
                     onPressed: () => goToProfile(context),
                   ),
+                  // Botón de enviar plantas seleccionadas
+                  if (selectedPlant.isNotEmpty)
+                    ElevatedButton(
+                      onPressed: _sendSelectedPlants,
+                      child:
+                          loading
+                              ? CircularPlantaTracker(
+                                size: 20.0,
+                                color: PlantaColors.colorGreen,
+                              )
+                              : Text(
+                                'Enviar (${selectedPlant.length})',
+                                style: TextStyle(
+                                  color: PlantaColors.colorBlack,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                    ),
                 ],
               ),
             ),
@@ -117,253 +414,3 @@ class _MyPlantsState extends State<MyPlants> {
     );
   }
 }
-
-
-// CODIGO VIEJO ++++++++++++++++++++++++++++++++++++++++++++
-
-
-// // ignore_for_file: use_build_context_synchronously
-
-// import 'dart:convert';
-// import 'dart:io';
-
-// import 'package:auto_size_text/auto_size_text.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_easyloading/flutter_easyloading.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:ionicons/ionicons.dart';
-// import 'package:planta_tracker/assets/l10n/l10n.dart';
-// import 'package:planta_tracker/assets/utils/constants.dart';
-// import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
-// import 'package:planta_tracker/assets/utils/methods/utils.dart';
-// import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
-// import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
-// import 'package:planta_tracker/pages/details_plant/details.dart';
-// import 'package:planta_tracker/pages/my_plants/edit/edit_plant_1.dart';
-// import 'package:planta_tracker/services/plants_services.dart';
-// import 'package:planta_tracker/assets/l10n/app_localizations.dart';
-
-// class MyPlants extends StatefulWidget {
-//   const MyPlants({super.key});
-
-//   @override
-//   State<MyPlants> createState() => _MyPlantsState();
-// }
-
-// class _MyPlantsState extends State<MyPlants> {
-//   final OptionPlantServices optionServices = OptionPlantServices();
-//   final storage = const FlutterSecureStorage();
-//   List items = [];
-//   int next = 1;
-//   var secretUrl = Uri.parse('${Constants.baseUrl}/en/api/o/token/');
-//   ScrollController scroll = ScrollController();
-//   bool isLoadMore = false;
-
-//   _loadMore() async {
-//     final token = await storage.read(key: "token");
-//     String idioma = getFlag();
-
-//     try {
-//       final myPlantsUri =
-//           Uri.parse('${Constants.baseUrl}/$idioma/api/my_plants?page=$next');
-
-//       final response = await http.get(myPlantsUri,
-//           headers: <String, String>{'authorization': "Token $token"});
-
-//       final utf = const Utf8Decoder().convert(response.body.codeUnits);
-
-//       if (response.statusCode == 200) {
-//         final json = jsonDecode(utf)['results'] as List;
-//         if (json.isEmpty) {
-//           EasyLoading.dismiss();
-//           return tutorial(context);
-//           // return alert(context, AppLocalizations.of(context)!.no_elements);
-//         } else {
-//           setState(() {
-//             items.addAll(json);
-//           });
-//         }
-//       }
-//     } on SocketException {
-//       EasyLoading.dismiss();
-//       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//         backgroundColor: PlantaColors.colorOrange,
-//         content: Center(
-//           child: AutoSizeText(
-//             AppLocalizations.of(context)!.no_internet,
-//             style: context.theme.textTheme.text_01.copyWith(
-//               color: PlantaColors.colorWhite,
-//               fontSize: 16.0,
-//             ),
-//           ),
-//         ),
-//       ));
-//     } catch (e) {
-//       EasyLoading.dismiss();
-//       throw Exception(e);
-//     }
-//   }
-
-//   String getFlag() {
-//     final locale = Localizations.localeOf(context);
-//     var flag = L10n.getFlag(locale.languageCode);
-//     return flag;
-//   }
-
-//   @override
-//   void initState() {
-//     EasyLoading.show();
-//     _loadMore();
-//     scroll.addListener(() async {
-//       if (isLoadMore == true) return;
-//       if (scroll.position.pixels == scroll.position.maxScrollExtent) {
-//         setState(() {
-//           isLoadMore = true;
-//         });
-//         next++;
-//         await _loadMore();
-//         setState(() {
-//           isLoadMore = false;
-//         });
-//       }
-//     });
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: ListView.separated(
-//               controller: scroll,
-//               itemCount: isLoadMore ? items.length + 1 : items.length,
-//               separatorBuilder: (context, index) => verticalMargin4,
-//               itemBuilder: (context, index) {
-//                 EasyLoading.dismiss();
-//                 if (index >= items.length) {
-//                   return const Center(
-//                     child: CircularProgressIndicator(),
-//                   );
-//                 } else {
-//                   final date = DateTime.parse(items[index]["fecha_registro_"]);
-//                   return CardMyPlants(
-//                     id: items[index]['id'],
-//                     picture: items[index]['imagen_principal'],
-//                     title: items[index]['especie_planta'] ??
-//                         AppLocalizations.of(context)!.name_plant,
-//                     lifestage: items[index]['lifestage'] ?? '',
-//                     status: items[index]['estado_actual'] ?? '',
-//                     date: '${date.day} / ${date.month} / ${date.year}',
-
-//                     // Este es el onTap de enviar el id a Detalles
-//                     onTap: () {
-//                       Navigator.push(
-//                           context,
-//                           SlideRightRoute(
-//                               page: Details(id: items[index]['id'])));
-//                     },
-
-//                     // Este es el onTap del servicio Eliminar Planta solo se pueden eliminar los PENDIENTES
-//                     onTapDelete: () {
-//                       var status = items[index]['estado_actual']
-//                           .toString()
-//                           .toLowerCase();
-//                       if ((status == 'pendiente') || (status == 'earring')) {
-//                         warning(
-//                           context,
-//                           AppLocalizations.of(context)!.message_delete_plant,
-//                           () async {
-//                             EasyLoading.show();
-//                             Navigator.pop(context);
-
-//                             await optionServices
-//                                 .delete(items[index]['id'].toString());
-
-//                             setState(() {
-//                               items = [];
-//                             });
-
-//                             _loadMore();
-//                           },
-//                         );
-//                       } else {
-//                         null;
-//                       }
-//                     },
-
-//                     // Este es el onTap del servicio EDITAR Planta solo se pueden eliminar los PENDIENTES
-//                     onTapEdit: () {
-//                       var status = items[index]['estado_actual']
-//                           .toString()
-//                           .toLowerCase();
-//                       if ((status == 'pendiente') || (status == 'earring')) {
-//                         warning(
-//                           context,
-//                           AppLocalizations.of(context)!.message_edit_plant,
-//                           () async {
-//                             Navigator.pop(context);
-//                             Navigator.push(
-//                                 context,
-//                                 SlideRightRoute(
-//                                     page: GetApiEditInformation01(
-//                                   id: items[index]['id'],
-//                                 )));
-//                           },
-//                         );
-//                       } else {
-//                         null;
-//                       }
-//                     },
-//                   );
-//                 }
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         shape: const CircleBorder(),
-//         backgroundColor: PlantaColors.colorGreen,
-//         onPressed: () => goToRegisterPlant(context),
-//         child: Icon(
-//           Ionicons.add_outline,
-//           color: PlantaColors.colorWhite,
-//         ),
-//       ),
-//       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//       bottomNavigationBar: Padding(
-//         padding: EdgeInsets.only(
-//           bottom: MediaQuery.of(context).padding.bottom, // Add this
-//         ),
-//         child: Ink(
-//           height: 60.0,
-//           child: ClipRRect(
-//             borderRadius: BorderRadius.only(
-//               topLeft: borderRadius10.topLeft,
-//               topRight: borderRadius10.topRight,
-//             ),
-//             child: BottomAppBar(
-//               color: PlantaColors.colorGreen,
-//               elevation: 0,
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   IconButton(
-//                     icon: Icon(
-//                       Ionicons.people_outline,
-//                       color: PlantaColors.colorWhite,
-//                     ),
-//                     onPressed: () => goToProfile(context),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

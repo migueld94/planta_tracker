@@ -1,35 +1,32 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
-import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
-import 'package:planta_tracker/models/details_edit_model.dart';
+import 'package:planta_tracker/models/plantas_hive.dart';
 import 'package:planta_tracker/pages/my_plants/edit_my_plants.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 
 class GetApiEditInformation06 extends StatefulWidget {
-  final int id;
+  final Planta planta;
+  final int index;
   // final List<File> pictures;
   List<Map<String, dynamic>> valores = [
-    {"imagen": "", "name": ""}
+    {"imagen": "", "name": ""},
   ];
   GetApiEditInformation06({
-    required this.id,
-    // required this.pictures,
+    required this.planta,
     required this.valores,
+    required this.index,
     super.key,
   });
 
@@ -44,21 +41,10 @@ class _GetApiEditInformation06State extends State<GetApiEditInformation06> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: detailsEditServices.getDetailsEdit(context, widget.id),
-        builder: (context, AsyncSnapshot<DetailsEditPlant> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            EasyLoading.show();
-            return Container();
-          } else {
-            EasyLoading.dismiss();
-            return EditPlants06(
-              valores: widget.valores,
-              details: snapshot.data!,
-              images: snapshot.data!.imageneseditar,
-            );
-          }
-        },
+      body: EditPlants06(
+        valores: widget.valores,
+        planta: widget.planta,
+        index: widget.index,
       ),
     );
   }
@@ -66,17 +52,17 @@ class _GetApiEditInformation06State extends State<GetApiEditInformation06> {
 
 class EditPlants06 extends StatefulWidget {
   // final List<File> pictures;
-  final DetailsEditPlant details;
-  final List<Imageneseditar>? images;
+  final Planta planta;
+  final int index;
   List<Map<String, dynamic>> valores = [
-    {"imagen": "", "name": ""}
+    {"imagen": "", "name": ""},
   ];
 
   EditPlants06({
     // required this.pictures,
     required this.valores,
-    required this.details,
-    required this.images,
+    required this.planta,
+    required this.index,
     super.key,
   });
 
@@ -108,7 +94,7 @@ class _EditPlants06State extends State<EditPlants06> {
       setState(() {
         if (image != null) {
           _image = File(image.path);
-          widget.images![5].posterPath = null;
+          widget.planta.images[5].posterPath = null;
           flag = true;
         } else {
           //print('No se seleccionó ninguna imagen.');
@@ -140,17 +126,27 @@ class _EditPlants06State extends State<EditPlants06> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if ((_image != null) || (widget.images![5].posterPath != null))
+              if ((_image != null) ||
+                  (widget.planta.images[5].posterPath != null) &&
+                      (!widget.planta.images[5].posterPath!
+                          .split('/')
+                          .last
+                          .endsWith("De7au1t.png")))
                 Flexible(
                   child: AutoSizeText(
                     AppLocalizations.of(context)!.take_photo,
-                    style:
-                        context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                    style: context.theme.textTheme.text_01.copyWith(
+                      fontSize: 18,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
               verticalMargin57,
-              if (widget.images![5].posterPath == null)
+              if (widget.planta.images[5].posterPath == null ||
+                  widget.planta.images[5].posterPath!
+                      .split('/')
+                      .last
+                      .endsWith("De7au1t.png"))
                 Column(
                   children: [
                     GestureDetector(
@@ -160,31 +156,33 @@ class _EditPlants06State extends State<EditPlants06> {
                           Container(
                             padding: allPadding16,
                             decoration: BoxDecoration(
-                                color: _image != null
-                                    ? null
-                                    : PlantaColors.colorWhite,
-                                borderRadius: borderRadius10,
-                                boxShadow: [
-                                  if (_image == null)
-                                    BoxShadow(
-                                      offset: const Offset(5, 7),
-                                      blurRadius: 12,
-                                      color: PlantaColors.colorBlack
-                                          .withOpacity(0.3),
+                              color:
+                                  _image != null
+                                      ? null
+                                      : PlantaColors.colorWhite,
+                              borderRadius: borderRadius10,
+                              boxShadow: [
+                                if (_image == null)
+                                  BoxShadow(
+                                    offset: const Offset(5, 7),
+                                    blurRadius: 12,
+                                    color: PlantaColors.colorBlack.withOpacity(
+                                      0.3,
                                     ),
-                                ]),
-                            child: _image != null
-                                ? ClipRRect(
-                                    borderRadius: borderRadius10,
-                                    child: Image.file(
-                                      _image!,
-                                    ),
-                                  )
-                                : Icon(
-                                    Ionicons.camera_outline,
-                                    size: 40,
-                                    color: PlantaColors.colorOrange,
                                   ),
+                              ],
+                            ),
+                            child:
+                                _image != null
+                                    ? ClipRRect(
+                                      borderRadius: borderRadius10,
+                                      child: Image.file(_image!),
+                                    )
+                                    : Icon(
+                                      Ionicons.camera_outline,
+                                      size: 40,
+                                      color: PlantaColors.colorOrange,
+                                    ),
                           ),
                           if (_image != null)
                             Positioned(
@@ -213,12 +211,16 @@ class _EditPlants06State extends State<EditPlants06> {
                     verticalMargin16,
                     if (_image == null)
                       AutoSizeText(
-                        '${widget.images![5].type}',
+                        widget.planta.images[5].type,
                         style: context.theme.textTheme.text_01,
                       ),
                   ],
                 ),
-              if (widget.images![5].posterPath != null)
+              if (widget.planta.images[5].posterPath != null &&
+                  !widget.planta.images[5].posterPath!
+                      .split('/')
+                      .last
+                      .endsWith("De7au1t.png"))
                 GestureDetector(
                   onTap: () => getImage(),
                   child: Stack(
@@ -227,14 +229,9 @@ class _EditPlants06State extends State<EditPlants06> {
                         padding: allPadding16,
                         child: ClipRRect(
                           borderRadius: borderRadius10,
-                          child: CachedNetworkImage(
-                            filterQuality: FilterQuality.low,
+                          child: Image.file(
+                            File(widget.planta.images[5].posterPath!),
                             fit: BoxFit.cover,
-                            imageUrl:
-                                '${Constants.baseUrl}${widget.images![5].posterPath}',
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
                           ),
                         ),
                       ),
@@ -244,7 +241,7 @@ class _EditPlants06State extends State<EditPlants06> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              widget.images![5].posterPath = null;
+                              widget.planta.images[5].posterPath = null;
                             });
                           },
                           child: CircleAvatar(
@@ -270,125 +267,100 @@ class _EditPlants06State extends State<EditPlants06> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            widget.images![5].posterPath != null
+            widget.planta.images[5].posterPath != null &&
+                    !widget.planta.images[5].posterPath!
+                        .split('/')
+                        .last
+                        .endsWith("De7au1t.png")
                 ? emptyWidget
                 : ButtomSkip(
-                    color: PlantaColors.colorTransparent,
-                    onTap: () async {
-                      if ((_image != null) &&
-                          (widget.images![5].posterPath == null)) {
-                        null;
-                      } else if ((_image == null) &&
-                          (widget.images![5].posterPath != null)) {
-                        null;
-                      } else {
-                        File f = await optionServices
-                            .getImageFileFromAssets(Constants.noPicture);
+                  color: PlantaColors.colorTransparent,
+                  onTap: () async {
+                    if ((_image != null) &&
+                        (widget.planta.images[5].posterPath == null)) {
+                      null;
+                    } else if ((_image == null) &&
+                        (widget.planta.images[5].posterPath != null &&
+                            !widget.planta.images[5].posterPath!
+                                .split('/')
+                                .last
+                                .endsWith("De7au1t.png"))) {
+                      null;
+                    } else {
+                      File f = await optionServices.getImageFileFromAssets(
+                        Constants.noPicture,
+                      );
 
-                        widget.valores
-                            .add({"imagen": f, "name": widget.images![5].type});
+                      widget.valores.add({
+                        "imagen": f.path,
+                        "name": widget.planta.images[5].type,
+                      });
 
-                        Navigator.push(
-                            context,
-                            SlideRightRoute(
-                                page: GetApiEditInformationEnd(
-                              id: widget.details.id!,
-                              valores: widget.valores,
-                            )));
-                        // return PlantaColors.colorBlack;
-                      }
-                    },
-                    title: AppLocalizations.of(context)!.skip,
-                    colorText: getColorOmitir(),
-                  ),
+                      Navigator.push(
+                        context,
+                        SlideRightRoute(
+                          page: GetApiEditInformationEnd(
+                            valores: widget.valores,
+                            planta: widget.planta,
+                            index: widget.index,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  title: AppLocalizations.of(context)!.skip,
+                  colorText: getColorOmitir(),
+                ),
             ButtomSmall(
-                color: getColor(),
-                onTap: () async {
-                  if ((_image != null) &&
-                      (widget.images![5].posterPath == null)) {
-                    // return PlantaColors.colorGreen;
-                    if (flag == true) {
-                      widget.valores.add(
-                          {"imagen": _image!, "name": widget.images![5].type});
+              color: getColor(),
+              onTap: () async {
+                if ((_image == null) &&
+                    (widget.planta.images[5].posterPath == null ||
+                        widget.planta.images[5].posterPath!
+                            .split('/')
+                            .last
+                            .endsWith("De7au1t.png"))) {
+                  null;
+                } else if (_image != null) {
+                  //Si tomo la foto
+                  widget.valores.add({
+                    "imagen": _image!.path,
+                    "name": widget.planta.images[5].type,
+                  });
 
-                      Navigator.push(
+                  Navigator.push(
+                    context,
+                    SlideRightRoute(
+                      page: GetApiEditInformationEnd(
+                        planta: widget.planta,
+                        valores: widget.valores,
+                        index: widget.index,
+                      ),
+                    ),
+                  );
+                } else {
+                  widget.valores.add({
+                    "imagen": widget.planta.images[5].posterPath,
+                    "name":
+                        AppLocalizations.of(
                           context,
-                          SlideRightRoute(
-                              page: GetApiEditInformationEnd(
-                            id: widget.details.id!,
-                            valores: widget.valores,
-                          )));
-                    } else {
-                      EasyLoading.show();
-                      try {
-                        final String foto =
-                            '${Constants.baseUrl}${widget.images?[5].posterPath}';
-                        final pictureFile = await urlToFile(foto);
-                        EasyLoading.dismiss();
+                        )!.plant_register_image_flower,
+                  });
 
-                        widget.valores.add({
-                          "imagen": pictureFile,
-                          "name": widget.images![5].type
-                        });
-
-                        Navigator.push(
-                            context,
-                            SlideRightRoute(
-                                page: GetApiEditInformationEnd(
-                              id: widget.details.id!,
-                              valores: widget.valores,
-                            )));
-                      } on Exception catch (e) {
-                        log(e.toString());
-                        throw Exception('Something Error');
-                      }
-                    }
-                  } else if ((_image == null) &&
-                      (widget.images![5].posterPath != null)) {
-                    // return PlantaColors.colorGreen;
-                    if (flag == true) {
-                      widget.valores.add(
-                          {"imagen": _image!, "name": widget.images![5].type});
-
-                      Navigator.push(
-                          context,
-                          SlideRightRoute(
-                              page: GetApiEditInformationEnd(
-                            id: widget.details.id!,
-                            valores: widget.valores,
-                          )));
-                    } else {
-                      EasyLoading.show();
-
-                      try {
-                        final String foto =
-                            '${Constants.baseUrl}${widget.images?[5].posterPath}';
-                        final pictureFile = await urlToFile(foto);
-                        EasyLoading.show();
-
-                        widget.valores.add({
-                          "imagen": pictureFile,
-                          "name": widget.images![5].type
-                        });
-
-                        Navigator.push(
-                            context,
-                            SlideRightRoute(
-                                page: GetApiEditInformationEnd(
-                              id: widget.details.id!,
-                              valores: widget.valores,
-                            )));
-                      } on Exception catch (e) {
-                        log(e.toString());
-                        throw Exception('Something Error');
-                      }
-                    }
-                  } else {
-                    // return PlantaColors.colorGrey;
-                    null;
-                  }
-                },
-                title: AppLocalizations.of(context)!.text_buttom_next),
+                  Navigator.push(
+                    context,
+                    SlideRightRoute(
+                      page: GetApiEditInformationEnd(
+                        planta: widget.planta,
+                        valores: widget.valores,
+                        index: widget.index,
+                      ),
+                    ),
+                  );
+                }
+              },
+              title: AppLocalizations.of(context)!.text_buttom_next,
+            ),
           ],
         ),
       ),
@@ -396,9 +368,14 @@ class _EditPlants06State extends State<EditPlants06> {
   }
 
   Color getColor() {
-    if ((_image != null) && (widget.images![5].posterPath == null)) {
+    if ((_image != null) && (widget.planta.images[5].posterPath == null)) {
       return PlantaColors.colorGreen;
-    } else if ((_image == null) && (widget.images![5].posterPath != null)) {
+    } else if ((_image == null) &&
+        (widget.planta.images[5].posterPath != null &&
+            !widget.planta.images[5].posterPath!
+                .split('/')
+                .last
+                .endsWith("De7au1t.png"))) {
       return PlantaColors.colorGreen;
     } else {
       return PlantaColors.colorGrey;
@@ -406,9 +383,14 @@ class _EditPlants06State extends State<EditPlants06> {
   }
 
   Color getColorOmitir() {
-    if ((_image != null) && (widget.images![5].posterPath == null)) {
+    if ((_image != null) && (widget.planta.images[5].posterPath == null)) {
       return PlantaColors.colorGrey;
-    } else if ((_image == null) && (widget.images![5].posterPath != null)) {
+    } else if ((_image == null) &&
+        (widget.planta.images[5].posterPath != null &&
+            !widget.planta.images[5].posterPath!
+                .split('/')
+                .last
+                .endsWith("De7au1t.png"))) {
       return PlantaColors.colorGrey;
     } else {
       return PlantaColors.colorBlack;

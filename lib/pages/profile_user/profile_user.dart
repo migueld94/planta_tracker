@@ -4,11 +4,16 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
+import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
+import 'package:planta_tracker/blocs/profile/profile_event.dart';
+import 'package:planta_tracker/blocs/profile/profile_state.dart';
 import 'package:planta_tracker/models/user_models.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
@@ -48,16 +53,17 @@ class _ProfileUserState extends State<ProfileUser> {
           style: context.theme.textTheme.titleApBar,
         ),
       ),
-      body: FutureBuilder(
-        future: userServices.getUserDetails(context),
-        builder: (context, AsyncSnapshot<User> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            EasyLoading.show();
-            return Container();
-          } else {
-            EasyLoading.dismiss();
-            return _UserProfile(user: snapshot.data);
+      body: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          if (state is ProfileLoading) {
+            return const Center(child: CircularPlantaTracker());
+          } else if (state is ProfileLoaded) {
+            final profile = state.profile;
+            return _UserProfile(user: profile);
+          } else if (state is ProfileError) {
+            return Center(child: Text(state.message));
           }
+          return Container();
         },
       ),
     );
@@ -352,15 +358,19 @@ class _UserProfileState extends State<_UserProfile> {
                       switch (res.statusCode) {
                         case 200:
                           EasyLoading.dismiss();
+
                           if (!context.mounted) return;
+
+                          context.read<ProfileBloc>().add(
+                            ProfileInvalidateCache(),
+                          );
+                          context.read<ProfileBloc>().add(FetchProfile());
+
                           setState(() {
                             disabledName = true;
                           });
-                          WidgetsBinding.instance.addPostFrameCallback((
-                            _,
-                          ) async {
-                            Navigator.pop(context);
-                          });
+                          Navigator.pop(context);
+
                           break;
                         case 400:
                           EasyLoading.dismiss();
@@ -477,15 +487,17 @@ class _UserProfileState extends State<_UserProfile> {
                         switch (res.statusCode) {
                           case 200:
                             EasyLoading.dismiss();
+
                             if (!context.mounted) return;
+                            context.read<ProfileBloc>().add(
+                              ProfileInvalidateCache(),
+                            );
+                            context.read<ProfileBloc>().add(FetchProfile());
                             setState(() {
                               disabledPassword = false;
                             });
-                            WidgetsBinding.instance.addPostFrameCallback((
-                              _,
-                            ) async {
-                              Navigator.pop(context);
-                            });
+                            Navigator.pop(context);
+
                             break;
                           case 400:
                             EasyLoading.dismiss();

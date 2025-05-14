@@ -2,13 +2,23 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/l10n/l10n.dart';
+import 'package:planta_tracker/assets/utils/assets.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/blocs/all_plants/all_plants_bloc.dart';
+import 'package:planta_tracker/blocs/all_plants/all_plants_event.dart';
+import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
+import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
+import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
+import 'package:planta_tracker/blocs/profile/profile_event.dart';
 import 'package:planta_tracker/pages/all_plants/all_plants.dart';
+import 'package:planta_tracker/pages/home/methods/dialog_misions.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/pages/map/map.dart';
 import 'package:planta_tracker/pages/my_plants/my_plants.dart';
@@ -28,6 +38,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final language = L10n.getFlag(locale.languageCode);
+
+    context.read<AllPlantsBloc>().add(LoadAllPlants(language: language));
+    context.read<ProfileBloc>().add(FetchProfile());
+    context.read<MyPlantsBloc>().add(LoadMyPlants());
+
     return SafeArea(
       top: false,
       bottom: true,
@@ -35,14 +52,32 @@ class _HomeState extends State<Home> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: AutoSizeText(
-              'Planta! Tracker',
-              style: context.theme.textTheme.titleApBar,
-            ),
-            centerTitle: true,
+            title: Image.asset(Assets.logotipoTransparente, scale: 25.0),
+            // title: AutoSizeText(
+            //   'Planta! Tracker',
+            //   style: context.theme.textTheme.titleApBar,
+            // ),
+            // centerTitle: true,
             automaticallyImplyLeading: false,
             backgroundColor: PlantaColors.colorGreen,
             actions: [
+              Row(
+                children: [
+                  Icon(Ionicons.leaf_outline),
+                  Text(
+                    '40',
+                    style: context.theme.textTheme.subtitle.copyWith(
+                      fontSize: 14.0,
+                      color: PlantaColors.colorWhite,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                onPressed: () => showMisions(context),
+                icon: Icon(Ionicons.trophy_outline),
+              ),
               IconButton(
                 icon: Icon(Icons.logout, color: PlantaColors.colorWhite),
                 tooltip: AppLocalizations.of(context)!.logout,
@@ -61,10 +96,13 @@ class _HomeState extends State<Home> {
                           EasyLoading.dismiss();
                           Navigator.pop(context);
 
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) async {
+                          WidgetsBinding.instance.addPostFrameCallback((
+                            _,
+                          ) async {
                             Navigator.push(
-                                context, SlideRightRoute(page: const Login()));
+                              context,
+                              SlideRightRoute(page: const Login()),
+                            );
                           });
                           await storage.delete(key: 'token');
                           break;
@@ -73,8 +111,9 @@ class _HomeState extends State<Home> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: AutoSizeText(
-                                AppLocalizations.of(context)!
-                                    .verify_credentials,
+                                AppLocalizations.of(
+                                  context,
+                                )!.verify_credentials,
                                 style: context.theme.textTheme.text_01,
                               ),
                             ),
@@ -86,8 +125,9 @@ class _HomeState extends State<Home> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: AutoSizeText(
-                                AppLocalizations.of(context)!
-                                    .verify_credentials,
+                                AppLocalizations.of(
+                                  context,
+                                )!.verify_credentials,
                                 style: context.theme.textTheme.text_01,
                               ),
                             ),
@@ -99,8 +139,9 @@ class _HomeState extends State<Home> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: AutoSizeText(
-                                AppLocalizations.of(context)!
-                                    .verify_credentials,
+                                AppLocalizations.of(
+                                  context,
+                                )!.verify_credentials,
                                 style: context.theme.textTheme.text_01,
                               ),
                             ),
@@ -115,8 +156,9 @@ class _HomeState extends State<Home> {
             bottom: TabBar(
               indicatorColor: PlantaColors.colorOrange,
               dividerColor: PlantaColors.colorWhite,
-              labelStyle: context.theme.textTheme.text_01
-                  .copyWith(color: PlantaColors.colorWhite),
+              labelStyle: context.theme.textTheme.text_01.copyWith(
+                color: PlantaColors.colorWhite,
+              ),
               labelColor: PlantaColors.colorWhite,
               tabs: [
                 Tab(
@@ -147,7 +189,9 @@ class _HomeState extends State<Home> {
                       Navigator.pop(context);
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         Navigator.push(
-                            context, SlideRightRoute(page: const Login()));
+                          context,
+                          SlideRightRoute(page: const Login()),
+                        );
                       });
                     },
                   );
@@ -155,11 +199,7 @@ class _HomeState extends State<Home> {
               },
               child: const TabBarView(
                 physics: NeverScrollableScrollPhysics(),
-                children: [
-                  AllPlants(),
-                  MapView(),
-                  MyPlants(),
-                ],
+                children: [AllPlants(), MapView(), MyPlants()],
               ),
             ),
           ),

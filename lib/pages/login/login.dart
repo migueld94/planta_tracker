@@ -93,8 +93,9 @@ class _LoginState extends State<Login> {
                       controller: email,
                       decoration: InputDecorations.authInputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: PlantaColors.colorGreen),
+                          borderSide: BorderSide(
+                            color: PlantaColors.colorGreen,
+                          ),
                           borderRadius: borderRadius10,
                         ),
                         hintText: AppLocalizations.of(context)!.email_enter,
@@ -122,8 +123,9 @@ class _LoginState extends State<Login> {
                       autocorrect: false,
                       decoration: InputDecorations.authInputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: PlantaColors.colorGreen),
+                          borderSide: BorderSide(
+                            color: PlantaColors.colorGreen,
+                          ),
                           borderRadius: borderRadius10,
                         ),
                         hintText: AppLocalizations.of(context)!.password_enter,
@@ -134,15 +136,16 @@ class _LoginState extends State<Login> {
                               visibility = !visibility;
                             });
                           },
-                          icon: visibility
-                              ? Icon(
-                                  Ionicons.eye_off_outline,
-                                  color: PlantaColors.colorGreen,
-                                )
-                              : Icon(
-                                  Ionicons.eye_outline,
-                                  color: PlantaColors.colorGreen,
-                                ),
+                          icon:
+                              visibility
+                                  ? Icon(
+                                    Ionicons.eye_off_outline,
+                                    color: PlantaColors.colorGreen,
+                                  )
+                                  : Icon(
+                                    Ionicons.eye_outline,
+                                    color: PlantaColors.colorGreen,
+                                  ),
                         ),
                         icon: Icon(
                           Ionicons.key_outline,
@@ -193,8 +196,9 @@ class _LoginState extends State<Login> {
                           },
                           child: AutoSizeText(
                             AppLocalizations.of(context)!.register,
-                            style: context.theme.textTheme.text_01
-                                .copyWith(color: PlantaColors.colorGreen),
+                            style: context.theme.textTheme.text_01.copyWith(
+                              color: PlantaColors.colorGreen,
+                            ),
                           ),
                         ),
                       ],
@@ -214,98 +218,113 @@ class _LoginState extends State<Login> {
                           EasyLoading.show();
                           try {
                             var res = await authService.login(
-                                email.text.trim(), password.text);
+                              email.text.trim().toLowerCase(),
+                              password.text,
+                            );
 
                             switch (res!.statusCode) {
                               case 200:
                                 EasyLoading.dismiss();
                                 var data = jsonDecode(res.body);
                                 await storage.write(
-                                    key: "token", value: data['token']);
+                                  key: "token",
+                                  value: data['token'],
+                                );
 
                                 await storage.write(
                                   key: "refresh_token",
                                   value: data['refresh_token'],
                                 );
                                 if (!context.mounted) return;
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) async {
-                                  Navigator.push(context,
-                                      SlideRightRoute(page: const Home()));
+                                WidgetsBinding.instance.addPostFrameCallback((
+                                  _,
+                                ) async {
+                                  Navigator.push(
+                                    context,
+                                    FadeTransitionRoute(page: const Home()),
+                                  );
                                 });
                                 break;
                               case 400:
                                 EasyLoading.dismiss();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  backgroundColor: PlantaColors.colorOrange,
-                                  content: Center(
-                                    child: AutoSizeText(
-                                      AppLocalizations.of(context)!
-                                          .verify_credentials,
-                                      style: context.theme.textTheme.text_01
-                                          .copyWith(
-                                        color: PlantaColors.colorWhite,
-                                        fontSize: 16.0,
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: PlantaColors.colorOrange,
+                                    content: Center(
+                                      child: AutoSizeText(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.verify_credentials,
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                              color: PlantaColors.colorWhite,
+                                              fontSize: 16.0,
+                                            ),
                                       ),
                                     ),
                                   ),
-                                ));
+                                );
                                 break;
                               case 401:
                                 EasyLoading.dismiss();
                                 if (!context.mounted) return;
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  backgroundColor: PlantaColors.colorOrange,
-                                  content: Center(
-                                    child: AutoSizeText(
-                                      AppLocalizations.of(context)!
-                                          .verify_credentials,
-                                      style: context.theme.textTheme.text_01
-                                          .copyWith(
-                                        color: PlantaColors.colorWhite,
-                                        fontSize: 16.0,
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: PlantaColors.colorOrange,
+                                    content: Center(
+                                      child: AutoSizeText(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.verify_credentials,
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                              color: PlantaColors.colorWhite,
+                                              fontSize: 16.0,
+                                            ),
                                       ),
                                     ),
                                   ),
-                                ));
+                                );
                                 break;
                               default:
                                 EasyLoading.dismiss();
                                 if (!context.mounted) return;
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  backgroundColor: PlantaColors.colorOrange,
-                                  content: Center(
-                                    child: AutoSizeText(
-                                      AppLocalizations.of(context)!
-                                          .verify_credentials,
-                                      style: context.theme.textTheme.text_01
-                                          .copyWith(
-                                        color: PlantaColors.colorWhite,
-                                        fontSize: 16.0,
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: PlantaColors.colorOrange,
+                                    content: Center(
+                                      child: AutoSizeText(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.verify_credentials,
+                                        style: context.theme.textTheme.text_01
+                                            .copyWith(
+                                              color: PlantaColors.colorWhite,
+                                              fontSize: 16.0,
+                                            ),
                                       ),
                                     ),
                                   ),
-                                ));
+                                );
                                 break;
                             }
                           } on SocketException {
                             EasyLoading.dismiss();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: PlantaColors.colorOrange,
-                              content: Center(
-                                child: AutoSizeText(
-                                  AppLocalizations.of(context)!.no_internet,
-                                  style:
-                                      context.theme.textTheme.text_01.copyWith(
-                                    color: PlantaColors.colorWhite,
-                                    fontSize: 16.0,
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    AppLocalizations.of(context)!.no_internet,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
                                   ),
                                 ),
                               ),
-                            ));
+                            );
                           } catch (e) {
                             EasyLoading.dismiss();
                             throw Exception(e);

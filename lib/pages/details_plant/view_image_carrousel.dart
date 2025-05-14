@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/models/details_models.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 
@@ -50,13 +51,14 @@ class _ViewImageCarouselState extends State<ViewImageCarousel> {
                     filterQuality: FilterQuality.high,
                     imageUrl:
                         '${Constants.baseUrl}${widget.posterPath?[index].posterPath}',
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Icon(
-                      Ionicons.image_sharp,
-                      color: PlantaColors.colorBlack,
-                    ),
+                    placeholder:
+                        (context, url) =>
+                            const Center(child: CircularPlantaTracker()),
+                    errorWidget:
+                        (context, url, error) => Icon(
+                          Ionicons.image_sharp,
+                          color: PlantaColors.colorBlack,
+                        ),
                     fit: BoxFit.cover,
                   ),
                 );

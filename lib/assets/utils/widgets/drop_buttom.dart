@@ -24,7 +24,7 @@ class _MyDropButtomState extends State<MyDropButtom> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: lifestageServices.getLifestage(context),
+      future: lifestageServices.getLifestage(),
       builder: (context, AsyncSnapshot<Lifestage> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const _NomLifestage([]);
@@ -107,7 +107,7 @@ class _MyDropButtomEditState extends State<MyDropButtomEdit> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: lifestageServices.getLifestage(context),
+      future: lifestageServices.getLifestage(),
       builder: (context, AsyncSnapshot<Lifestage> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _NomLifestageEdit(const [], '');

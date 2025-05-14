@@ -3,6 +3,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 
 class ViewImage extends StatelessWidget {
   final int id;
@@ -38,7 +39,7 @@ class ViewImage extends StatelessWidget {
                       offset: const Offset(5, 7),
                       blurRadius: 10,
                       color: PlantaColors.colorBlack.withOpacity(0.3),
-                    )
+                    ),
                   ],
                 ),
                 child: ClipRRect(
@@ -46,11 +47,14 @@ class ViewImage extends StatelessWidget {
                   child: CachedNetworkImage(
                     filterQuality: FilterQuality.low,
                     imageUrl: posterPath,
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => Icon(
-                        Ionicons.image_sharp,
-                        color: PlantaColors.colorBlack),
+                    placeholder:
+                        (context, url) =>
+                            const Center(child: CircularPlantaTracker()),
+                    errorWidget:
+                        (context, url, error) => Icon(
+                          Ionicons.image_sharp,
+                          color: PlantaColors.colorBlack,
+                        ),
                     fit: BoxFit.cover,
                   ),
                 ),

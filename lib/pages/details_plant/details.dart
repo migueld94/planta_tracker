@@ -1,14 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
+import 'package:planta_tracker/blocs/details_plants/details_plants_bloc.dart';
+import 'package:planta_tracker/blocs/details_plants/details_plants_event.dart';
+import 'package:planta_tracker/blocs/details_plants/details_plants_state.dart';
 import 'package:planta_tracker/models/details_models.dart';
 import 'package:planta_tracker/pages/comments/comments.dart';
 import 'package:planta_tracker/pages/details_plant/view_image_carrousel.dart';
@@ -27,6 +32,11 @@ class _DetailsState extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final lannguage = L10n.getFlag(locale.languageCode);
+    context.read<PlantDetailBloc>().add(
+      FetchPlantDetail(id: widget.id.toString(), language: lannguage),
+    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -48,11 +58,9 @@ class _DetailsState extends State<Details> {
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context,
-                    SlideRightRoute(
-                        page: Comments(
-                      id: widget.id,
-                    )));
+                  context,
+                  SlideRightRoute(page: Comments(id: widget.id)),
+                );
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -63,29 +71,28 @@ class _DetailsState extends State<Details> {
                   ),
                   AutoSizeText(
                     AppLocalizations.of(context)!.comments,
-                    style: TextStyle(
-                      color: PlantaColors.colorWhite,
-                    ),
-                  )
+                    style: TextStyle(color: PlantaColors.colorWhite),
+                  ),
                 ],
               ),
             ),
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: detailsServices.getDetails(context, widget.id),
-        builder: (context, AsyncSnapshot<DetailsModel> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            EasyLoading.show();
-            return Container();
-          } else {
-            EasyLoading.dismiss();
+      body: BlocBuilder<PlantDetailBloc, PlantDetailState>(
+        builder: (context, state) {
+          if (state is PlantDetailLoading) {
+            return const Center(child: CircularPlantaTracker());
+          } else if (state is PlantDetailLoaded) {
+            final plantDetails = state.plantDetail;
             return DetailsWidget(
-              details: snapshot.data!,
-              images: snapshot.data!.imagenes,
+              details: plantDetails,
+              images: plantDetails.imagenes,
             );
+          } else if (state is PlantDetailError) {
+            return Center(child: Text(state.message));
           }
+          return Container();
         },
       ),
     );
@@ -95,11 +102,7 @@ class _DetailsState extends State<Details> {
 class DetailsWidget extends StatelessWidget {
   final DetailsModel details;
   final List<Imagene>? images;
-  const DetailsWidget({
-    super.key,
-    required this.details,
-    required this.images,
-  });
+  const DetailsWidget({super.key, required this.details, required this.images});
 
   @override
   Widget build(BuildContext context) {
@@ -121,16 +124,18 @@ class DetailsWidget extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          SlideRightRoute(
-                              page: ViewImageCarousel(
-                            id: images![index].id,
+                        context,
+                        SlideRightRoute(
+                          page: ViewImageCarousel(
+                            id: images![index].id!,
                             initialPage: index,
                             posterPath: images!,
-                          )));
+                          ),
+                        ),
+                      );
                     },
                     child: Hero(
-                      tag: images![index].id,
+                      tag: images![index].id!,
                       child: Container(
                         width: 240.0,
                         height: 140,
@@ -142,7 +147,7 @@ class DetailsWidget extends StatelessWidget {
                               offset: const Offset(5, 7),
                               blurRadius: 10,
                               color: PlantaColors.colorBlack.withOpacity(0.3),
-                            )
+                            ),
                           ],
                         ),
                         child: ClipRRect(
@@ -151,11 +156,15 @@ class DetailsWidget extends StatelessWidget {
                             filterQuality: FilterQuality.low,
                             imageUrl:
                                 '${Constants.baseUrl}${images?[index].posterPath}',
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) => Icon(
-                                Ionicons.image_sharp,
-                                color: PlantaColors.colorBlack),
+                            placeholder:
+                                (context, url) => const Center(
+                                  child: CircularPlantaTracker(),
+                                ),
+                            errorWidget:
+                                (context, url, error) => Icon(
+                                  Ionicons.image_sharp,
+                                  color: PlantaColors.colorBlack,
+                                ),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -202,9 +211,7 @@ class DetailsWidget extends StatelessWidget {
                   padding: allPadding8,
                   decoration: BoxDecoration(
                     borderRadius: borderRadius20,
-                    border: Border.all(
-                      color: PlantaColors.colorOrange,
-                    ),
+                    border: Border.all(color: PlantaColors.colorOrange),
                   ),
                   child: Center(
                     child: AutoSizeText(
@@ -239,8 +246,10 @@ class DetailsWidget extends StatelessWidget {
                     interactionOptions: const InteractionOptions(
                       flags: InteractiveFlag.none,
                     ),
-                    initialCenter:
-                        LatLng(details.latitude!, details.longitude!),
+                    initialCenter: LatLng(
+                      details.latitude!,
+                      details.longitude!,
+                    ),
                     initialZoom: 12,
                   ),
                   children: [
@@ -250,16 +259,18 @@ class DetailsWidget extends StatelessWidget {
                       userAgentPackageName: 'dev.fleaflet.flutter_map.example',
                       subdomains: const ['a', 'b', 'c'],
                     ),
-                    MarkerLayer(markers: [
-                      Marker(
-                        point: LatLng(details.latitude!, details.longitude!),
-                        child: Icon(
-                          Ionicons.location_sharp,
-                          color: getColor(),
-                          size: 30,
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: LatLng(details.latitude!, details.longitude!),
+                          child: Icon(
+                            Ionicons.location_sharp,
+                            color: getColor(),
+                            size: 30,
+                          ),
                         ),
-                      ),
-                    ]),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -274,7 +285,9 @@ class DetailsWidget extends StatelessWidget {
               // height: 300,
               child: SingleChildScrollView(
                 child: AutoSizeText(
-                  details.notas ?? AppLocalizations.of(context)!.no_notes,
+                  details.notas != null && details.notas!.isNotEmpty
+                      ? details.notas!
+                      : AppLocalizations.of(context)!.no_notes,
                   style: context.theme.textTheme.text_01,
                   textAlign: TextAlign.justify,
                 ),

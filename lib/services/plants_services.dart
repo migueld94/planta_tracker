@@ -30,12 +30,13 @@ class OptionPlantServices {
   var registerPlantUri = Uri.parse('${Constants.baseUrl}/en/api/plants_post/');
   var addComments = Uri.parse('${Constants.baseUrl}/en/api/comentario/');
 
+  // Todas mis plantas
   Future<MyPlantsModel> getAllMyPlants({required int page}) async {
     final token = await storage.read(key: "token");
     // String idioma = getFlag();
     try {
       Response response = await dio.get(
-        '${dotenv.env["API_BASE_DOMAIN"]}my_plants?page=$page',
+        '${dotenv.env["API_BASE_DOMAIN"]}en/api/my_plants?page=$page',
         options: Options(
           headers: <String, String>{'authorization': "Token $token"},
         ),
@@ -43,6 +44,49 @@ class OptionPlantServices {
 
       if (response.statusCode == 200) {
         return MyPlantsModel.fromJson(response.data);
+      } else {
+        throw Exception('Error al cargar los datos');
+      }
+    } on DioException catch (e) {
+      if (e.response == null) {
+        log(e.toString());
+      }
+      throw Exception('Error: ${e.response?.statusMessage}');
+    } catch (e) {
+      throw Exception('Error inesperado: $e');
+    }
+  }
+
+  // Todas las plantas
+  Future<MyPlantsModel> getAllPlants({
+    required int page,
+    required String language,
+  }) async {
+    String client = 'IMIUgjEXwzviJeCfVzCQw4g8GkhUpYGbcDieCxSE';
+    String secret =
+        'rOsMV2OjTPs89ku5NlWuukWNMfm9CDO3nZuzOxRWYCPUSSxnZcCfUl8XnU1HcPTfCqCTpZxYhv3zNYUB0H1hlQ6b7heLWsoqgJjLSkwAsZp7NTwT2B1D8nwfTS6bfvpw';
+    String basicAuth = 'Basic ${base64.encode(utf8.encode('$client:$secret'))}';
+    try {
+      var response = await http.post(
+        secretUrl,
+        headers: <String, String>{'authorization': basicAuth},
+        body: {"grant_type": "client_credentials"},
+      );
+
+      log('autorizado');
+
+      final Map<String, dynamic> data = json.decode(response.body);
+      final accessToken = data["access_token"];
+
+      Response resp = await dio.get(
+        '${dotenv.env["API_BASE_DOMAIN"]}$language/api/plants_api?page=$page',
+        options: Options(
+          headers: <String, String>{'authorization': "Bearer $accessToken"},
+        ),
+      );
+
+      if (resp.statusCode == 200) {
+        return MyPlantsModel.fromJson(resp.data);
       } else {
         throw Exception('Error al cargar los datos');
       }

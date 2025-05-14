@@ -8,4 +8,7 @@ class Assets {
   static const page_03 = 'assets/images/page_03.png';
   static const logo = 'assets/images/logo.png';
   static const plant_example = 'assets/images/salvadora.jpeg';
+
+  static const logotipo = 'assets/logo/logo.png';
+  static const logotipoTransparente = 'assets/logo/logo_transparente.png';
 }
