@@ -7,7 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
-import 'package:planta_tracker/assets/utils/assets.dart';
+// import 'package:planta_tracker/assets/utils/assets.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
@@ -18,7 +18,7 @@ import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
 import 'package:planta_tracker/blocs/profile/profile_event.dart';
 import 'package:planta_tracker/pages/all_plants/all_plants.dart';
-import 'package:planta_tracker/pages/home/methods/dialog_misions.dart';
+// import 'package:planta_tracker/pages/home/methods/dialog_misions.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/pages/map/map.dart';
 import 'package:planta_tracker/pages/my_plants/my_plants.dart';
@@ -52,32 +52,32 @@ class _HomeState extends State<Home> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: Image.asset(Assets.logotipoTransparente, scale: 25.0),
-            // title: AutoSizeText(
-            //   'Planta! Tracker',
-            //   style: context.theme.textTheme.titleApBar,
-            // ),
-            // centerTitle: true,
+            // title: Image.asset(Assets.logotipoTransparente, scale: 25.0),
+            title: AutoSizeText(
+              'Planta! Tracker',
+              style: context.theme.textTheme.titleApBar,
+            ),
+            centerTitle: true,
             automaticallyImplyLeading: false,
             backgroundColor: PlantaColors.colorGreen,
             actions: [
-              Row(
-                children: [
-                  Icon(Ionicons.leaf_outline),
-                  Text(
-                    '40',
-                    style: context.theme.textTheme.subtitle.copyWith(
-                      fontSize: 14.0,
-                      color: PlantaColors.colorWhite,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              IconButton(
-                onPressed: () => showMisions(context),
-                icon: Icon(Ionicons.trophy_outline),
-              ),
+              // Row(
+              //   children: [
+              //     Icon(Ionicons.leaf_outline),
+              //     Text(
+              //       '40',
+              //       style: context.theme.textTheme.subtitle.copyWith(
+              //         fontSize: 14.0,
+              //         color: PlantaColors.colorWhite,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // IconButton(
+              //   onPressed: () => showMisions(context),
+              //   icon: Icon(Ionicons.trophy_outline),
+              // ),
               IconButton(
                 icon: Icon(Icons.logout, color: PlantaColors.colorWhite),
                 tooltip: AppLocalizations.of(context)!.logout,
