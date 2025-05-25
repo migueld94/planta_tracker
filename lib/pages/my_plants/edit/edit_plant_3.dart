@@ -19,6 +19,8 @@ import 'package:planta_tracker/services/plants_services.dart';
 class GetApiEditInformation03 extends StatefulWidget {
   final Planta planta;
   final int index;
+  final double latitude;
+  final double longitude;
   // final List<File> pictures;
   List<Map<String, dynamic>> valores = [
     {"imagen": "", "name": ""},
@@ -27,6 +29,8 @@ class GetApiEditInformation03 extends StatefulWidget {
     required this.valores,
     required this.planta,
     required this.index,
+    required this.latitude,
+    required this.longitude,
     super.key,
     // required this.pictures,
   });
@@ -46,6 +50,8 @@ class _GetApiEditInformation03State extends State<GetApiEditInformation03> {
         valores: widget.valores,
         planta: widget.planta,
         index: widget.index,
+        latitude: widget.latitude,
+        longitude: widget.longitude,
       ),
     );
   }
@@ -58,12 +64,15 @@ class EditPlants03 extends StatefulWidget {
   ];
   final Planta planta;
   final int index;
-
+  final double latitude;
+  final double longitude;
   EditPlants03({
     // required this.pictures,
     required this.valores,
     required this.planta,
     required this.index,
+    required this.latitude,
+    required this.longitude,
     super.key,
   });
 
@@ -301,6 +310,8 @@ class _EditPlants03State extends State<EditPlants03> {
                             valores: widget.valores,
                             planta: widget.planta,
                             index: widget.index,
+                            latitude: widget.latitude,
+                            longitude: widget.longitude,
                           ),
                         ),
                       );
@@ -333,6 +344,8 @@ class _EditPlants03State extends State<EditPlants03> {
                         planta: widget.planta,
                         valores: widget.valores,
                         index: widget.index,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
                       ),
                     ),
                   );
@@ -352,6 +365,8 @@ class _EditPlants03State extends State<EditPlants03> {
                         planta: widget.planta,
                         valores: widget.valores,
                         index: widget.index,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
                       ),
                     ),
                   );

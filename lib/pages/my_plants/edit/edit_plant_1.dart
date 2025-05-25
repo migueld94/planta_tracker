@@ -1,13 +1,16 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
+import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
@@ -54,6 +57,29 @@ class _EditPlants01State extends State<EditPlants01> {
   List<File> pictures = [];
   List<Map<String, dynamic>> valores = [];
   bool flag = false;
+  double? latitude;
+  double? longitude;
+
+  Future<void> _getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() {
+        latitude = position.latitude;
+        longitude = position.longitude;
+      });
+    } else {
+      // Manejo de error si el permiso es denegado
+      log('Permiso de ubicación denegado');
+    }
+  }
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
@@ -86,6 +112,7 @@ class _EditPlants01State extends State<EditPlants01> {
   @override
   void initState() {
     super.initState();
+    _getCurrentLocation();
   }
 
   @override
@@ -152,41 +179,56 @@ class _EditPlants01State extends State<EditPlants01> {
             ButtomSmall(
               color: PlantaColors.colorGreen,
               onTap: () async {
-                if (_image != null) {
-                  //Si se tomo la nueva foto
+                if (latitude != null && longitude != null) {
+                  if (_image != null) {
+                    //Si se tomo la nueva foto
 
-                  valores.add({
-                    "imagen": _image!.path,
-                    "name":
-                        AppLocalizations.of(context)!.plant_register_full_image,
-                  });
+                    valores.add({
+                      "imagen": _image!.path,
+                      "name":
+                          AppLocalizations.of(
+                            context,
+                          )!.plant_register_full_image,
+                    });
 
-                  Navigator.push(
-                    context,
-                    FadeTransitionRoute(
-                      page: GetApiEditInformation02(
-                        valores: valores,
-                        planta: widget.details,
-                        index: widget.index,
+                    Navigator.push(
+                      context,
+                      FadeTransitionRoute(
+                        page: GetApiEditInformation02(
+                          valores: valores,
+                          planta: widget.details,
+                          index: widget.index,
+                          latitude: latitude!,
+                          longitude: longitude!,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    valores.add({
+                      "imagen": widget.details.images[0].posterPath,
+                      "name":
+                          AppLocalizations.of(
+                            context,
+                          )!.plant_register_full_image,
+                    });
+
+                    Navigator.push(
+                      context,
+                      FadeTransitionRoute(
+                        page: GetApiEditInformation02(
+                          valores: valores,
+                          planta: widget.details,
+                          index: widget.index,
+                          latitude: latitude!,
+                          longitude: longitude!,
+                        ),
+                      ),
+                    );
+                  }
                 } else {
-                  valores.add({
-                    "imagen": widget.details.images[0].posterPath,
-                    "name":
-                        AppLocalizations.of(context)!.plant_register_full_image,
-                  });
-
-                  Navigator.push(
+                  alert(
                     context,
-                    FadeTransitionRoute(
-                      page: GetApiEditInformation02(
-                        valores: valores,
-                        planta: widget.details,
-                        index: widget.index,
-                      ),
-                    ),
+                    'Estamos tomando los datos de su ubicacion, espere un momento y vuelva a intentarlo.',
                   );
                 }
               },

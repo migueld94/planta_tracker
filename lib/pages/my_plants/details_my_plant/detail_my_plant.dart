@@ -177,13 +177,26 @@ class DetailsWidget extends StatelessWidget {
                             : PlantaColors.colorDarkGreen,
                   ),
                   child: Center(
-                    child: AutoSizeText(
-                      details.status!,
-                      style: context.theme.textTheme.text_02.copyWith(
-                        color: PlantaColors.colorWhite,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Row(
+                      spacing: 4.0,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          details.status!.toLowerCase() == 'sin enviar'
+                              ? Ionicons.timer_outline
+                              : Ionicons.checkmark_done_outline,
+                          color: PlantaColors.colorWhite,
+                          size: 20.0,
+                        ),
+                        Text(
+                          details.status!,
+                          style: context.theme.textTheme.text_02.copyWith(
+                            color: PlantaColors.colorWhite,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

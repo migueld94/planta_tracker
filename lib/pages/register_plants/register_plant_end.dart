@@ -8,7 +8,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
@@ -27,11 +26,18 @@ import 'package:planta_tracker/services/plants_services.dart';
 import 'package:uuid/uuid.dart';
 
 class RegisterPlantEnd extends StatefulWidget {
+  final double latitude;
+  final double longitude;
   List<Map<String, dynamic>> valores = [
     {"imagen": "", "name": ""},
   ];
 
-  RegisterPlantEnd({super.key, required this.valores});
+  RegisterPlantEnd({
+    super.key,
+    required this.valores,
+    required this.latitude,
+    required this.longitude,
+  });
 
   @override
   RegisterPlantEndState createState() => RegisterPlantEndState();
@@ -47,8 +53,6 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   Result? result;
   Lifestage? free;
   bool avaliable = false;
-  double? latitude;
-  double? longitude;
   String lifestage = '';
   List<ImagesMyPlant> images = [];
 
@@ -56,33 +60,12 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   void initState() {
     super.initState();
     note.addListener(() {});
-    _getCurrentLocation();
   }
 
   @override
   void dispose() {
     note.dispose();
     super.dispose();
-  }
-
-  Future<void> _getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-
-    if (permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always) {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setState(() {
-        latitude = position.latitude;
-        longitude = position.longitude;
-      });
-    } else {
-      log('Permiso de ubicación denegado');
-    }
   }
 
   Future<void> _savePlantData({
@@ -292,22 +275,22 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                       },
                     ),
                     verticalMargin12,
-                    if (latitude == null && longitude == null)
-                      Text(
-                        'Cargando datos de su ubicación... Por favor espere.',
-                      ),
-                    verticalMargin8,
+                    // if (latitude == null && longitude == null)
+                    //   Text(
+                    //     'Cargando datos de su ubicación... Por favor espere.',
+                    //   ),
+                    // verticalMargin8,
                     // Muestra la latitud y longitud (opcional)
-                    if (latitude != null && longitude != null) ...[
-                      Text(
-                        'Datos de su ubicación',
-                        style: context.theme.textTheme.h2.copyWith(
-                          fontSize: 20.0,
-                        ),
+                    // if (latitude != null && longitude != null) ...[
+                    Text(
+                      'Datos de su ubicación',
+                      style: context.theme.textTheme.h2.copyWith(
+                        fontSize: 20.0,
                       ),
-                      Text('Latitud: $latitude'),
-                      Text('Longitud: $longitude'),
-                    ],
+                    ),
+                    Text('Latitud: ${widget.latitude}'),
+                    Text('Longitud: ${widget.longitude}'),
+                    // ],
                     verticalMargin12,
                     //TextField para las notas
                     AutoSizeText(
@@ -368,21 +351,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                   avaliable
                       ? null
                       : () async {
-                        if (latitude == null && longitude == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: PlantaColors.colorDarkOrange,
-                              content: Text(
-                                'Faltan los datos de su ubicacion. Por favor encienda su GPS',
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        } else if (lifestage.isEmpty) {
+                        if (lifestage.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: PlantaColors.colorDarkOrange,
@@ -447,8 +416,8 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
 
                           await _savePlantData(
                             note: note.text,
-                            latitude: latitude!,
-                            longitude: longitude!,
+                            latitude: widget.latitude,
+                            longitude: widget.longitude,
                             lifestage: lifestage,
                             imagenPrincipal:
                                 widget.valores.isNotEmpty

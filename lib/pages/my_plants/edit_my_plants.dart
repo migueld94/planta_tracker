@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, must_be_immutable, unrelated_type_equality_checks
 
-import 'dart:developer';
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/blocs/lifestage_nomenclador/lifestage_nomenclador_bloc.dart';
@@ -30,6 +28,8 @@ import 'package:planta_tracker/assets/utils/widgets/animation_controller.dart';
 class GetApiEditInformationEnd extends StatefulWidget {
   final Planta planta;
   final int index;
+  final double latitude;
+  final double longitude;
   // final List<File> pictures;
   List<Map<String, dynamic>> valores = [
     {"imagen": "", "name": ""},
@@ -39,6 +39,8 @@ class GetApiEditInformationEnd extends StatefulWidget {
     required this.valores,
     required this.planta,
     required this.index,
+    required this.latitude,
+    required this.longitude,
     super.key,
   });
 
@@ -57,6 +59,8 @@ class _GetApiEditInformationEndState extends State<GetApiEditInformationEnd> {
         valores: widget.valores,
         planta: widget.planta,
         index: widget.index,
+        latitude: widget.latitude,
+        longitude: widget.longitude,
       ),
     );
   }
@@ -70,11 +74,15 @@ class EditPlant extends StatefulWidget {
 
   final Planta planta;
   final int index;
+  final double latitude;
+  final double longitude;
   EditPlant({
     // required this.pictures,
     required this.valores,
     required this.planta,
     required this.index,
+    required this.latitude,
+    required this.longitude,
     super.key,
   });
 
@@ -96,14 +104,11 @@ class EditPlantState extends State<EditPlant> {
   String lifestage = '';
   // late Future<Box<Planta>> _plantaBoxFuture;
   List<ImagesMyPlant> images = [];
-  double? latitude;
-  double? longitude;
 
   @override
   void initState() {
     super.initState();
     // _loadPlantaBox();
-    _getCurrentLocation();
     noteController.text =
         widget.planta.nota != null ? widget.planta.nota ?? '' : '';
   }
@@ -116,27 +121,6 @@ class EditPlantState extends State<EditPlant> {
   void dispose() {
     noteController.dispose();
     super.dispose();
-  }
-
-  Future<void> _getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-
-    if (permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always) {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setState(() {
-        latitude = position.latitude;
-        longitude = position.longitude;
-      });
-    } else {
-      // Manejo de error si el permiso es denegado
-      log('Permiso de ubicación denegado');
-    }
   }
 
   Future<void> _savePlantData({
@@ -354,22 +338,16 @@ class EditPlantState extends State<EditPlant> {
                       ),
                     ),
                     verticalMargin12,
-                    if (latitude == null && longitude == null)
-                      Text(
-                        'Cargando datos de su ubicación... Por favor espere.',
-                      ),
-                    verticalMargin8,
+
                     // Muestra la latitud y longitud (opcional)
-                    if (latitude != null && longitude != null) ...[
-                      Text(
-                        'Datos de su ubicación',
-                        style: context.theme.textTheme.h2.copyWith(
-                          fontSize: 20.0,
-                        ),
+                    Text(
+                      'Datos de su ubicación',
+                      style: context.theme.textTheme.h2.copyWith(
+                        fontSize: 20.0,
                       ),
-                      Text('Latitud: $latitude'),
-                      Text('Longitud: $longitude'),
-                    ],
+                    ),
+                    Text('Latitud: ${widget.latitude}'),
+                    Text('Longitud: ${widget.longitude}'),
                     verticalMargin12,
 
                     //TextField para las notas
@@ -491,8 +469,8 @@ class EditPlantState extends State<EditPlant> {
 
                       await _savePlantData(
                         note: noteController.text,
-                        latitude: latitude!,
-                        longitude: longitude!,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
                         lifestage: widget.planta.lifestage,
                         imagenPrincipal:
                             widget.valores.isNotEmpty

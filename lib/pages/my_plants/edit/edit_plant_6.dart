@@ -23,10 +23,14 @@ class GetApiEditInformation06 extends StatefulWidget {
   List<Map<String, dynamic>> valores = [
     {"imagen": "", "name": ""},
   ];
+  final double latitude;
+  final double longitude;
   GetApiEditInformation06({
     required this.planta,
     required this.valores,
     required this.index,
+    required this.latitude,
+    required this.longitude,
     super.key,
   });
 
@@ -45,6 +49,8 @@ class _GetApiEditInformation06State extends State<GetApiEditInformation06> {
         valores: widget.valores,
         planta: widget.planta,
         index: widget.index,
+        latitude: widget.latitude,
+        longitude: widget.longitude,
       ),
     );
   }
@@ -57,12 +63,16 @@ class EditPlants06 extends StatefulWidget {
   List<Map<String, dynamic>> valores = [
     {"imagen": "", "name": ""},
   ];
+  final double latitude;
+  final double longitude;
 
   EditPlants06({
     // required this.pictures,
     required this.valores,
     required this.planta,
     required this.index,
+    required this.latitude,
+    required this.longitude,
     super.key,
   });
 
@@ -303,6 +313,8 @@ class _EditPlants06State extends State<EditPlants06> {
                             valores: widget.valores,
                             planta: widget.planta,
                             index: widget.index,
+                            latitude: widget.latitude,
+                            longitude: widget.longitude,
                           ),
                         ),
                       );
@@ -335,6 +347,8 @@ class _EditPlants06State extends State<EditPlants06> {
                         planta: widget.planta,
                         valores: widget.valores,
                         index: widget.index,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
                       ),
                     ),
                   );
@@ -354,6 +368,8 @@ class _EditPlants06State extends State<EditPlants06> {
                         planta: widget.planta,
                         valores: widget.valores,
                         index: widget.index,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
                       ),
                     ),
                   );

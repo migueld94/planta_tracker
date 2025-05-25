@@ -18,10 +18,18 @@ import 'package:planta_tracker/services/plants_services.dart';
 class RegisterPlant5 extends StatefulWidget {
   // final List<String>? pictures;
   List<Map<String, dynamic>> valores = [
-    {"imagen": "", "name": ""}
+    {"imagen": "", "name": ""},
   ];
 
-  RegisterPlant5({super.key, required this.valores});
+  final double latitude;
+  final double longitude;
+
+  RegisterPlant5({
+    super.key,
+    required this.valores,
+    required this.latitude,
+    required this.longitude,
+  });
 
   @override
   State<RegisterPlant5> createState() => _RegisterPlant5State();
@@ -87,8 +95,9 @@ class _RegisterPlant5State extends State<RegisterPlant5> {
                   child: AutoSizeText(
                     // 'Para volver a tomar la foto pulse la imagén',
                     AppLocalizations.of(context)!.take_photo,
-                    style:
-                        context.theme.textTheme.text_01.copyWith(fontSize: 18),
+                    style: context.theme.textTheme.text_01.copyWith(
+                      fontSize: 18,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -118,20 +127,29 @@ class _RegisterPlant5State extends State<RegisterPlant5> {
                 } else {
                   // widget.pictures!.add(Constants.noPicture);
 
-                  File f = await optionServices
-                      .getImageFileFromAssets(Constants.noPicture);
+                  File f = await optionServices.getImageFileFromAssets(
+                    Constants.noPicture,
+                  );
                   // widget.pictures!.add(f.path);
 
                   widget.valores.add({
                     "imagen": f.path,
                     "name":
-                        AppLocalizations.of(context)!.plant_register_fruit_image
+                        AppLocalizations.of(
+                          context,
+                        )!.plant_register_fruit_image,
                   });
 
                   Navigator.push(
-                      context,
-                      SlideRightRoute(
-                          page: RegisterPlant6(valores: widget.valores)));
+                    context,
+                    SlideRightRoute(
+                      page: RegisterPlant6(
+                        valores: widget.valores,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
+                      ),
+                    ),
+                  );
                 }
               },
               title: AppLocalizations.of(context)!.skip,
@@ -139,26 +157,35 @@ class _RegisterPlant5State extends State<RegisterPlant5> {
                   flag ? PlantaColors.colorGrey : PlantaColors.colorBlack,
             ),
             ButtomSmall(
-                color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
-                onTap: () {
-                  if (flag == true) {
-                    // widget.pictures!.add(_image!.path);
+              color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
+              onTap: () {
+                if (flag == true) {
+                  // widget.pictures!.add(_image!.path);
 
-                    widget.valores.add({
-                      "imagen": _image!.path,
-                      "name": AppLocalizations.of(context)!
-                          .plant_register_fruit_image
-                    });
+                  widget.valores.add({
+                    "imagen": _image!.path,
+                    "name":
+                        AppLocalizations.of(
+                          context,
+                        )!.plant_register_fruit_image,
+                  });
 
-                    Navigator.push(
-                        context,
-                        SlideRightRoute(
-                            page: RegisterPlant6(valores: widget.valores)));
-                  } else {
-                    null;
-                  }
-                },
-                title: AppLocalizations.of(context)!.text_buttom_next),
+                  Navigator.push(
+                    context,
+                    SlideRightRoute(
+                      page: RegisterPlant6(
+                        valores: widget.valores,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
+                      ),
+                    ),
+                  );
+                } else {
+                  null;
+                }
+              },
+              title: AppLocalizations.of(context)!.text_buttom_next,
+            ),
           ],
         ),
       ),

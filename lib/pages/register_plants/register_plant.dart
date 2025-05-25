@@ -1,14 +1,17 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:exif/exif.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
+import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
@@ -26,8 +29,16 @@ class _RegisterPlantState extends State<RegisterPlant> {
   File? _image;
   List<String>? pictures = [];
   List<Map<String, dynamic>> valores = [];
+  double? latitude;
+  double? longitude;
 
   bool flag = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
 
   Future<File?> getImage() async {
     var cameraStatus = await Permission.camera.status;
@@ -68,9 +79,24 @@ class _RegisterPlantState extends State<RegisterPlant> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() {
+        latitude = position.latitude;
+        longitude = position.longitude;
+      });
+    } else {
+      log('Permiso de ubicación denegado');
+    }
   }
 
   @override
@@ -137,21 +163,31 @@ class _RegisterPlantState extends State<RegisterPlant> {
                   // final latitude = data['GPS GPSLatitude'];
                   // final longitude = data['GPS GPSLongitude'];
 
-                  // if (longitude != null && latitude != null) {
-                  valores.add({
-                    "imagen": _image!.path,
-                    "name":
-                        AppLocalizations.of(context)!.plant_register_full_image,
-                  });
+                  if (longitude != null && latitude != null) {
+                    valores.add({
+                      "imagen": _image!.path,
+                      "name":
+                          AppLocalizations.of(
+                            context,
+                          )!.plant_register_full_image,
+                    });
 
-                  Navigator.push(
-                    context,
-                    SlideRightRoute(page: RegisterPlant2(valores: valores)),
-                  );
-                  // } else {
-                  //   alert(context,
-                  //       'La imagen capturada no tiene informacion de GPS, por favor usted debe activar los permisos de su camara para continuar con el registro de su planta.');
-                  // }
+                    Navigator.push(
+                      context,
+                      SlideRightRoute(
+                        page: RegisterPlant2(
+                          valores: valores,
+                          latitude: latitude!,
+                          longitude: longitude!,
+                        ),
+                      ),
+                    );
+                  } else {
+                    alert(
+                      context,
+                      'Estamos tomando los datos de su ubicacion, espere un momento y vuelva a intentarlo.',
+                    );
+                  }
                 } else {
                   null;
                 }

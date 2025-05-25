@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -10,8 +12,11 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
 import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/models/plantas_hive.dart';
+import 'package:planta_tracker/models/register_plant_models.dart';
 import 'package:planta_tracker/pages/my_plants/details_my_plant/detail_my_plant.dart';
 import 'package:planta_tracker/pages/my_plants/edit/edit_plant_1.dart';
+import 'package:planta_tracker/pages/my_plants/methods/methods.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MyPlants extends StatefulWidget {
   const MyPlants({super.key});
@@ -25,6 +30,7 @@ class _MyPlantsState extends State<MyPlants> {
   bool isSelectionMode = false;
   bool loading = false;
   Set<String> selectedPlant = {};
+  final storage = const FlutterSecureStorage();
 
   @override
   void initState() {
@@ -55,15 +61,6 @@ class _MyPlantsState extends State<MyPlants> {
     });
   }
 
-  // Metodo para enviar la informacion a la api
-  Future<void> sendPlantToApi({required Planta planta}) async {
-    // Simulación de envío a la API
-    // Aquí deberías implementar la lógica para hacer la solicitud HTTP
-    // Por ejemplo, usando http.post o dio
-    await Future.delayed(Duration(seconds: 1)); // Simula un retraso de red
-    return;
-  }
-
   void _sendSelectedPlants() async {
     if (selectedPlant.isNotEmpty) {
       try {
@@ -80,8 +77,21 @@ class _MyPlantsState extends State<MyPlants> {
           if (plantaMap.containsKey(plantId)) {
             final planta = plantaMap[plantId]!;
 
+            RegisterPlant plantRegister = RegisterPlant(
+              imagenPrincipal: File(planta.imagenPricipal),
+              imagenFlor: File(planta.imagenFlor!),
+              imagenFruto: File(planta.imagenFruto!),
+              imagenHojas: File(planta.imagenHoja!),
+              imagenRamas: File(planta.imagenRamas!),
+              imagenTronco: File(planta.imagenTallo!),
+              notas: planta.nota,
+              lifestage: planta.lifestage,
+              latitude: planta.latitude,
+              longitude: planta.longitude,
+            );
+
             // Enviar planta a la API
-            await sendPlantToApi(planta: planta);
+            await sendPlantToApi(context: context, plant: plantRegister);
 
             // Actualizar el estado a 'Enviado'
             planta.status = 'Enviado';
@@ -89,7 +99,9 @@ class _MyPlantsState extends State<MyPlants> {
               plantaBox.putAt(allPlantas.indexOf(planta), planta),
             );
 
-            log('Enviado => ID: ${planta.id}, status: ${planta.status}');
+            log(
+              'Enviado Correctamente => ID: ${planta.id}, status: ${planta.status}',
+            );
           }
         }
 
