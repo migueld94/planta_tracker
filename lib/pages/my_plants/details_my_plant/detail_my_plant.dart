@@ -223,13 +223,13 @@ class DetailsWidget extends StatelessWidget {
             ),
             verticalMargin16,
             AutoSizeText(
-              '${AppLocalizations.of(context)!.take_photo_details} ',
-              style: context.theme.textTheme.text_01.copyWith(fontSize: 16),
+              'Datos de Ubicacion',
+              style: context.theme.textTheme.h2.copyWith(fontSize: 23.0),
             ),
             verticalMargin8,
             AutoSizeText(
               'Latitud ${details.latitude} - Longitud ${details.longitude}',
-              style: context.theme.textTheme.text_02,
+              style: context.theme.textTheme.text_02.copyWith(fontSize: 14.0),
             ),
             verticalMargin8,
             SizedBox(

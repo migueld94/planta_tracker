@@ -91,21 +91,34 @@ class _MyPlantsState extends State<MyPlants> {
             );
 
             // Enviar planta a la API
-            await sendPlantToApi(context: context, plant: plantRegister);
-
-            // Actualizar el estado a 'Enviado'
-            planta.status = 'Enviado';
-            updateFutures.add(
-              plantaBox.putAt(allPlantas.indexOf(planta), planta),
+            var response = await sendPlantToApi(
+              context: context,
+              plant: plantRegister,
             );
 
-            log(
-              'Enviado Correctamente => ID: ${planta.id}, status: ${planta.status}',
-            );
+            log('Esperando respuesta');
+
+            if (response != null) {
+              log('Response del sendPlantToApi => ${response.statusCode}');
+              if (response.statusCode == 200) {
+                planta.status = 'Enviado';
+                updateFutures.add(
+                  plantaBox.putAt(allPlantas.indexOf(planta), planta),
+                );
+                log(
+                  'Enviado Correctamente => ID: ${planta.id}, status: ${planta.status}',
+                );
+              } else {
+                log(
+                  'Error al enviar la planta => ID: ${planta.id}, status: ${response.statusCode}',
+                );
+              }
+            } else {
+              log('Error: La respuesta fue nula para ID: ${planta.id}');
+            }
           }
         }
 
-        // Esperar a que todas las actualizaciones se completen
         await Future.wait(updateFutures);
 
         setState(() {

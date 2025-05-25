@@ -13,6 +13,7 @@ String registerPlantToJson(RegisterPlant data) => json.encode(data.toJson());
 class RegisterPlant {
   String? lifestage;
   String? notas;
+  String? status;
   File? imagenPrincipal;
   File? imagenTronco;
   File? imagenRamas;
@@ -26,6 +27,7 @@ class RegisterPlant {
   RegisterPlant({
     this.lifestage,
     this.notas,
+    this.status,
     this.imagenPrincipal,
     this.imagenTronco,
     this.imagenRamas,
@@ -39,6 +41,7 @@ class RegisterPlant {
   factory RegisterPlant.fromJson(Map<String, dynamic> json) => RegisterPlant(
     lifestage: json["lifestage"],
     notas: json["notas"],
+    status: json["status"],
     imagenPrincipal: json["imagen_principal"],
     imagenTronco: json["imagen_tronco"],
     imagenRamas: json["imagen_ramas"],
@@ -52,6 +55,7 @@ class RegisterPlant {
   Map<String, dynamic> toJson() => {
     "lifestage": lifestage,
     "notas": notas,
+    "status": status,
     "imagen_principal": imagenPrincipal,
     "imagen_tronco": imagenTronco,
     "imagen_ramas": imagenRamas,

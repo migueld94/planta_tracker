@@ -115,6 +115,8 @@ class OptionPlantServices {
   Future<http.Response?> register({required RegisterPlant plant}) async {
     var token = await storage.read(key: "token");
 
+    log('Planta a registrar => ${plant.toString()}');
+
     final principal = await http.MultipartFile.fromPath(
       'imagen_principal',
       plant.imagenPrincipal!.path,
@@ -147,9 +149,9 @@ class OptionPlantServices {
 
     final request = http.MultipartRequest('POST', registerPlantUri);
     request.headers['Authorization'] = 'Token $token';
+
     request.fields['lifestage'] = plant.lifestage!;
     request.fields['notas'] = plant.notas!;
-
     request.fields['latitude'] = plant.latitude.toString();
     request.fields['longitude'] = plant.longitude.toString();
 
