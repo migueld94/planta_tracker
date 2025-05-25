@@ -96,15 +96,20 @@ class _MyPlantsState extends State<MyPlants> {
               plant: plantRegister,
             );
 
-            log('Esperando respuesta');
-
             if (response != null) {
               log('Response del sendPlantToApi => ${response.statusCode}');
               if (response.statusCode == 200) {
-                planta.status = 'Enviado';
+                // Actualizar estado de la planta
+                // planta.status = 'Enviado';
+                // updateFutures.add(
+                //   plantaBox.putAt(allPlantas.indexOf(planta), planta),
+                // );
+
+                // Eliminar la planta
                 updateFutures.add(
-                  plantaBox.putAt(allPlantas.indexOf(planta), planta),
+                  plantaBox.deleteAt(allPlantas.indexOf(planta)),
                 );
+
                 log(
                   'Enviado Correctamente => ID: ${planta.id}, status: ${planta.status}',
                 );

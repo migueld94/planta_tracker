@@ -432,64 +432,58 @@ class CardMyPlants2 extends StatelessWidget {
             verticalMargin12,
           ],
         ),
-        subtitle: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        subtitle: Wrap(
+          runSpacing: 8.0,
+          spacing: 4.0,
           children: [
-            Row(
-              spacing: 4.0,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 4.0,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: borderRadius20,
+                color: getColor(),
+              ),
+              child: Row(
+                spacing: 4.0,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    status!.toLowerCase() == 'sin enviar'
+                        ? Ionicons.timer_outline
+                        : Ionicons.checkmark_done_outline,
+                    color: PlantaColors.colorWhite,
+                    size: 20.0,
                   ),
-                  decoration: BoxDecoration(
-                    borderRadius: borderRadius20,
-                    color: getColor(),
-                  ),
-                  child: Row(
-                    spacing: 4.0,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        status!.toLowerCase() == 'sin enviar'
-                            ? Ionicons.timer_outline
-                            : Ionicons.checkmark_done_outline,
-                        color: PlantaColors.colorWhite,
-                        size: 20.0,
-                      ),
-                      AutoSizeText(
-                        status!,
-                        style: context.theme.textTheme.text_02.copyWith(
-                          color: PlantaColors.colorWhite,
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: borderRadius20,
-                    border: Border.all(color: PlantaColors.colorOrange),
-                  ),
-                  child: Center(
-                    child: AutoSizeText(
-                      lifestage,
-                      style: context.theme.textTheme.text_02.copyWith(
-                        fontSize: 13.0,
-                      ),
+                  AutoSizeText(
+                    status!,
+                    style: context.theme.textTheme.text_02.copyWith(
+                      color: PlantaColors.colorWhite,
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                ],
+              ),
+            ),
+            IntrinsicWidth(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 4.0,
                 ),
-              ],
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius20,
+                  border: Border.all(color: PlantaColors.colorOrange),
+                ),
+                child: Text(
+                  lifestage,
+                  style: context.theme.textTheme.text_02.copyWith(
+                    fontSize: 13.0,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
