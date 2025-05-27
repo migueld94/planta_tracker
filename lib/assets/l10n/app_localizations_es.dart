@@ -297,6 +297,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String get search_without_results => 'No se encontraron resultados';
 
   @override
+  String get buttom_cancel => 'Cancelar';
+
+  @override
+  String get error_connection => 'Error de conexión. Inténtalo de nuevo.';
+
+  @override
+  String get non_plant_registered => 'No hay plantas registradas en este momento.';
+
+  @override
+  String get confirm_delete => 'Confirmar eliminación';
+
+  @override
+  String get delete_plant_question => '¿Estás seguro de que quieres eliminar esta planta?';
+
+  @override
+  String get delete_plant_confirmed => 'Planta removida';
+
+  @override
+  String get plant_selected => 'Se seleccionó una planta ya enviada';
+
+  @override
+  String get buttom_send => 'Enviar';
+
+  @override
   String get nSLocationWhenInUseUsageDescription => 'Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa';
 
   @override

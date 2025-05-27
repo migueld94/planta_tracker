@@ -93,9 +93,42 @@ class _AllPlantsState extends State<AllPlants> {
                     return SizedBox.shrink();
                   },
                 )
-                : Text('Usted no tiene plantas');
+                : Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.non_plant_registered,
+                    style: context.theme.textTheme.h2,
+                  ),
+                );
           } else if (state is AllPlantsError) {
-            return Center(child: Text('Error: ${state.error}'));
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Ionicons.wifi_outline,
+                    size: 90.0,
+                    color: PlantaColors.colorGrey,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.error_connection,
+                    style: context.theme.textTheme.h2.copyWith(
+                      color: PlantaColors.colorGrey,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      final locale = Localizations.localeOf(context);
+                      final language = L10n.getFlag(locale.languageCode);
+                      context.read<AllPlantsBloc>().add(
+                        LoadAllPlants(language: language),
+                      );
+                    },
+                    icon: Icon(Ionicons.refresh_outline, size: 30.0),
+                  ),
+                ],
+              ),
+            );
           }
           return Container();
         },

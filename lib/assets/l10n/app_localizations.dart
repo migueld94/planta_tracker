@@ -671,6 +671,54 @@ abstract class AppLocalizations {
   /// **'No results found'**
   String get search_without_results;
 
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get buttom_cancel;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error. Please try again.'**
+  String get error_connection;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'There are no registered plants at the moment.'**
+  String get non_plant_registered;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm deletion'**
+  String get confirm_delete;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this Plant?'**
+  String get delete_plant_question;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Plant removed'**
+  String get delete_plant_confirmed;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'A plant already sent is selected'**
+  String get plant_selected;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get buttom_send;
+
   /// No description provided for @nSLocationWhenInUseUsageDescription.
   ///
   /// In en, this message translates to:

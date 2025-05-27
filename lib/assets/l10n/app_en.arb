@@ -438,10 +438,48 @@
         "description": "search_without_results"
     },
 
+    "buttom_cancel": "Cancel",
+    "@buttom_cancel": {
+        "description": "text"
+    },
+
+    "error_connection": "Connection error. Please try again.",
+    "@error_connection": {
+        "description": "text"
+    },
+    "non_plant_registered": "There are no registered plants at the moment.",
+    "@non_plant_registered": {
+        "description": "text"
+    },
+    "confirm_delete": "Confirm deletion",
+    "@confirm_delete": {
+        "description": "text"
+    },
+    "delete_plant_question": "Are you sure you want to delete this Plant?",
+    "@delete_plant_question": {
+        "description": "text"
+    },
+    "delete_plant_confirmed": "Plant removed",
+    "@delete_plant_confirmed": {
+        "description": "text"
+    },
+    "plant_selected": "A plant already sent is selected",
+    "@plant_selected": {
+        "description": "text"
+    },
+    "buttom_send": "Send",
+    "@buttom_send": {
+        "description": "text"
+    },
+
     "nSLocationWhenInUseUsageDescription": "We need access to your location to show your position on the map",
     "nSLocationAlwaysAndWhenInUseUsageDescription": "We need access to your location in the background to provide a better experience",
     "nSCameraUsageDescription": "This app needs access to your camera in order to take pictures."
 }
+
+
+
+
 
 
 

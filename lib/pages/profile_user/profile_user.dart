@@ -61,7 +61,31 @@ class _ProfileUserState extends State<ProfileUser> {
             final profile = state.profile;
             return _UserProfile(user: profile);
           } else if (state is ProfileError) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Ionicons.wifi_outline,
+                    size: 90.0,
+                    color: PlantaColors.colorGrey,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.error_connection,
+                    style: context.theme.textTheme.h2.copyWith(
+                      color: PlantaColors.colorGrey,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      context.read<ProfileBloc>().add(FetchProfile());
+                    },
+                    icon: Icon(Ionicons.refresh_outline, size: 30.0),
+                  ),
+                ],
+              ),
+            );
           }
           return Container();
         },

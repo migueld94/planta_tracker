@@ -152,14 +152,14 @@ class _MyPlantsState extends State<MyPlants> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar Eliminación'),
-          content: Text('¿Estás seguro de que deseas eliminar esta Planta?'),
+          title: Text(AppLocalizations.of(context)!.confirm_delete),
+          content: Text(AppLocalizations.of(context)!.delete_plant_question),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancelar'),
+              child: Text(AppLocalizations.of(context)!.buttom_cancel),
             ),
             TextButton(
               onPressed: () async {
@@ -193,14 +193,14 @@ class _MyPlantsState extends State<MyPlants> {
                   SnackBar(
                     backgroundColor: Colors.green,
                     content: Text(
-                      'Planta eliminada',
+                      AppLocalizations.of(context)!.delete_plant_confirmed,
                       style: TextStyle(fontFamily: 'Poppins'),
                     ),
                   ),
                 );
                 Navigator.of(context).pop();
               },
-              child: Text('Eliminar'),
+              child: Text(AppLocalizations.of(context)!.text_buttom_accept),
             ),
           ],
         );
@@ -219,7 +219,9 @@ class _MyPlantsState extends State<MyPlants> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularPlantaTracker());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error. Inténtelo de nuevo'));
+              return Center(
+                child: Text(AppLocalizations.of(context)!.error_connection),
+              );
             }
 
             final plantaBox = snapshot.data!;
@@ -259,7 +261,9 @@ class _MyPlantsState extends State<MyPlants> {
                                       backgroundColor:
                                           PlantaColors.colorDarkOrange,
                                       content: Text(
-                                        'Esta seleccionado una planta ya enviada',
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.plant_selected,
                                         style: context.theme.textTheme.text_01
                                             .copyWith(
                                               color: PlantaColors.colorWhite,
@@ -292,7 +296,9 @@ class _MyPlantsState extends State<MyPlants> {
                                     backgroundColor:
                                         PlantaColors.colorDarkOrange,
                                     content: Text(
-                                      'Esta seleccionado una planta ya enviada',
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.plant_selected,
                                       style: context.theme.textTheme.text_01
                                           .copyWith(
                                             color: PlantaColors.colorWhite,
@@ -384,7 +390,11 @@ class _MyPlantsState extends State<MyPlants> {
                     );
                   },
                 )
-                : Center(child: Text('No hay plantas registradas'));
+                : Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.non_plant_registered,
+                  ),
+                );
           },
         ),
       ),
@@ -428,7 +438,7 @@ class _MyPlantsState extends State<MyPlants> {
                                 color: PlantaColors.colorGreen,
                               )
                               : Text(
-                                'Enviar (${selectedPlant.length})',
+                                '${AppLocalizations.of(context)!.buttom_send} (${selectedPlant.length})',
                                 style: TextStyle(
                                   color: PlantaColors.colorBlack,
                                   fontWeight: FontWeight.bold,
