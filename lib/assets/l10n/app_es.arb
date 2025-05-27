@@ -123,6 +123,10 @@
     "delete_plant_confirmed": "Planta removida",
     "plant_selected": "Se seleccionó una planta ya enviada",
     "buttom_send": "Enviar",
+    "location_info": "Estamos recopilando información de tu ubicación, espera un momento y vuelve a intentarlo.",
+    "data_location": "Datos de ubicación",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
 
     "nSLocationWhenInUseUsageDescription": "Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa",
     "nSLocationAlwaysAndWhenInUseUsageDescription": "Necesitamos acceder a tu ubicación en segundo plano para proporcionar una mejor experiencia",

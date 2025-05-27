@@ -719,6 +719,30 @@ abstract class AppLocalizations {
   /// **'Send'**
   String get buttom_send;
 
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re collecting your location information, please wait a moment and try again.'**
+  String get location_info;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Location data'**
+  String get data_location;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude'**
+  String get latitude;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Longitude'**
+  String get longitude;
+
   /// No description provided for @nSLocationWhenInUseUsageDescription.
   ///
   /// In en, this message translates to:

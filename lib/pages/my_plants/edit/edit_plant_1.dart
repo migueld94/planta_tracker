@@ -226,10 +226,7 @@ class _EditPlants01State extends State<EditPlants01> {
                     );
                   }
                 } else {
-                  alert(
-                    context,
-                    'Estamos tomando los datos de su ubicacion, espere un momento y vuelva a intentarlo.',
-                  );
+                  alert(context, AppLocalizations.of(context)!.location_info);
                 }
               },
               title: AppLocalizations.of(context)!.text_buttom_next,

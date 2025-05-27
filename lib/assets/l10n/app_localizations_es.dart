@@ -321,6 +321,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get buttom_send => 'Enviar';
 
   @override
+  String get location_info => 'Estamos recopilando información de tu ubicación, espera un momento y vuelve a intentarlo.';
+
+  @override
+  String get data_location => 'Datos de ubicación';
+
+  @override
+  String get latitude => 'Latitud';
+
+  @override
+  String get longitude => 'Longitud';
+
+  @override
   String get nSLocationWhenInUseUsageDescription => 'Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa';
 
   @override

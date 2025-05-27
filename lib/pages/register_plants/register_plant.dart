@@ -183,10 +183,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
                       ),
                     );
                   } else {
-                    alert(
-                      context,
-                      'Estamos tomando los datos de su ubicacion, espere un momento y vuelva a intentarlo.',
-                    );
+                    alert(context, AppLocalizations.of(context)!.location_info);
                   }
                 } else {
                   null;

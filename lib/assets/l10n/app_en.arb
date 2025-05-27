@@ -471,11 +471,28 @@
     "@buttom_send": {
         "description": "text"
     },
+    "location_info": "We're collecting your location information, please wait a moment and try again.",
+    "@location_info": {
+        "description": "text"
+    },
+    "data_location": "Location data",
+    "@data_location": {
+        "description": "text"
+    },
+    "latitude": "Latitude",
+    "@latitude": {
+        "description": "text"
+    },
+    "longitude": "Longitude",
+    "@longitude": {
+        "description": "text"
+    },
 
     "nSLocationWhenInUseUsageDescription": "We need access to your location to show your position on the map",
     "nSLocationAlwaysAndWhenInUseUsageDescription": "We need access to your location in the background to provide a better experience",
     "nSCameraUsageDescription": "This app needs access to your camera in order to take pictures."
 }
+
 
 
 
