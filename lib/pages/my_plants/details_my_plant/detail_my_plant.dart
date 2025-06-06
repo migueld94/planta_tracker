@@ -201,24 +201,24 @@ class DetailsWidget extends StatelessWidget {
                   ),
                 ),
                 horizontalMargin12,
-                Container(
-                  width: 120,
-                  padding: allPadding8,
-                  decoration: BoxDecoration(
-                    borderRadius: borderRadius20,
-                    border: Border.all(color: PlantaColors.colorOrange),
-                  ),
-                  child: Center(
-                    child: AutoSizeText(
-                      details.lifestage,
-                      style: context.theme.textTheme.text_02.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PlantaColors.colorOrange,
-                      ),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   width: 120,
+                //   padding: allPadding8,
+                //   decoration: BoxDecoration(
+                //     borderRadius: borderRadius20,
+                //     border: Border.all(color: PlantaColors.colorOrange),
+                //   ),
+                //   child: Center(
+                //     child: AutoSizeText(
+                //       details.lifestage,
+                //       style: context.theme.textTheme.text_02.copyWith(
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.bold,
+                //         color: PlantaColors.colorOrange,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             verticalMargin16,

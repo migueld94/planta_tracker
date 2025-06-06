@@ -10,7 +10,6 @@ import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/blocs/all_plants/all_plants_bloc.dart';
 import 'package:planta_tracker/blocs/details_plants/details_plants_bloc.dart';
-import 'package:planta_tracker/blocs/lifestage_nomenclador/lifestage_nomenclador_bloc.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
 import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
 // import 'package:planta_tracker/dependency_injection.dart';
@@ -24,7 +23,6 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/pages/splash/splash_screen.dart';
 import 'package:planta_tracker/services/all_plants_services.dart';
 import 'package:planta_tracker/services/details_services.dart';
-import 'package:planta_tracker/services/nom_lifestage_services.dart';
 import 'package:planta_tracker/services/plants_services.dart';
 import 'package:planta_tracker/services/user_services.dart';
 import 'assets/l10n/app_localizations.dart';
@@ -72,11 +70,11 @@ void main() async {
           create:
               (context) => PlantDetailBloc(detailsServices: DetailsServices()),
         ),
-        BlocProvider(
-          create:
-              (context) =>
-                  LifestageNomBloc(lifestageServices: LifestageServices()),
-        ),
+        // BlocProvider(
+        //   create:
+        //       (context) =>
+        //           LifestageNomBloc(lifestageServices: LifestageServices()),
+        // ),
       ],
       child: MyApp(),
     ),

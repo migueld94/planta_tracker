@@ -85,7 +85,7 @@ class _MyPlantsState extends State<MyPlants> {
               imagenRamas: File(planta.imagenRamas!),
               imagenTronco: File(planta.imagenTallo!),
               notas: planta.nota,
-              lifestage: planta.lifestage,
+              // lifestage: planta.lifestage,
               latitude: planta.latitude,
               longitude: planta.longitude,
             );
@@ -236,159 +236,194 @@ class _MyPlantsState extends State<MyPlants> {
             ];
 
             return plantasOrdenadas.isNotEmpty
-                ? ListView.builder(
-                  itemCount: plantasOrdenadas.length,
-                  itemBuilder: (context, index) {
-                    final planta = plantasOrdenadas[index];
-                    final isSelected = selectedPlant.contains(planta.id);
+                ? Column(
+                  spacing: 8.0,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: allMargin8,
+                      decoration: BoxDecoration(
+                        borderRadius: borderRadius15,
+                        color: PlantaColors.colorGrey.withOpacity(0.3),
+                      ),
+                      child: Text(
+                        'Mantenga presionado la o las plantas que desee enviar',
+                        style: context.theme.textTheme.subtitle,
+                      ),
+                    ),
+                    ListView.builder(
+                      itemCount: plantasOrdenadas.length,
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final planta = plantasOrdenadas[index];
+                        final isSelected = selectedPlant.contains(planta.id);
 
-                    return Row(
-                      spacing: 8.0,
-                      children: [
-                        Expanded(
-                          child: CardMyPlants2(
-                            title: AppLocalizations.of(context)!.name_plant,
-                            lifestage: planta.lifestage,
-                            date:
-                                '${planta.fechaCreacion.day} / ${planta.fechaCreacion.month} / ${planta.fechaCreacion.year}',
-                            onTap: () {
-                              if (isSelectionMode) {
-                                if (planta.status!.toLowerCase() != 'enviado') {
-                                  _toggleSelection(plantId: planta.id);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor:
-                                          PlantaColors.colorDarkOrange,
-                                      content: Text(
-                                        AppLocalizations.of(
-                                          context,
-                                        )!.plant_selected,
-                                        style: context.theme.textTheme.text_01
-                                            .copyWith(
-                                              color: PlantaColors.colorWhite,
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  FadeTransitionRoute(
-                                    page: DetailsMyPlants(planta: planta),
-                                  ),
-                                );
-                              }
-                            },
-                            picture: File(planta.imagenPricipal).path,
-                            id: planta.id,
-                            status: planta.status,
-                            onLongPress: () {
-                              if (planta.status!.toLowerCase() != 'enviado') {
-                                _startSelectionMode();
-                                _toggleSelection(plantId: planta.id);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor:
-                                        PlantaColors.colorDarkOrange,
-                                    content: Text(
-                                      AppLocalizations.of(
+                        return Row(
+                          spacing: 8.0,
+                          children: [
+                            Expanded(
+                              child: CardMyPlants2(
+                                title: AppLocalizations.of(context)!.name_plant,
+                                // lifestage: planta.lifestage,
+                                date:
+                                    '${planta.fechaCreacion.day} / ${planta.fechaCreacion.month} / ${planta.fechaCreacion.year}',
+                                onTap: () {
+                                  if (isSelectionMode) {
+                                    if (planta.status!.toLowerCase() !=
+                                        'enviado') {
+                                      _toggleSelection(plantId: planta.id);
+                                    } else {
+                                      ScaffoldMessenger.of(
                                         context,
-                                      )!.plant_selected,
-                                      style: context.theme.textTheme.text_01
-                                          .copyWith(
-                                            color: PlantaColors.colorWhite,
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            color:
-                                isSelected
-                                    ? PlantaColors.colorGreen
-                                    : PlantaColors.colorWhite,
-                          ),
-                        ),
-
-                        // Botones de acción
-                        if (!isSelectionMode)
-                          SizedBox(
-                            height: 90.0,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                // EDITAR
-                                if (planta.status!.toLowerCase() != 'enviado')
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        FadeTransitionRoute(
-                                          page: GetApiEditInformation01(
-                                            planta: planta,
-                                            index: index,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          backgroundColor:
+                                              PlantaColors.colorDarkOrange,
+                                          content: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.plant_selected,
+                                            style: context
+                                                .theme
+                                                .textTheme
+                                                .text_01
+                                                .copyWith(
+                                                  color:
+                                                      PlantaColors.colorWhite,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                           ),
                                         ),
                                       );
-                                    },
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: PlantaColors.colorGreen,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
+                                    }
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      FadeTransitionRoute(
+                                        page: DetailsMyPlants(planta: planta),
                                       ),
-                                      child: Center(
-                                        child: Icon(
-                                          Ionicons.pencil_outline,
-                                          color: PlantaColors.colorGreen,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                // ELIMINAR
-                                if (planta.status!.toLowerCase() != 'enviado')
-                                  GestureDetector(
-                                    onTap: () {
-                                      _confirmDeleteCard(
-                                        context: context,
-                                        plantaIndex: index,
-                                      );
-                                    },
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: PlantaColors.colorRed,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Icon(
-                                          Ionicons.trash_outline,
-                                          color: PlantaColors.colorRed,
+                                    );
+                                  }
+                                },
+                                picture: File(planta.imagenPricipal).path,
+                                id: planta.id,
+                                status: planta.status,
+                                onLongPress: () {
+                                  if (planta.status!.toLowerCase() !=
+                                      'enviado') {
+                                    _startSelectionMode();
+                                    _toggleSelection(plantId: planta.id);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor:
+                                            PlantaColors.colorDarkOrange,
+                                        content: Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.plant_selected,
+                                          style: context.theme.textTheme.text_01
+                                              .copyWith(
+                                                color: PlantaColors.colorWhite,
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                              ],
+                                    );
+                                  }
+                                },
+                                color:
+                                    isSelected
+                                        ? PlantaColors.colorGreen
+                                        : PlantaColors.colorWhite,
+                              ),
                             ),
-                          ),
-                      ],
-                    );
-                  },
+
+                            // Botones de acción
+                            if (!isSelectionMode)
+                              SizedBox(
+                                height: 90.0,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    // EDITAR
+                                    if (planta.status!.toLowerCase() !=
+                                        'enviado')
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            FadeTransitionRoute(
+                                              page: GetApiEditInformation01(
+                                                planta: planta,
+                                                index: index,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: PlantaColors.colorGreen,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Ionicons.pencil_outline,
+                                              color: PlantaColors.colorGreen,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                    // ELIMINAR
+                                    if (planta.status!.toLowerCase() !=
+                                        'enviado')
+                                      GestureDetector(
+                                        onTap: () {
+                                          _confirmDeleteCard(
+                                            context: context,
+                                            plantaIndex: index,
+                                          );
+                                        },
+                                        child: Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: PlantaColors.colorRed,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Ionicons.trash_outline,
+                                              color: PlantaColors.colorRed,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 )
                 : Center(
                   child: Text(

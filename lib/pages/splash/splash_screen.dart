@@ -7,8 +7,6 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/blocs/all_plants/all_plants_bloc.dart';
 import 'package:planta_tracker/blocs/all_plants/all_plants_event.dart';
-import 'package:planta_tracker/blocs/lifestage_nomenclador/lifestage_nomenclador_bloc.dart';
-import 'package:planta_tracker/blocs/lifestage_nomenclador/lifestage_nomenclador_event.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
@@ -39,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
     context.read<AllPlantsBloc>().add(LoadAllPlants(language: language!));
     context.read<ProfileBloc>().add(FetchProfile());
     context.read<MyPlantsBloc>().add(LoadMyPlants());
-    context.read<LifestageNomBloc>().add(LoadLifestageNom());
+    // context.read<LifestageNomBloc>().add(LoadLifestageNom());
 
     await Future.delayed(Duration(seconds: 3));
 

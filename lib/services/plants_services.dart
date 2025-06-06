@@ -150,7 +150,7 @@ class OptionPlantServices {
     final request = http.MultipartRequest('POST', registerPlantUri);
     request.headers['Authorization'] = 'Token $token';
 
-    request.fields['lifestage'] = plant.lifestage!;
+    // request.fields['lifestage'] = plant.lifestage!;
     request.fields['notas'] = plant.notas!;
     request.fields['latitude'] = plant.latitude.toString();
     request.fields['longitude'] = plant.longitude.toString();
@@ -271,7 +271,7 @@ class OptionPlantServices {
 
     final request = http.MultipartRequest('PUT', updatePlantUri);
     request.headers['Authorization'] = 'Token $token';
-    request.fields['lifestage'] = plant.lifestage!;
+    // request.fields['lifestage'] = plant.lifestage!;
     request.fields['notas'] = plant.notas!;
     request.fields['id'] = id;
 

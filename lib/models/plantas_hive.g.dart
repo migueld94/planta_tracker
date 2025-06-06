@@ -21,24 +21,23 @@ class PlantaAdapter extends TypeAdapter<Planta> {
       imagenPricipal: fields[1] as String,
       latitude: (fields[2] as num).toDouble(),
       longitude: (fields[3] as num).toDouble(),
-      lifestage: fields[4] as String,
-      imagenFruto: fields[5] as String?,
-      imagenRaiz: fields[6] as String?,
-      imagenTallo: fields[7] as String?,
-      imagenRamas: fields[8] as String?,
-      imagenHoja: fields[9] as String?,
-      imagenFlor: fields[10] as String?,
-      nota: fields[11] as String?,
-      fechaCreacion: fields[12] as DateTime,
-      images: (fields[13] as List).cast<ImagesMyPlant>(),
-      status: fields[14] as String?,
+      imagenFruto: fields[4] as String?,
+      imagenRaiz: fields[5] as String?,
+      imagenTallo: fields[6] as String?,
+      imagenRamas: fields[7] as String?,
+      imagenHoja: fields[8] as String?,
+      imagenFlor: fields[9] as String?,
+      nota: fields[10] as String?,
+      fechaCreacion: fields[11] as DateTime,
+      images: (fields[12] as List).cast<ImagesMyPlant>(),
+      status: fields[13] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Planta obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -48,26 +47,24 @@ class PlantaAdapter extends TypeAdapter<Planta> {
       ..writeByte(3)
       ..write(obj.longitude)
       ..writeByte(4)
-      ..write(obj.lifestage)
-      ..writeByte(5)
       ..write(obj.imagenFruto)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.imagenRaiz)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.imagenTallo)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.imagenRamas)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.imagenHoja)
-      ..writeByte(10)
+      ..writeByte(9)
       ..write(obj.imagenFlor)
-      ..writeByte(11)
+      ..writeByte(10)
       ..write(obj.nota)
-      ..writeByte(12)
+      ..writeByte(11)
       ..write(obj.fechaCreacion)
-      ..writeByte(13)
+      ..writeByte(12)
       ..write(obj.images)
-      ..writeByte(14)
+      ..writeByte(13)
       ..write(obj.status);
   }
 

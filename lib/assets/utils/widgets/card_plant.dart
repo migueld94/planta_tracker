@@ -368,7 +368,7 @@ class CardMyPlants2 extends StatelessWidget {
   const CardMyPlants2({
     super.key,
     required this.title,
-    required this.lifestage,
+    // required this.lifestage,
     this.status,
     required this.date,
     required this.onTap,
@@ -380,7 +380,7 @@ class CardMyPlants2 extends StatelessWidget {
 
   final String title;
   final String picture;
-  final String lifestage;
+  // final String lifestage;
   final String? status;
   final String date;
   final Function()? onTap;
@@ -467,24 +467,24 @@ class CardMyPlants2 extends StatelessWidget {
                 ],
               ),
             ),
-            IntrinsicWidth(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: borderRadius20,
-                  border: Border.all(color: PlantaColors.colorOrange),
-                ),
-                child: Text(
-                  lifestage,
-                  style: context.theme.textTheme.text_02.copyWith(
-                    fontSize: 13.0,
-                  ),
-                ),
-              ),
-            ),
+            // IntrinsicWidth(
+            //   child: Container(
+            //     padding: const EdgeInsets.symmetric(
+            //       horizontal: 8.0,
+            //       vertical: 4.0,
+            //     ),
+            //     decoration: BoxDecoration(
+            //       borderRadius: borderRadius20,
+            //       border: Border.all(color: PlantaColors.colorOrange),
+            //     ),
+            //     child: Text(
+            //       lifestage,
+            //       style: context.theme.textTheme.text_02.copyWith(
+            //         fontSize: 13.0,
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         onTap: onTap,

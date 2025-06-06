@@ -24,37 +24,37 @@ class Planta {
   @HiveField(3)
   double longitude;
 
-  @HiveField(4)
-  String lifestage;
+  // @HiveField(4)
+  // String lifestage;
 
-  @HiveField(5)
+  @HiveField(4)
   String? imagenFruto;
 
-  @HiveField(6)
+  @HiveField(5)
   String? imagenRaiz;
 
-  @HiveField(7)
+  @HiveField(6)
   String? imagenTallo;
 
-  @HiveField(8)
+  @HiveField(7)
   String? imagenRamas;
 
-  @HiveField(9)
+  @HiveField(8)
   String? imagenHoja;
 
-  @HiveField(10)
+  @HiveField(9)
   String? imagenFlor;
 
-  @HiveField(11)
+  @HiveField(10)
   String? nota;
 
-  @HiveField(12)
+  @HiveField(11)
   DateTime fechaCreacion;
 
-  @HiveField(13)
+  @HiveField(12)
   List<ImagesMyPlant> images;
 
-  @HiveField(14)
+  @HiveField(13)
   String? status;
 
   Planta({
@@ -62,7 +62,7 @@ class Planta {
     required this.imagenPricipal,
     required this.latitude,
     required this.longitude,
-    required this.lifestage,
+    // required this.lifestage,
     this.imagenFruto,
     this.imagenRaiz,
     this.imagenTallo,
@@ -80,7 +80,7 @@ class Planta {
     imagenPricipal: json["imagen_pricipal"],
     latitude: json["latitude"]?.toDouble(),
     longitude: json["longitude"]?.toDouble(),
-    lifestage: json["lifestage"],
+    // lifestage: json["lifestage"],
     imagenFruto: json["imagen_fruto"],
     imagenRaiz: json["imagen_raiz"],
     imagenTallo: json["imagen_tallo"],
@@ -93,7 +93,6 @@ class Planta {
       json["imagenes"]!.map((x) => ImagesMyPlant.fromJson(x)),
     ),
     status: json["status"],
-
   );
 
   Map<String, dynamic> toJson() => {
@@ -101,7 +100,7 @@ class Planta {
     "imagen_pricipal": imagenPricipal,
     "latitude": latitude,
     "longitude": longitude,
-    "lifestage": lifestage,
+    // "lifestage": lifestage,
     "imagen_fruto": imagenFruto,
     "imagen_raiz": imagenRaiz,
     "imagen_tallo": imagenTallo,
@@ -112,7 +111,6 @@ class Planta {
     "fecha_creacion": fechaCreacion.toIso8601String(),
     "imagenes": List<dynamic>.from(images.map((x) => x.toJson())),
     "status": status,
-
   };
 }
 
