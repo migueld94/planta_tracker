@@ -131,7 +131,7 @@ class _CommentsState extends State<Comments> {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) async {
                                   Navigator.push(context,
-                                      SlideRightRoute(page: const Home()));
+                                      FadeTransitionRoute(page: const Home()));
                                 });
                                 break;
                               case 406:

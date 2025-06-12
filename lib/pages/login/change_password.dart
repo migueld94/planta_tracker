@@ -181,7 +181,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           EasyLoading.dismiss();
                           Navigator.push(
                             context,
-                            SlideRightRoute(page: const Login()),
+                            FadeTransitionRoute(page: const Login()),
                           );
                           break;
                         case 400:

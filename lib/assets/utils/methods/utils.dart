@@ -299,19 +299,19 @@ Future<File> getImageFileFromAssets(String path) async {
 }
 
 goTerms(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const TermsAndConditions()));
+    Navigator.push(context, FadeTransitionRoute(page: const TermsAndConditions()));
 
 goToRecovery(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const PasswordRecovery()));
+    Navigator.push(context, FadeTransitionRoute(page: const PasswordRecovery()));
 
 goToRegister(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const Register()));
+    Navigator.push(context, FadeTransitionRoute(page: const Register()));
 
 goToLogin(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const Login()));
+    Navigator.push(context, FadeTransitionRoute(page: const Login()));
 
 goToProfile(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const ProfileUser()));
+    Navigator.push(context, FadeTransitionRoute(page: const ProfileUser()));
 
 goToRegisterPlant(BuildContext context) =>
-    Navigator.push(context, SlideRightRoute(page: const RegisterPlant()));
+    Navigator.push(context, FadeTransitionRoute(page: const RegisterPlant()));

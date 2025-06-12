@@ -299,7 +299,7 @@ class _RegisterState extends State<Register> {
                               EasyLoading.dismiss();
                               Navigator.push(
                                 context,
-                                SlideRightRoute(
+                                FadeTransitionRoute(
                                   page: VerifyCode(email: email.text.trim()),
                                 ),
                               );

@@ -41,7 +41,7 @@ class _ProfileUserState extends State<ProfileUser> {
         leading: GestureDetector(
           onTap:
               () =>
-                  Navigator.push(context, SlideRightRoute(page: const Home())),
+                  Navigator.push(context, FadeTransitionRoute(page: const Home())),
           child: Icon(
             Ionicons.arrow_back_outline,
             color: PlantaColors.colorWhite,

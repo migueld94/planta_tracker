@@ -305,7 +305,7 @@ class _EditPlants03State extends State<EditPlants03> {
 
                       Navigator.push(
                         context,
-                        SlideRightRoute(
+                        FadeTransitionRoute(
                           page: GetApiEditInformation04(
                             valores: widget.valores,
                             planta: widget.planta,
@@ -339,7 +339,7 @@ class _EditPlants03State extends State<EditPlants03> {
 
                   Navigator.push(
                     context,
-                    SlideRightRoute(
+                    FadeTransitionRoute(
                       page: GetApiEditInformation04(
                         planta: widget.planta,
                         valores: widget.valores,
@@ -360,7 +360,7 @@ class _EditPlants03State extends State<EditPlants03> {
 
                   Navigator.push(
                     context,
-                    SlideRightRoute(
+                    FadeTransitionRoute(
                       page: GetApiEditInformation04(
                         planta: widget.planta,
                         valores: widget.valores,

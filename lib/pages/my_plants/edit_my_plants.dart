@@ -394,7 +394,7 @@ class EditPlantState extends State<EditPlant> {
 
                     Navigator.push(
                       context,
-                      SlideRightRoute(page: const Home()),
+                      FadeTransitionRoute(page: const Home()),
                     );
                   },
                 );

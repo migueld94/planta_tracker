@@ -81,7 +81,7 @@ class _OnboardingState extends State<Onboarding> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.setBool('showHome', true);
-                  Navigator.push(context, SlideRightRoute(page: const Login()));
+                  Navigator.push(context, FadeTransitionRoute(page: const Login()));
                 },
                 title: AppLocalizations.of(context)!.text_buttom_continue,
               ),

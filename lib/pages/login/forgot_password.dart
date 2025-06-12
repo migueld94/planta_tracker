@@ -141,7 +141,7 @@ class _PasswordRecoveryState extends State<PasswordRecovery> {
                             EasyLoading.dismiss();
                             Navigator.push(
                               context,
-                              SlideRightRoute(page: VerifyCode02(email: email)),
+                              FadeTransitionRoute(page: VerifyCode02(email: email)),
                             );
                             break;
                           case 400:

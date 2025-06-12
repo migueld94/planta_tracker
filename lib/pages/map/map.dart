@@ -458,7 +458,7 @@ List<CustomMarker> createMarkers(List<Plant> plants, BuildContext context) {
             () {
               Navigator.push(
                 context,
-                SlideRightRoute(page: Details(id: plant.id!)),
+                FadeTransitionRoute(page: Details(id: plant.id!)),
               );
             },
           );

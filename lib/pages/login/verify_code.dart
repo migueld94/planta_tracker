@@ -193,7 +193,7 @@ class _VerifyCodeState extends State<VerifyCode> {
                       EasyLoading.dismiss();
                       Navigator.push(
                         context,
-                        SlideRightRoute(page: const Login()),
+                        FadeTransitionRoute(page: const Login()),
                       );
                       break;
                     case 400:

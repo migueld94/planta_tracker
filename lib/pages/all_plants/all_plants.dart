@@ -85,7 +85,7 @@ class _AllPlantsState extends State<AllPlants> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            SlideRightRoute(page: Details(id: plants.id)),
+                            FadeTransitionRoute(page: Details(id: plants.id)),
                           );
                         },
                       );

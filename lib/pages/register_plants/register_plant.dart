@@ -174,7 +174,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
 
                     Navigator.push(
                       context,
-                      SlideRightRoute(
+                      FadeTransitionRoute(
                         page: RegisterPlant2(
                           valores: valores,
                           latitude: latitude!,

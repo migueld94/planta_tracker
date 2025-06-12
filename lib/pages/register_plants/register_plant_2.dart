@@ -138,7 +138,7 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
 
                   Navigator.push(
                     context,
-                    SlideRightRoute(
+                    FadeTransitionRoute(
                       page: RegisterPlant3(
                         valores: widget.valores,
                         latitude: widget.latitude,
@@ -167,7 +167,7 @@ class _RegisterPlant2State extends State<RegisterPlant2> {
 
                   Navigator.push(
                     context,
-                    SlideRightRoute(
+                    FadeTransitionRoute(
                       page: RegisterPlant3(
                         valores: widget.valores,
                         latitude: widget.latitude,

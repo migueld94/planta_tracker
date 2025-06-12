@@ -59,7 +59,7 @@ class _DetailsState extends State<Details> {
               onTap: () {
                 Navigator.push(
                   context,
-                  SlideRightRoute(page: Comments(id: widget.id)),
+                  FadeTransitionRoute(page: Comments(id: widget.id)),
                 );
               },
               child: Column(
@@ -125,7 +125,7 @@ class DetailsWidget extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        SlideRightRoute(
+                        FadeTransitionRoute(
                           page: ViewImageCarousel(
                             id: images![index].id!,
                             initialPage: index,
@@ -205,25 +205,25 @@ class DetailsWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                horizontalMargin12,
-                Container(
-                  width: 120,
-                  padding: allPadding8,
-                  decoration: BoxDecoration(
-                    borderRadius: borderRadius20,
-                    border: Border.all(color: PlantaColors.colorOrange),
-                  ),
-                  child: Center(
-                    child: AutoSizeText(
-                      details.lifestage ?? '',
-                      style: context.theme.textTheme.text_02.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PlantaColors.colorOrange,
-                      ),
-                    ),
-                  ),
-                ),
+                // horizontalMargin12,
+                // Container(
+                //   width: 120,
+                //   padding: allPadding8,
+                //   decoration: BoxDecoration(
+                //     borderRadius: borderRadius20,
+                //     border: Border.all(color: PlantaColors.colorOrange),
+                //   ),
+                //   child: Center(
+                //     child: AutoSizeText(
+                //       details.lifestage ?? '',
+                //       style: context.theme.textTheme.text_02.copyWith(
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.bold,
+                //         color: PlantaColors.colorOrange,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             verticalMargin16,

@@ -332,7 +332,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                   () {
                     Navigator.push(
                       context,
-                      SlideRightRoute(page: const Home()),
+                      FadeTransitionRoute(page: const Home()),
                     );
                   },
                 );

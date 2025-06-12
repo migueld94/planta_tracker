@@ -195,7 +195,7 @@ class _VerifyCode02State extends State<VerifyCode02> {
                       EasyLoading.dismiss();
                       Navigator.push(
                         context,
-                        SlideRightRoute(
+                        FadeTransitionRoute(
                             page: ChangePassword(
                           email: widget.email,
                           otp: otp,

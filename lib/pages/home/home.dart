@@ -140,7 +140,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             ) async {
                               Navigator.push(
                                 context,
-                                SlideRightRoute(page: const Login()),
+                                FadeTransitionRoute(page: const Login()),
                               );
                             });
                             await storage.delete(key: 'token');
@@ -241,7 +241,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           Navigator.push(
                             context,
-                            SlideRightRoute(page: const Login()),
+                            FadeTransitionRoute(page: const Login()),
                           );
                         });
                       },
