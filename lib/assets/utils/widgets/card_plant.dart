@@ -12,7 +12,7 @@ class CardPlant extends StatelessWidget {
   const CardPlant({
     super.key,
     required this.title,
-    required this.lifestage,
+    // required this.lifestage,
     required this.status,
     required this.date,
     required this.onTap,
@@ -21,7 +21,7 @@ class CardPlant extends StatelessWidget {
 
   final String title;
   final String picture;
-  final String lifestage;
+  // final String lifestage;
   final String status;
   final String date;
   final Function()? onTap;
@@ -94,23 +94,23 @@ class CardPlant extends StatelessWidget {
                           ),
                         ),
                       ),
-                      horizontalMargin8,
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 4.0,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: borderRadius20,
-                          border: Border.all(color: PlantaColors.colorOrange),
-                        ),
-                        child: Center(
-                          child: AutoSizeText(
-                            lifestage,
-                            style: context.theme.textTheme.text_02,
-                          ),
-                        ),
-                      ),
+                      // horizontalMargin8,
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(
+                      //     horizontal: 8.0,
+                      //     vertical: 4.0,
+                      //   ),
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: borderRadius20,
+                      //     border: Border.all(color: PlantaColors.colorOrange),
+                      //   ),
+                      //   child: Center(
+                      //     child: AutoSizeText(
+                      //       lifestage,
+                      //       style: context.theme.textTheme.text_02,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],

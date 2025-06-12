@@ -1,5 +1,7 @@
 // // ignore_for_file: use_build_context_synchronously
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -77,7 +79,7 @@ class _AllPlantsState extends State<AllPlants> {
                             plants.especiePlanta.isNotEmpty
                                 ? plants.especiePlanta
                                 : AppLocalizations.of(context)!.name_plant,
-                        lifestage: plants.lifestage,
+                        // lifestage: plants.lifestage,
                         status: plants.estadoActual,
                         date: '${date.day} / ${date.month} / ${date.year}',
                         onTap: () {
@@ -100,6 +102,8 @@ class _AllPlantsState extends State<AllPlants> {
                   ),
                 );
           } else if (state is AllPlantsError) {
+            log(state.props.toString());
+
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

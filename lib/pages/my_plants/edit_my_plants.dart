@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:planta_tracker/models/nom_lifestage.dart';
 import 'package:planta_tracker/models/plantas_hive.dart';
 
 import 'package:planta_tracker/pages/home/home.dart';
@@ -94,7 +93,7 @@ class EditPlantState extends State<EditPlant> {
   final OptionPlantServices optionServices = OptionPlantServices();
   RegisterPlant plant = RegisterPlant();
   // final _lifestage = GlobalKey<ShakeWidgetState>();
-  Lifestage? free;
+  // Lifestage? free;
   String lifestage = '';
   // late Future<Box<Planta>> _plantaBoxFuture;
   List<ImagesMyPlant> images = [];

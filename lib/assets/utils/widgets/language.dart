@@ -4,8 +4,6 @@ import 'package:planta_tracker/blocs/all_plants/all_plants_bloc.dart';
 import 'package:planta_tracker/blocs/all_plants/all_plants_event.dart';
 import 'package:planta_tracker/blocs/details_plants/details_plants_bloc.dart';
 import 'package:planta_tracker/blocs/details_plants/details_plants_event.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:provider/provider.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -44,9 +42,6 @@ class LanguagePickerWidget extends StatelessWidget {
                   context.read<AllPlantsBloc>().add(
                     LoadAllPlants(language: flag),
                   );
-
-                  context.read<MyPlantsBloc>().add(InvalidateCacheMyPlants());
-                  context.read<MyPlantsBloc>().add(LoadMyPlants());
 
                   context.read<PlantDetailBloc>().add(
                     PlantDetailInvalidateCache(),

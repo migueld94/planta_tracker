@@ -3,23 +3,23 @@
 // Check in to version control
 
 import 'package:hive_ce/hive.dart';
-import 'package:planta_tracker/models/nom_lifestage.dart';
+// import 'package:planta_tracker/models/nom_lifestage.dart';
 import 'package:planta_tracker/models/plantas_hive.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(ImagesMyPlantAdapter());
-    registerAdapter(LifestageAdapter());
+    // registerAdapter(LifestageAdapter());
     registerAdapter(PlantaAdapter());
-    registerAdapter(ResultAdapter());
+    // registerAdapter(ResultAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(ImagesMyPlantAdapter());
-    registerAdapter(LifestageAdapter());
+    // registerAdapter(LifestageAdapter());
     registerAdapter(PlantaAdapter());
-    registerAdapter(ResultAdapter());
+    // registerAdapter(ResultAdapter());
   }
 }

@@ -10,9 +10,7 @@ import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/blocs/all_plants/all_plants_bloc.dart';
 import 'package:planta_tracker/blocs/details_plants/details_plants_bloc.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
 import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
-// import 'package:planta_tracker/dependency_injection.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/map/map_event.dart';
@@ -55,10 +53,6 @@ void main() async {
         BlocProvider(create: (context) => GpsBloc()..add(GpsStarted())),
         BlocProvider(create: (context) => MapBloc()..add(MapStarted())),
         BlocProvider(create: (context) => PlantsMapBloc(AllPlantServices())),
-        BlocProvider(
-          create:
-              (context) => MyPlantsBloc(plantServices: OptionPlantServices()),
-        ),
         BlocProvider(
           create:
               (context) => AllPlantsBloc(plantServices: OptionPlantServices()),

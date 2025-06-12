@@ -451,7 +451,7 @@ List<CustomMarker> createMarkers(List<Plant> plants, BuildContext context) {
         onTap: () {
           info(
             context,
-            plant.lifestage!,
+            // plant.lifestage!,
             plant.estadoActual!,
             plant.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
             getColor(),

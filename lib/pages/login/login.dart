@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -217,6 +218,7 @@ class _LoginState extends State<Login> {
 
                           EasyLoading.show();
                           try {
+                            log('Probando');
                             var res = await authService.login(
                               email.text.trim().toLowerCase(),
                               password.text,
@@ -327,7 +329,23 @@ class _LoginState extends State<Login> {
                             );
                           } catch (e) {
                             EasyLoading.dismiss();
-                            throw Exception(e);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: PlantaColors.colorOrange,
+                                content: Center(
+                                  child: AutoSizeText(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.error_connection,
+                                    style: context.theme.textTheme.text_01
+                                        .copyWith(
+                                          color: PlantaColors.colorWhite,
+                                          fontSize: 16.0,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            );
                           }
                         }
                       },

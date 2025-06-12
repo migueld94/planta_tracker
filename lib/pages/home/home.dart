@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,18 +9,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
-// import 'package:planta_tracker/assets/utils/assets.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/blocs/all_plants/all_plants_bloc.dart';
 import 'package:planta_tracker/blocs/all_plants/all_plants_event.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
-import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
 import 'package:planta_tracker/blocs/profile/profile_event.dart';
 import 'package:planta_tracker/pages/all_plants/all_plants.dart';
-// import 'package:planta_tracker/pages/home/methods/dialog_misions.dart';
 import 'package:planta_tracker/pages/login/login.dart';
 import 'package:planta_tracker/pages/map/map.dart';
 import 'package:planta_tracker/pages/my_plants/my_plants.dart';
@@ -32,9 +30,50 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
   final storage = const FlutterSecureStorage();
   final AuthService authService = AuthService();
+  bool isLoading = false;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleLoadingChange(bool loading) {
+    log(loading.toString());
+    setState(() {
+      isLoading = loading;
+    });
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cargando'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Text(
+                  'Por favor, espera mientras se están enviando las plantas.',
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +82,6 @@ class _HomeState extends State<Home> {
 
     context.read<AllPlantsBloc>().add(LoadAllPlants(language: language));
     context.read<ProfileBloc>().add(FetchProfile());
-    context.read<MyPlantsBloc>().add(LoadMyPlants());
 
     return SafeArea(
       top: false,
@@ -154,12 +192,20 @@ class _HomeState extends State<Home> {
               ),
             ],
             bottom: TabBar(
+              controller: _tabController,
               indicatorColor: PlantaColors.colorOrange,
               dividerColor: PlantaColors.colorWhite,
               labelStyle: context.theme.textTheme.text_01.copyWith(
                 color: PlantaColors.colorWhite,
               ),
               labelColor: PlantaColors.colorWhite,
+              onTap: (index) {
+                if (isLoading) {
+                  _showLoadingDialog(context);
+                  // Cancelar el cambio de pestaña forzando que no se actualice el índice
+                  _tabController.index = _tabController.previousIndex;
+                }
+              },
               tabs: [
                 Tab(
                   text: AppLocalizations.of(context)!.plants,
@@ -197,9 +243,14 @@ class _HomeState extends State<Home> {
                   );
                 }
               },
-              child: const TabBarView(
+              child: TabBarView(
+                controller: _tabController,
                 physics: NeverScrollableScrollPhysics(),
-                children: [AllPlants(), MapView(), MyPlants()],
+                children: [
+                  AllPlants(),
+                  MapView(),
+                  MyPlants(onLoadingChanged: _handleLoadingChange),
+                ],
               ),
             ),
           ),

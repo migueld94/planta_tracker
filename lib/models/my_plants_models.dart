@@ -43,7 +43,7 @@ class Result {
   double latitude;
   double longitude;
   String imagenPrincipal;
-  String lifestage;
+  // String lifestage;
   String estadoActual;
   DateTime fechaRegistro;
 
@@ -53,7 +53,7 @@ class Result {
     required this.latitude,
     required this.longitude,
     required this.imagenPrincipal,
-    required this.lifestage,
+    // required this.lifestage,
     required this.estadoActual,
     required this.fechaRegistro,
   });
@@ -64,7 +64,7 @@ class Result {
     latitude: json["latitude"]?.toDouble(),
     longitude: json["longitude"]?.toDouble(),
     imagenPrincipal: json["imagen_principal"],
-    lifestage: json["lifestage"],
+    // lifestage: json["lifestage"],
     estadoActual: json["estado_actual"],
     fechaRegistro: DateTime.parse(json["fecha_registro_"]),
   );
@@ -75,7 +75,7 @@ class Result {
     "latitude": latitude,
     "longitude": longitude,
     "imagen_principal": imagenPrincipal,
-    "lifestage": lifestage,
+    // "lifestage": lifestage,
     "estado_actual": estadoActual,
     "fecha_registro_":
         "${fechaRegistro.year.toString().padLeft(4, '0')}-${fechaRegistro.month.toString().padLeft(2, '0')}-${fechaRegistro.day.toString().padLeft(2, '0')}",

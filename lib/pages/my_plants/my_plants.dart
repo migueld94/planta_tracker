@@ -19,7 +19,8 @@ import 'package:planta_tracker/pages/my_plants/methods/methods.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MyPlants extends StatefulWidget {
-  const MyPlants({super.key});
+  final Function(bool) onLoadingChanged;
+  const MyPlants({super.key, required this.onLoadingChanged});
 
   @override
   State<MyPlants> createState() => _MyPlantsState();
@@ -66,6 +67,7 @@ class _MyPlantsState extends State<MyPlants> {
       try {
         setState(() {
           loading = true;
+          widget.onLoadingChanged(true);
         });
         final plantaBox = await _plantaBoxFuture;
         final allPlantas = plantaBox.values.toList();
@@ -99,17 +101,9 @@ class _MyPlantsState extends State<MyPlants> {
             if (response != null) {
               log('Response del sendPlantToApi => ${response.statusCode}');
               if (response.statusCode == 200) {
-                // Actualizar estado de la planta
-                // planta.status = 'Enviado';
-                // updateFutures.add(
-                //   plantaBox.putAt(allPlantas.indexOf(planta), planta),
-                // );
-
-                // Eliminar la planta
                 updateFutures.add(
                   plantaBox.deleteAt(allPlantas.indexOf(planta)),
                 );
-
                 log(
                   'Enviado Correctamente => ID: ${planta.id}, status: ${planta.status}',
                 );
@@ -130,6 +124,7 @@ class _MyPlantsState extends State<MyPlants> {
           selectedPlant.clear();
           isSelectionMode = false;
           loading = false;
+          widget.onLoadingChanged(false);
         });
       } catch (e) {
         log("Error al abrir la caja de plantas: $e");
@@ -137,6 +132,7 @@ class _MyPlantsState extends State<MyPlants> {
           selectedPlant.clear();
           isSelectionMode = false;
           loading = false;
+          widget.onLoadingChanged(false);
         });
       }
     } else {
@@ -269,73 +265,97 @@ class _MyPlantsState extends State<MyPlants> {
                                 // lifestage: planta.lifestage,
                                 date:
                                     '${planta.fechaCreacion.day} / ${planta.fechaCreacion.month} / ${planta.fechaCreacion.year}',
-                                onTap: () {
-                                  if (isSelectionMode) {
-                                    if (planta.status!.toLowerCase() !=
-                                        'enviado') {
-                                      _toggleSelection(plantId: planta.id);
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          backgroundColor:
-                                              PlantaColors.colorDarkOrange,
-                                          content: Text(
-                                            AppLocalizations.of(
-                                              context,
-                                            )!.plant_selected,
-                                            style: context
-                                                .theme
-                                                .textTheme
-                                                .text_01
-                                                .copyWith(
-                                                  color:
-                                                      PlantaColors.colorWhite,
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.bold,
+                                onTap:
+                                    loading
+                                        ? null
+                                        : () {
+                                          if (isSelectionMode) {
+                                            if (planta.status!.toLowerCase() !=
+                                                'enviado') {
+                                              _toggleSelection(
+                                                plantId: planta.id,
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  backgroundColor:
+                                                      PlantaColors
+                                                          .colorDarkOrange,
+                                                  content: Text(
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.plant_selected,
+                                                    style: context
+                                                        .theme
+                                                        .textTheme
+                                                        .text_01
+                                                        .copyWith(
+                                                          color:
+                                                              PlantaColors
+                                                                  .colorWhite,
+                                                          fontSize: 16.0,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
                                                 ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      FadeTransitionRoute(
-                                        page: DetailsMyPlants(planta: planta),
-                                      ),
-                                    );
-                                  }
-                                },
+                                              );
+                                            }
+                                          } else {
+                                            Navigator.push(
+                                              context,
+                                              FadeTransitionRoute(
+                                                page: DetailsMyPlants(
+                                                  planta: planta,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
                                 picture: File(planta.imagenPricipal).path,
                                 id: planta.id,
                                 status: planta.status,
-                                onLongPress: () {
-                                  if (planta.status!.toLowerCase() !=
-                                      'enviado') {
-                                    _startSelectionMode();
-                                    _toggleSelection(plantId: planta.id);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        backgroundColor:
-                                            PlantaColors.colorDarkOrange,
-                                        content: Text(
-                                          AppLocalizations.of(
-                                            context,
-                                          )!.plant_selected,
-                                          style: context.theme.textTheme.text_01
-                                              .copyWith(
-                                                color: PlantaColors.colorWhite,
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold,
+                                onLongPress:
+                                    loading
+                                        ? null
+                                        : () {
+                                          if (planta.status!.toLowerCase() !=
+                                              'enviado') {
+                                            _startSelectionMode();
+                                            _toggleSelection(
+                                              plantId: planta.id,
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                backgroundColor:
+                                                    PlantaColors
+                                                        .colorDarkOrange,
+                                                content: Text(
+                                                  AppLocalizations.of(
+                                                    context,
+                                                  )!.plant_selected,
+                                                  style: context
+                                                      .theme
+                                                      .textTheme
+                                                      .text_01
+                                                      .copyWith(
+                                                        color:
+                                                            PlantaColors
+                                                                .colorWhite,
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
                                               ),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
+                                            );
+                                          }
+                                        },
                                 color:
                                     isSelected
                                         ? PlantaColors.colorGreen
@@ -353,8 +373,7 @@ class _MyPlantsState extends State<MyPlants> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     // EDITAR
-                                    if (planta.status!.toLowerCase() !=
-                                        'enviado')
+                                    if (!loading)
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
@@ -391,12 +410,15 @@ class _MyPlantsState extends State<MyPlants> {
                                     if (planta.status!.toLowerCase() !=
                                         'enviado')
                                       GestureDetector(
-                                        onTap: () {
-                                          _confirmDeleteCard(
-                                            context: context,
-                                            plantaIndex: index,
-                                          );
-                                        },
+                                        onTap:
+                                            loading
+                                                ? null
+                                                : () {
+                                                  _confirmDeleteCard(
+                                                    context: context,
+                                                    plantaIndex: index,
+                                                  );
+                                                },
                                         child: Container(
                                           width: 40,
                                           height: 40,
@@ -436,7 +458,7 @@ class _MyPlantsState extends State<MyPlants> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: PlantaColors.colorGreen,
-        onPressed: () => goToRegisterPlant(context),
+        onPressed: loading ? null : () => goToRegisterPlant(context),
         child: Icon(Ionicons.add_outline, color: PlantaColors.colorWhite),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -460,12 +482,12 @@ class _MyPlantsState extends State<MyPlants> {
                       Ionicons.people_outline,
                       color: PlantaColors.colorWhite,
                     ),
-                    onPressed: () => goToProfile(context),
+                    onPressed: loading ? null : () => goToProfile(context),
                   ),
                   // Botón de enviar plantas seleccionadas
                   if (selectedPlant.isNotEmpty)
                     ElevatedButton(
-                      onPressed: _sendSelectedPlants,
+                      onPressed: loading ? null : _sendSelectedPlants,
                       child:
                           loading
                               ? CircularPlantaTracker(

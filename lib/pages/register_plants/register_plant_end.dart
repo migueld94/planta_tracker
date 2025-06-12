@@ -13,7 +13,6 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
-import 'package:planta_tracker/models/nom_lifestage.dart';
 import 'package:planta_tracker/models/plantas_hive.dart';
 import 'package:planta_tracker/models/register_plant_models.dart';
 import 'package:planta_tracker/pages/home/home.dart';
@@ -45,7 +44,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
   final OptionPlantServices optionServices = OptionPlantServices();
   RegisterPlant plant = RegisterPlant();
   // final _lifestage = GlobalKey<ShakeWidgetState>();
-  Result? result;
+  // Result? result;
   // Lifestage? free;
   bool avaliable = false;
   // String lifestage = '';
@@ -462,7 +461,7 @@ class RegisterPlantEndState extends State<RegisterPlantEnd> {
                           );
                         }
                       },
-              title: AppLocalizations.of(context)!.text_buttom_send,
+              title: 'Guardar',
             ),
           ],
         ),

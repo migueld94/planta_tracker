@@ -175,7 +175,6 @@ Future<Object?> tutorial(BuildContext context) {
 
 Future<Object?> info(
   BuildContext context,
-  String lifestage,
   String status,
   String name,
   Color color,
@@ -230,25 +229,25 @@ Future<Object?> info(
                           ),
                         ),
                       ),
-                      horizontalMargin8,
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 4.0,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: borderRadius20,
-                          border: Border.all(color: PlantaColors.colorOrange),
-                        ),
-                        child: Center(
-                          child: AutoSizeText(
-                            lifestage,
-                            style: context.theme.textTheme.text_02.copyWith(
-                              fontSize: 14.0,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // horizontalMargin8,
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(
+                      //     horizontal: 8.0,
+                      //     vertical: 4.0,
+                      //   ),
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: borderRadius20,
+                      //     border: Border.all(color: PlantaColors.colorOrange),
+                      //   ),
+                      //   child: Center(
+                      //     child: AutoSizeText(
+                      //       lifestage,
+                      //       style: context.theme.textTheme.text_02.copyWith(
+                      //         fontSize: 14.0,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   GestureDetector(
