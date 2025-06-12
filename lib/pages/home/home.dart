@@ -118,74 +118,78 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 icon: Icon(Icons.logout, color: PlantaColors.colorWhite),
                 tooltip: AppLocalizations.of(context)!.logout,
                 onPressed: () async {
-                  warning(
-                    context,
-                    AppLocalizations.of(context)!.warning_exit,
-                    () async {
-                      EasyLoading.show();
+                  if (isLoading) {
+                    _showLoadingDialog(context);
+                  } else {
+                    warning(
+                      context,
+                      AppLocalizations.of(context)!.warning_exit,
+                      () async {
+                        EasyLoading.show();
 
-                      final token = await storage.read(key: 'token');
-                      var res = await authService.logout(token!);
+                        final token = await storage.read(key: 'token');
+                        var res = await authService.logout(token!);
 
-                      switch (res!.statusCode) {
-                        case 200:
-                          EasyLoading.dismiss();
-                          Navigator.pop(context);
+                        switch (res!.statusCode) {
+                          case 200:
+                            EasyLoading.dismiss();
+                            Navigator.pop(context);
 
-                          WidgetsBinding.instance.addPostFrameCallback((
-                            _,
-                          ) async {
-                            Navigator.push(
-                              context,
-                              SlideRightRoute(page: const Login()),
+                            WidgetsBinding.instance.addPostFrameCallback((
+                              _,
+                            ) async {
+                              Navigator.push(
+                                context,
+                                SlideRightRoute(page: const Login()),
+                              );
+                            });
+                            await storage.delete(key: 'token');
+                            break;
+                          case 400:
+                            EasyLoading.dismiss();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: AutoSizeText(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.verify_credentials,
+                                  style: context.theme.textTheme.text_01,
+                                ),
+                              ),
                             );
-                          });
-                          await storage.delete(key: 'token');
-                          break;
-                        case 400:
-                          EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: AutoSizeText(
-                                AppLocalizations.of(
-                                  context,
-                                )!.verify_credentials,
-                                style: context.theme.textTheme.text_01,
+                            break;
+                          case 401:
+                            EasyLoading.dismiss();
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: AutoSizeText(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.verify_credentials,
+                                  style: context.theme.textTheme.text_01,
+                                ),
                               ),
-                            ),
-                          );
-                          break;
-                        case 401:
-                          EasyLoading.dismiss();
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: AutoSizeText(
-                                AppLocalizations.of(
-                                  context,
-                                )!.verify_credentials,
-                                style: context.theme.textTheme.text_01,
+                            );
+                            break;
+                          default:
+                            EasyLoading.dismiss();
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: AutoSizeText(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.verify_credentials,
+                                  style: context.theme.textTheme.text_01,
+                                ),
                               ),
-                            ),
-                          );
-                          break;
-                        default:
-                          EasyLoading.dismiss();
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: AutoSizeText(
-                                AppLocalizations.of(
-                                  context,
-                                )!.verify_credentials,
-                                style: context.theme.textTheme.text_01,
-                              ),
-                            ),
-                          );
-                          break;
-                      }
-                    },
-                  );
+                            );
+                            break;
+                        }
+                      },
+                    );
+                  }
                 },
               ),
             ],
