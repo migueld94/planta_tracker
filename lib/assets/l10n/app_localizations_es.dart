@@ -333,6 +333,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get longitude => 'Longitud';
 
   @override
+  String get loading => 'Cargando';
+
+  @override
+  String get loading_send_plant => 'Por favor, espera mientras se están enviando las plantas.';
+
+  @override
   String get nSLocationWhenInUseUsageDescription => 'Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa';
 
   @override

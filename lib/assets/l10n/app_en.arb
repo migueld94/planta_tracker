@@ -488,6 +488,15 @@
         "description": "text"
     },
 
+    "loading": "Cargando",
+    "@loading": {
+        "description": "text"
+    },
+    "loading_send_plant": "Por favor, espera mientras se están enviando las plantas.",
+    "@loading_send_plant": {
+        "description": "text"
+    },
+
     "nSLocationWhenInUseUsageDescription": "We need access to your location to show your position on the map",
     "nSLocationAlwaysAndWhenInUseUsageDescription": "We need access to your location in the background to provide a better experience",
     "nSCameraUsageDescription": "This app needs access to your camera in order to take pictures."

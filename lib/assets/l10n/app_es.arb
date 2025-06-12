@@ -128,6 +128,9 @@
     "latitude": "Latitud",
     "longitude": "Longitud",
 
+    "loading": "Cargando",
+    "loading_send_plant": "Por favor, espera mientras se están enviando las plantas.",
+
     "nSLocationWhenInUseUsageDescription": "Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa",
     "nSLocationAlwaysAndWhenInUseUsageDescription": "Necesitamos acceder a tu ubicación en segundo plano para proporcionar una mejor experiencia",
     "nSCameraUsageDescription": "Esta aplicación necesita acceso a su cámara para poder tomar fotografías."

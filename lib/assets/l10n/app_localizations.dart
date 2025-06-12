@@ -743,6 +743,18 @@ abstract class AppLocalizations {
   /// **'Longitude'**
   String get longitude;
 
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Cargando'**
+  String get loading;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Por favor, espera mientras se están enviando las plantas.'**
+  String get loading_send_plant;
+
   /// No description provided for @nSLocationWhenInUseUsageDescription.
   ///
   /// In en, this message translates to:

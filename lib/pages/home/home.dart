@@ -60,13 +60,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Cargando'),
+          title: Text(AppLocalizations.of(context)!.loading),
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text(
-                  'Por favor, espera mientras se están enviando las plantas.',
-                ),
+                Text(AppLocalizations.of(context)!.loading_send_plant),
               ],
             ),
           ),
@@ -227,20 +225,24 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               canPop: false,
               onPopInvoked: (bool didPop) async {
                 if (!didPop) {
-                  warning(
-                    context,
-                    AppLocalizations.of(context)!.warning_exit,
-                    () async {
-                      await storage.deleteAll();
-                      Navigator.pop(context);
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Navigator.push(
-                          context,
-                          SlideRightRoute(page: const Login()),
-                        );
-                      });
-                    },
-                  );
+                  if (isLoading) {
+                    _showLoadingDialog(context);
+                  } else {
+                    warning(
+                      context,
+                      AppLocalizations.of(context)!.warning_exit,
+                      () async {
+                        await storage.deleteAll();
+                        Navigator.pop(context);
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.push(
+                            context,
+                            SlideRightRoute(page: const Login()),
+                          );
+                        });
+                      },
+                    );
+                  }
                 }
               },
               child: TabBarView(
