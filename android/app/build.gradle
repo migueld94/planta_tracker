@@ -50,8 +50,8 @@ android {
         applicationId "plantango.plantatracker"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 34
-        versionCode 3
-        versionName '1.0.3'
+        versionCode 4
+        versionName '1.0.4'
         ndk {
             debugSymbolLevel 'FULL' // También puedes usar 'SYMBOL_TABLE' si el tamaño del archivo es un problema
         }
