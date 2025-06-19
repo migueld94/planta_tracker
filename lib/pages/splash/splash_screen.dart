@@ -10,7 +10,6 @@ import 'package:planta_tracker/blocs/all_plants/all_plants_event.dart';
 import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
 import 'package:planta_tracker/blocs/profile/profile_event.dart';
 import 'package:planta_tracker/pages/login/login.dart';
-import 'package:planta_tracker/pages/my_plants/methods/methods.dart';
 import 'package:planta_tracker/pages/onboarding/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

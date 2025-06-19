@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
@@ -14,6 +15,7 @@ import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_bloc.dart';
 import 'package:planta_tracker/blocs/gps/gps_event.dart';
 import 'package:planta_tracker/blocs/map/map_event.dart';
+import 'package:planta_tracker/dependency_injection.dart';
 import 'package:planta_tracker/hive_registrar.g.dart';
 import 'package:planta_tracker/models/plantas_hive.dart';
 import 'package:planta_tracker/pages/map/bloc/plants_map_bloc.dart';
@@ -42,7 +44,7 @@ void main() async {
   await Hive.openBox<Planta>('plantasBox');
 
   // Inicializa la inyección de dependencias
-  // DependencyInjection.init();
+  DependencyInjection.init();
 
   configLoading();
   clearSecureStorageOnReinstall();
@@ -123,7 +125,7 @@ class MyApp extends StatelessWidget {
       },
       builder: (context, child) {
         final provider = Provider.of<ThemeProvider>(context);
-        return MaterialApp(
+        return GetMaterialApp(
           builder: EasyLoading.init(),
           debugShowCheckedModeBanner: false,
           title: 'Planta! Tracker',
