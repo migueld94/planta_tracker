@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/constants.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
@@ -158,12 +160,22 @@ class _RegisterPlant3State extends State<RegisterPlant3> {
             ),
             ButtomSmall(
               color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
-              onTap: () {
+              onTap: () async {
                 if (flag == true) {
-                  // widget.pictures!.add(_image!.path);
+                  final imageBytes = await _image!.readAsBytes();
+                  final compressedBytes =
+                      await FlutterImageCompress.compressWithList(
+                        imageBytes,
+                        quality: 75,
+                      );
+
+                  final tempDir = await getTemporaryDirectory();
+                  final compressedFile = await File(
+                    '${tempDir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg',
+                  ).writeAsBytes(compressedBytes);
 
                   widget.valores.add({
-                    "imagen": _image!.path,
+                    "imagen": compressedFile.path,
                     "name":
                         AppLocalizations.of(
                           context,

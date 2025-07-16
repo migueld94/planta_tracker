@@ -4,10 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:exif/exif.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
@@ -66,6 +68,7 @@ class _RegisterPlantState extends State<RegisterPlant> {
       setState(() {
         if (image != null) {
           _image = File(image.path);
+
           flag = true;
         } else {
           //print('No se seleccionó ninguna imagen.');
@@ -154,18 +157,21 @@ class _RegisterPlantState extends State<RegisterPlant> {
               color: flag ? PlantaColors.colorGreen : PlantaColors.colorGrey,
               onTap: () async {
                 if (flag == true) {
-                  // final bytes = await _image!.readAsBytes();
-                  // final data = await readExifFromBytes(Uint8List.fromList(bytes));
-
-                  // final fileBytes = File(_image!.path).readAsBytesSync();
-                  // final data = await readExifFromBytes(fileBytes);
-
-                  // final latitude = data['GPS GPSLatitude'];
-                  // final longitude = data['GPS GPSLongitude'];
-
                   if (longitude != null && latitude != null) {
+                    final imageBytes = await _image!.readAsBytes();
+                    final compressedBytes =
+                        await FlutterImageCompress.compressWithList(
+                          imageBytes,
+                          quality: 75,
+                        );
+
+                    final tempDir = await getTemporaryDirectory();
+                    final compressedFile = await File(
+                      '${tempDir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg',
+                    ).writeAsBytes(compressedBytes);
+
                     valores.add({
-                      "imagen": _image!.path,
+                      "imagen": compressedFile.path,
                       "name":
                           AppLocalizations.of(
                             context,
@@ -185,8 +191,6 @@ class _RegisterPlantState extends State<RegisterPlant> {
                   } else {
                     alert(context, AppLocalizations.of(context)!.location_info);
                   }
-                } else {
-                  null;
                 }
               },
               title: AppLocalizations.of(context)!.text_buttom_next,
@@ -206,3 +210,20 @@ class _RegisterPlantState extends State<RegisterPlant> {
     return degrees + (minutes / 60) + (seconds / 3600);
   }
 }
+
+// Future<File> saveCompressedFileToGallery(File compressedFile) async {
+//   // final status = await Permission.storage.request();
+//   // if (!status.isGranted) {
+//   //   throw Exception("Permiso de almacenamiento denegado");
+//   // }
+
+//   final directory = Directory('/storage/emulated/0/Pictures/PlantaTracker');
+//   if (!await directory.exists()) {
+//     await directory.create(recursive: true);
+//   }
+
+//   final fileName = compressedFile.path.split('/').last;
+//   final savedFile = File('${directory.path}/$fileName');
+
+//   return await compressedFile.copy(savedFile.path);
+// }

@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
@@ -183,8 +185,20 @@ class _EditPlants01State extends State<EditPlants01> {
                   if (_image != null) {
                     //Si se tomo la nueva foto
 
+                    final imageBytes = await _image!.readAsBytes();
+                    final compressedBytes =
+                        await FlutterImageCompress.compressWithList(
+                          imageBytes,
+                          quality: 75,
+                        );
+
+                    final tempDir = await getTemporaryDirectory();
+                    final compressedFile = await File(
+                      '${tempDir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg',
+                    ).writeAsBytes(compressedBytes);
+
                     valores.add({
-                      "imagen": _image!.path,
+                      "imagen": compressedFile.path,
                       "name":
                           AppLocalizations.of(
                             context,
