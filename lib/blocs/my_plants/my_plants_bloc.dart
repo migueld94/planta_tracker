@@ -37,7 +37,7 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
     }
 
     try {
-      final plants = await plantServices.getAllMyPlants(page: _currentPage);
+      final plants = await plantServices.getAllMyPlants(page: _currentPage, language: event.language);
       _cachedMyPlants = plants;
 
       if (plants.next == null) _hasMoreData = false;
@@ -58,7 +58,9 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
     emit(MyPlantsLoadingMore());
 
     try {
-      final plants = await plantServices.getAllMyPlants(page: ++_currentPage);
+      final plants = await plantServices.getAllMyPlants(page: ++_currentPage,
+        language: event.language,
+      );
 
       if (plants.results.isEmpty || plants.next == null) {
         _hasMoreData = false;

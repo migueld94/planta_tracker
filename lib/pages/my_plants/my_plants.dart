@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:planta_tracker/pages/my_plants/planta_enviada/planta_enviada_screen.dart';
@@ -29,7 +30,10 @@ class _MyPlantsState extends State<MyPlants> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<MyPlantsBloc>().add(LoadMyPlants());
+    final locale = Localizations.localeOf(context);
+    var language = L10n.getFlag(locale.languageCode);
+    context.read<MyPlantsBloc>().add(LoadMyPlants(language: language));
+    
     log(isLoading.toString());
     return Column(
       children: [

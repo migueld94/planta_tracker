@@ -31,12 +31,12 @@ class OptionPlantServices {
   var addComments = Uri.parse('${Constants.baseUrl}/en/api/comentario/');
 
   // Todas mis plantas
-  Future<MyPlantsModel> getAllMyPlants({required int page}) async {
+  Future<MyPlantsModel> getAllMyPlants({required int page, required String language}) async {
     final token = await storage.read(key: "token");
     // String idioma = getFlag();
     try {
       Response response = await dio.get(
-        '${dotenv.env["API_BASE_DOMAIN"]}es/api/my_plants?page=$page',
+        '${dotenv.env["API_BASE_DOMAIN"]}$language/api/my_plants?page=$page',
         options: Options(
           headers: <String, String>{'authorization': "Token $token"},
         ),

@@ -8,9 +8,22 @@ abstract class MyPlantsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadMyPlants extends MyPlantsEvent {}
+class LoadMyPlants extends MyPlantsEvent {
+  final String language;
+  const LoadMyPlants({required this.language});
 
-class LoadMoreMyPlants extends MyPlantsEvent {}
+  @override
+  List<Object> get props => [language];
+}
+
+class LoadMoreMyPlants extends MyPlantsEvent {
+  final String language;
+
+  const LoadMoreMyPlants(this.language);
+
+  @override
+  List<Object> get props => [language];
+}
 
 class InvalidateCacheMyPlants extends MyPlantsEvent {}
 

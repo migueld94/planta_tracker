@@ -33,7 +33,9 @@ class _PlantsSentViewState extends State<PlantsSentView> {
               _scrollController.position.maxScrollExtent - 200 &&
           context.read<MyPlantsBloc>().state is! MyPlantsLoadingMore &&
           context.read<MyPlantsBloc>().hasMoreData) {
-        context.read<MyPlantsBloc>().add(LoadMoreMyPlants());
+            final locale = Localizations.localeOf(context);
+        var language = L10n.getFlag(locale.languageCode);
+        context.read<MyPlantsBloc>().add(LoadMoreMyPlants(language));
       }
     });
   }
@@ -121,7 +123,9 @@ class _PlantsSentViewState extends State<PlantsSentView> {
                   ),
                   IconButton(
                     onPressed: () {
-                      context.read<MyPlantsBloc>().add(LoadMyPlants());
+                      final locale = Localizations.localeOf(context);
+                      var language = L10n.getFlag(locale.languageCode);
+                      context.read<MyPlantsBloc>().add(LoadMyPlants(language: language));
                     },
                     icon: Icon(Ionicons.refresh_outline, size: 30.0),
                   ),

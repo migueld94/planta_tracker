@@ -38,15 +38,6 @@ class _ProfileUserState extends State<ProfileUser> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: GestureDetector(
-          onTap:
-              () =>
-                  Navigator.push(context, FadeTransitionRoute(page: const Home())),
-          child: Icon(
-            Ionicons.arrow_back_outline,
-            color: PlantaColors.colorWhite,
-          ),
-        ),
         backgroundColor: PlantaColors.colorGreen,
         title: AutoSizeText(
           AppLocalizations.of(context)!.user_profile,
