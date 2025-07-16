@@ -11,7 +11,6 @@ import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_state.dart';
-import 'package:planta_tracker/models/my_plants_models.dart';
 import 'package:planta_tracker/pages/details_plant/details.dart';
 
 class PlantsSentView extends StatefulWidget {
@@ -33,7 +32,7 @@ class _PlantsSentViewState extends State<PlantsSentView> {
               _scrollController.position.maxScrollExtent - 200 &&
           context.read<MyPlantsBloc>().state is! MyPlantsLoadingMore &&
           context.read<MyPlantsBloc>().hasMoreData) {
-            final locale = Localizations.localeOf(context);
+        final locale = Localizations.localeOf(context);
         var language = L10n.getFlag(locale.languageCode);
         context.read<MyPlantsBloc>().add(LoadMoreMyPlants(language));
       }
@@ -91,10 +90,10 @@ class _PlantsSentViewState extends State<PlantsSentView> {
                     child: Center(child: CircularPlantaTracker()),
                   );
                 } else if (!hasMore) {
-                  return const Padding(
+                  return Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Center(
-                      child: Text("No hay más plantas para mostrar"),
+                      child: Text(AppLocalizations.of(context)!.non_plants),
                     ),
                   );
                 } else {
@@ -125,7 +124,9 @@ class _PlantsSentViewState extends State<PlantsSentView> {
                     onPressed: () {
                       final locale = Localizations.localeOf(context);
                       var language = L10n.getFlag(locale.languageCode);
-                      context.read<MyPlantsBloc>().add(LoadMyPlants(language: language));
+                      context.read<MyPlantsBloc>().add(
+                        LoadMyPlants(language: language),
+                      );
                     },
                     icon: Icon(Ionicons.refresh_outline, size: 30.0),
                   ),
@@ -164,39 +165,6 @@ class _PlantsSentViewState extends State<PlantsSentView> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class PlantCard extends StatelessWidget {
-  final Result result;
-
-  const PlantCard({super.key, required this.result});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-      child: ListTile(
-        leading: Image.network(
-          result.imagenPrincipal,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
-        ),
-        title: Text(result.especiePlanta ?? 'Determinacion pendiente'),
-        subtitle: Text(
-          "Estado: ${result.estadoActual}\nRegistrada: ${result.fechaRegistro.toLocal().toString().split(' ')[0]}",
-        ),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.push(
-            context,
-            FadeTransitionRoute(page: Details(id: result.id)),
-          );
-        },
       ),
     );
   }

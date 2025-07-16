@@ -303,6 +303,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_connection => 'Connection error. Please try again.';
 
   @override
+  String get non_plants => 'There are no more plants to show';
+
+  @override
+  String get sending => 'Sent';
+
+  @override
+  String get non_sending => 'Earrings';
+
+  @override
+  String get message_hold_send => 'Press and hold the plant(s) you want to send';
+
+  @override
   String get non_plant_registered => 'There are no plants to ship at this time.';
 
   @override

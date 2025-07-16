@@ -1,7 +1,5 @@
 // // ignore_for_file: use_build_context_synchronously
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -92,7 +90,9 @@ class _AllPlantsState extends State<AllPlants> {
                       );
                       return CardPlant(
                         picture: plant.imagenPrincipal,
-                        title: plant.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
+                        title:
+                            plant.especiePlanta ??
+                            AppLocalizations.of(context)!.name_plant,
                         status: plant.estadoActual,
                         date: '${date.day} / ${date.month} / ${date.year}',
                         onTap: () {
@@ -108,10 +108,10 @@ class _AllPlantsState extends State<AllPlants> {
                         child: Center(child: CircularPlantaTracker()),
                       );
                     } else if (!hasMore) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Center(
-                          child: Text("No hay más plantas para mostrar"),
+                          child: Text(AppLocalizations.of(context)!.non_plants),
                         ),
                       );
                     } else {

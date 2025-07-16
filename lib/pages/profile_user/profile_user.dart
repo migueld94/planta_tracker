@@ -9,7 +9,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:planta_tracker/assets/l10n/app_localizations.dart';
-import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/blocs/profile/profile_bloc.dart';
 import 'package:planta_tracker/blocs/profile/profile_event.dart';
@@ -20,7 +19,6 @@ import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
 import 'package:planta_tracker/assets/utils/widgets/buttoms.dart';
 import 'package:planta_tracker/assets/utils/widgets/input_decorations.dart';
 import 'package:planta_tracker/assets/utils/widgets/language.dart';
-import 'package:planta_tracker/pages/home/home.dart';
 import 'package:planta_tracker/services/user_services.dart';
 
 class ProfileUser extends StatefulWidget {

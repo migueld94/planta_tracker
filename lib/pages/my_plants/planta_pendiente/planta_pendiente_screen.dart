@@ -245,7 +245,7 @@ class _PlantasPendientesScreenState extends State<PlantasPendientesScreen> {
                         color: PlantaColors.colorGrey.withOpacity(0.3),
                       ),
                       child: Text(
-                        'Mantenga presionado la o las plantas que desee enviar',
+                        AppLocalizations.of(context)!.message_hold_send,
                         style: context.theme.textTheme.subtitle,
                       ),
                     ),

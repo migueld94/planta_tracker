@@ -686,6 +686,30 @@ abstract class AppLocalizations {
   /// text
   ///
   /// In en, this message translates to:
+  /// **'There are no more plants to show'**
+  String get non_plants;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sending;
+
+  /// text
+  ///
+  /// In en, this message translates to:
+  /// **'Earrings'**
+  String get non_sending;
+
+  /// No description provided for @message_hold_send.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold the plant(s) you want to send'**
+  String get message_hold_send;
+
+  /// text
+  ///
+  /// In en, this message translates to:
   /// **'There are no plants to ship at this time.'**
   String get non_plant_registered;
 

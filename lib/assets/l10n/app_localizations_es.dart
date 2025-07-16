@@ -303,6 +303,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get error_connection => 'Error de conexión. Inténtalo de nuevo.';
 
   @override
+  String get non_plants => 'No hay más plantas para mostrar';
+
+  @override
+  String get sending => 'Enviadas';
+
+  @override
+  String get non_sending => 'Pendientes';
+
+  @override
+  String get message_hold_send => 'Mantenga presionado la o las plantas que desee enviar';
+
+  @override
   String get non_plant_registered => 'No hay plantas por enviar en este momento.';
 
   @override
