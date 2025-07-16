@@ -10,7 +10,6 @@ abstract class AllPlantsEvent extends Equatable {
 
 class LoadAllPlants extends AllPlantsEvent {
   final String language;
-
   const LoadAllPlants({required this.language});
 
   @override
@@ -20,7 +19,7 @@ class LoadAllPlants extends AllPlantsEvent {
 class LoadMoreAllPlants extends AllPlantsEvent {
   final String language;
 
-  const LoadMoreAllPlants({required this.language});
+  const LoadMoreAllPlants(this.language);
 
   @override
   List<Object> get props => [language];

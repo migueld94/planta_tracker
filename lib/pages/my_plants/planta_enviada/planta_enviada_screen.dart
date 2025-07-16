@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/l10n/app_localizations.dart';
+import 'package:planta_tracker/assets/l10n/l10n.dart';
+import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
 import 'package:planta_tracker/assets/utils/theme/themes_provider.dart';
+import 'package:planta_tracker/assets/utils/widgets/card_plant.dart';
+import 'package:planta_tracker/assets/utils/widgets/circular_progress.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_event.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_state.dart';
 import 'package:planta_tracker/models/my_plants_models.dart';
+import 'package:planta_tracker/pages/details_plant/details.dart';
 
 class PlantsSentView extends StatefulWidget {
   const PlantsSentView({super.key});
@@ -44,7 +50,7 @@ class _PlantsSentViewState extends State<PlantsSentView> {
       body: BlocBuilder<MyPlantsBloc, MyPlantsState>(
         builder: (context, state) {
           if (state is MyPlantsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularPlantaTracker());
           }
 
           if (state is MyPlantsLoaded ||
@@ -58,14 +64,29 @@ class _PlantsSentViewState extends State<PlantsSentView> {
             return ListView.builder(
               controller: _scrollController,
               itemCount: plants.length + 1,
-              padding: const EdgeInsets.all(8),
               itemBuilder: (context, index) {
                 if (index < plants.length) {
-                  return PlantCard(result: plants[index]);
+                  final plant = plants[index];
+                  final date = plant.fechaRegistro.toLocal();
+
+                  return CardPlant(
+                    picture: plant.imagenPrincipal,
+                    title:
+                        plant.especiePlanta ??
+                        AppLocalizations.of(context)!.name_plant,
+                    status: plant.estadoActual,
+                    date: '${date.day} / ${date.month} / ${date.year}',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        FadeTransitionRoute(page: Details(id: plant.id)),
+                      );
+                    },
+                  );
                 } else if (isLoadingMore) {
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Center(child: CircularProgressIndicator()),
+                    child: Center(child: CircularPlantaTracker()),
                   );
                 } else if (!hasMore) {
                   return const Padding(
@@ -82,7 +103,31 @@ class _PlantsSentViewState extends State<PlantsSentView> {
           }
 
           if (state is MyPlantsError) {
-            return Center(child: Text("Error: ${state.error}"));
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Ionicons.wifi_outline,
+                    size: 90.0,
+                    color: PlantaColors.colorGrey,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.error_connection,
+                    style: context.theme.textTheme.h2.copyWith(
+                      color: PlantaColors.colorGrey,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      context.read<MyPlantsBloc>().add(LoadMyPlants());
+                    },
+                    icon: Icon(Ionicons.refresh_outline, size: 30.0),
+                  ),
+                ],
+              ),
+            );
           }
 
           return const SizedBox();
@@ -143,7 +188,10 @@ class PlantCard extends StatelessWidget {
         ),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
-          // Acción al tocar una planta, si aplica
+          Navigator.push(
+            context,
+            FadeTransitionRoute(page: Details(id: result.id)),
+          );
         },
       ),
     );

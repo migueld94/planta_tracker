@@ -25,23 +25,40 @@ class AllPlants extends StatefulWidget {
 }
 
 class _AllPlantsState extends State<AllPlants> {
-  late ScrollController _scrollController;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
-  }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      final locale = Localizations.localeOf(context);
-      final language = L10n.getFlag(locale.languageCode);
-      context.read<AllPlantsBloc>().add(LoadMoreAllPlants(language: language));
-    }
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 200 &&
+          context.read<AllPlantsBloc>().state is! AllPlantsLoadingMore &&
+          context.read<AllPlantsBloc>().hasMoreData) {
+        final locale = Localizations.localeOf(context);
+        final language = L10n.getFlag(locale.languageCode);
+        context.read<AllPlantsBloc>().add(LoadMoreAllPlants(language));
+      }
+    });
   }
+  // late ScrollController _scrollController;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _scrollController = ScrollController();
+  //   _scrollController.addListener(_onScroll);
+  // }
+
+  // void _onScroll() {
+  //   if (_scrollController.position.pixels ==
+  //       _scrollController.position.maxScrollExtent) {
+  //     final locale = Localizations.localeOf(context);
+  //     final language = L10n.getFlag(locale.languageCode);
+  //     context.read<AllPlantsBloc>().add(LoadMoreAllPlants(language: language));
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -57,42 +74,49 @@ class _AllPlantsState extends State<AllPlants> {
           if (state is AllPlantsLoading) {
             return Center(child: CircularPlantaTracker());
           } else if (state is AllPlantsLoaded ||
-              state is AllPlantsBackgroundLoading) {
-            final allPlants =
-                (state is AllPlantsLoaded)
-                    ? state.plants
-                    : (state as AllPlantsBackgroundLoading).plants;
+              state is AllPlantsBackgroundLoading ||
+              state is AllPlantsLoadingMore) {
+            final plants = context.read<AllPlantsBloc>().currentPlants;
+            final isLoadingMore = state is AllPlantsLoadingMore;
+            final hasMore = context.read<AllPlantsBloc>().hasMoreData;
 
-            return allPlants.results.isNotEmpty
+            return plants.isNotEmpty
                 ? ListView.builder(
                   controller: _scrollController,
-                  itemCount: allPlants.results.length + 1,
+                  itemCount: plants.length + 1,
                   itemBuilder: (context, index) {
-                    if (index < allPlants.results.length) {
-                      final plants = allPlants.results[index];
+                    if (index < plants.length) {
+                      final plant = plants[index];
                       final date = DateTime.parse(
-                        plants.fechaRegistro.toString(),
+                        plant.fechaRegistro.toString(),
                       );
                       return CardPlant(
-                        picture: plants.imagenPrincipal,
-                        title:
-                            plants.especiePlanta!.isNotEmpty
-                                ? plants.especiePlanta!
-                                : AppLocalizations.of(context)!.name_plant,
-                        // lifestage: plants.lifestage,
-                        status: plants.estadoActual,
+                        picture: plant.imagenPrincipal,
+                        title: plant.especiePlanta ?? AppLocalizations.of(context)!.name_plant,
+                        status: plant.estadoActual,
                         date: '${date.day} / ${date.month} / ${date.year}',
                         onTap: () {
                           Navigator.push(
                             context,
-                            FadeTransitionRoute(page: Details(id: plants.id)),
+                            FadeTransitionRoute(page: Details(id: plant.id)),
                           );
                         },
                       );
-                    } else if (state is AllPlantsLoadingMore) {
-                      return Center(child: CircularPlantaTracker());
+                    } else if (isLoadingMore) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(child: CircularPlantaTracker()),
+                      );
+                    } else if (!hasMore) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(
+                          child: Text("No hay más plantas para mostrar"),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
                     }
-                    return SizedBox.shrink();
                   },
                 )
                 : Center(
@@ -102,8 +126,6 @@ class _AllPlantsState extends State<AllPlants> {
                   ),
                 );
           } else if (state is AllPlantsError) {
-            log(state.props.toString());
-
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

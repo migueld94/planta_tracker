@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:planta_tracker/blocs/my_plants/my_plants_bloc.dart';
@@ -16,10 +18,19 @@ class MyPlants extends StatefulWidget {
 class _MyPlantsState extends State<MyPlants> {
   bool isSend = false;
   bool isPendient = true;
+  bool isLoading = false;
+
+  void _handleLoadingChange(bool loading) {
+    log(loading.toString());
+    setState(() {
+      isLoading = loading;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     context.read<MyPlantsBloc>().add(LoadMyPlants());
+    log(isLoading.toString());
     return Column(
       children: [
         const SizedBox(height: 12),
@@ -31,12 +42,15 @@ class _MyPlantsState extends State<MyPlants> {
               label: Text('Enviadas'),
               elevation: 1.0,
               selectedColor: Colors.green.withOpacity(0.3),
-              onSelected: (value) {
-                setState(() {
-                  isSend = true;
-                  isPendient = false;
-                });
-              },
+              onSelected:
+                  isLoading
+                      ? null
+                      : (value) {
+                        setState(() {
+                          isSend = true;
+                          isPendient = false;
+                        });
+                      },
             ),
             const SizedBox(width: 8),
             ChoiceChip(
@@ -53,12 +67,11 @@ class _MyPlantsState extends State<MyPlants> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
         Expanded(
           child:
               isPendient
                   ? PlantasPendientesScreen(
-                    onLoadingChanged: widget.onLoadingChanged,
+                    onLoadingChanged: _handleLoadingChange,
                   )
                   : const PlantsSentView(),
         ),
