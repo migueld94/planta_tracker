@@ -303,7 +303,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get error_connection => 'Error de conexión. Inténtalo de nuevo.';
 
   @override
-  String get non_plant_registered => 'No hay plantas registradas en este momento.';
+  String get non_plant_registered => 'No hay plantas por enviar en este momento.';
 
   @override
   String get confirm_delete => 'Confirmar eliminación';

@@ -117,7 +117,7 @@
 
     "buttom_cancel": "Cancelar",
     "error_connection": "Error de conexión. Inténtalo de nuevo.",
-    "non_plant_registered": "No hay plantas registradas en este momento.",
+    "non_plant_registered": "No hay plantas por enviar en este momento.",
     "confirm_delete": "Confirmar eliminación",
     "delete_plant_question": "¿Estás seguro de que quieres eliminar esta planta?",
     "delete_plant_confirmed": "Planta removida",

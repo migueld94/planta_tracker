@@ -36,7 +36,7 @@ class OptionPlantServices {
     // String idioma = getFlag();
     try {
       Response response = await dio.get(
-        '${dotenv.env["API_BASE_DOMAIN"]}en/api/my_plants?page=$page',
+        '${dotenv.env["API_BASE_DOMAIN"]}es/api/my_plants?page=$page',
         options: Options(
           headers: <String, String>{'authorization': "Token $token"},
         ),

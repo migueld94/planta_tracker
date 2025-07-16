@@ -76,8 +76,8 @@ class _AllPlantsState extends State<AllPlants> {
                       return CardPlant(
                         picture: plants.imagenPrincipal,
                         title:
-                            plants.especiePlanta.isNotEmpty
-                                ? plants.especiePlanta
+                            plants.especiePlanta!.isNotEmpty
+                                ? plants.especiePlanta!
                                 : AppLocalizations.of(context)!.name_plant,
                         // lifestage: plants.lifestage,
                         status: plants.estadoActual,
@@ -137,12 +137,12 @@ class _AllPlantsState extends State<AllPlants> {
           return Container();
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        backgroundColor: PlantaColors.colorGreen,
-        onPressed: () => goToRegisterPlant(context),
-        child: Icon(Ionicons.add_outline, color: PlantaColors.colorWhite),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   shape: const CircleBorder(),
+      //   backgroundColor: PlantaColors.colorGreen,
+      //   onPressed: () => goToRegisterPlant(context),
+      //   child: Icon(Ionicons.add_outline, color: PlantaColors.colorWhite),
+      // ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),

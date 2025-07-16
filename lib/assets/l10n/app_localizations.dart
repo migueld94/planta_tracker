@@ -686,7 +686,7 @@ abstract class AppLocalizations {
   /// text
   ///
   /// In en, this message translates to:
-  /// **'There are no registered plants at the moment.'**
+  /// **'There are no plants to ship at this time.'**
   String get non_plant_registered;
 
   /// text

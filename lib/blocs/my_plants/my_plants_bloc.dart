@@ -10,6 +10,7 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
   MyPlantsModel? _cachedMyPlants;
   int _currentPage = 1;
   bool _isLoadingMore = false;
+  bool _hasMoreData = true;
 
   MyPlantsBloc({required this.plantServices}) : super(MyPlantsInitial()) {
     on<LoadMyPlants>(_onLoadMyPlants);
@@ -18,8 +19,16 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
     on<ActualizarMyPlantss>(_onActualizarMyPlantss);
   }
 
+  bool get hasMoreData => _hasMoreData;
+
+  // Getter público para la lista de plantas
+  List<Result> get currentPlants => _cachedMyPlants?.results ?? [];
+
   void _onLoadMyPlants(LoadMyPlants event, Emitter<MyPlantsState> emit) async {
     emit(MyPlantsLoading());
+
+    _currentPage = 1;
+    _hasMoreData = true;
 
     if (_cachedMyPlants != null) {
       emit(MyPlantsBackgroundLoading(plants: _cachedMyPlants!));
@@ -30,6 +39,9 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
     try {
       final plants = await plantServices.getAllMyPlants(page: _currentPage);
       _cachedMyPlants = plants;
+
+      if (plants.next == null) _hasMoreData = false;
+
       emit(MyPlantsLoaded(plants: _cachedMyPlants!));
     } catch (e) {
       emit(MyPlantsError(error: e.toString()));
@@ -40,12 +52,17 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
     LoadMoreMyPlants event,
     Emitter<MyPlantsState> emit,
   ) async {
-    if (_isLoadingMore) return;
+    if (_isLoadingMore || !_hasMoreData) return;
+
     _isLoadingMore = true;
     emit(MyPlantsLoadingMore());
 
     try {
       final plants = await plantServices.getAllMyPlants(page: ++_currentPage);
+
+      if (plants.results.isEmpty || plants.next == null) {
+        _hasMoreData = false;
+      }
 
       if (_cachedMyPlants != null) {
         _cachedMyPlants!.results.addAll(plants.results);
@@ -65,6 +82,8 @@ class MyPlantsBloc extends Bloc<MyPlantsEvent, MyPlantsState> {
     Emitter<MyPlantsState> emit,
   ) {
     _cachedMyPlants = null;
+    _currentPage = 1;
+    _hasMoreData = true;
   }
 
   void _onActualizarMyPlantss(

@@ -447,7 +447,7 @@
     "@error_connection": {
         "description": "text"
     },
-    "non_plant_registered": "There are no registered plants at the moment.",
+    "non_plant_registered": "There are no plants to ship at this time.",
     "@non_plant_registered": {
         "description": "text"
     },
