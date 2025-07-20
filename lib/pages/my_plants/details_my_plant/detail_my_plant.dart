@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ class _DetailsMyPlantsState extends State<DetailsMyPlants> {
 
   @override
   Widget build(BuildContext context) {
-    log('Planta ID => ${widget.planta.id}');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -42,32 +40,6 @@ class _DetailsMyPlantsState extends State<DetailsMyPlants> {
           AppLocalizations.of(context)!.details,
           style: context.theme.textTheme.titleApBar,
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 24.0),
-            child: GestureDetector(
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   SlideRightRoute(page: Comments(id: widget.id)),
-                // );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Ionicons.clipboard_outline,
-                    color: PlantaColors.colorWhite,
-                  ),
-                  AutoSizeText(
-                    AppLocalizations.of(context)!.comments,
-                    style: TextStyle(color: PlantaColors.colorWhite),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
       body: DetailsWidget(details: widget.planta, images: widget.planta.images),
     );
