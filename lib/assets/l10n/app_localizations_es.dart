@@ -48,7 +48,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get my_plants => 'Mis plantas';
 
   @override
-  String get name_alert => 'El nombre se usara para dar crédito por las fotos subidas.';
+  String get name_alert =>
+      'El nombre se usara para dar crédito por las fotos subidas.';
 
   @override
   String get no_elements => 'No hay elementos a mostrar';
@@ -126,19 +127,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String get text_buttom_send => 'Enviar';
 
   @override
-  String get text_onboarding_first => '¡Únete a Planta! con nuestra aplicación móvil y contribuye a la conservación de las plantas mientras exploras ciudades y campos!';
+  String get text_onboarding_first =>
+      '¡Únete a Planta! con nuestra aplicación móvil y contribuye a la conservación de las plantas mientras exploras ciudades y campos!';
 
   @override
-  String get text_onboarding_second => '¡Únete a nosotros hoy mismo y comienza a explorar, aprender y contribuir a la conservación del entorno natural!';
+  String get text_onboarding_second =>
+      '¡Únete a nosotros hoy mismo y comienza a explorar, aprender y contribuir a la conservación del entorno natural!';
 
   @override
-  String get text_onboarding_three_00 => 'Registrar las plantas que encuentres durante tus paseos.';
+  String get text_onboarding_three_00 =>
+      'Registrar las plantas que encuentres durante tus paseos.';
 
   @override
-  String get text_onboarding_three_01 => 'Contribuir a la investigación y la conservación mediante la recopilación de datos sobre la distribución de las especies.';
+  String get text_onboarding_three_01 =>
+      'Contribuir a la investigación y la conservación mediante la recopilación de datos sobre la distribución de las especies.';
 
   @override
-  String get text_onboarding_three_02 => 'Aprender sobre las plantas locales y descubrir nuevas especies con la ayuda de nuestra comunidad de usuarios.';
+  String get text_onboarding_three_02 =>
+      'Aprender sobre las plantas locales y descubrir nuevas especies con la ayuda de nuestra comunidad de usuarios.';
 
   @override
   String get title_onboarding_second => 'Hazte Miembro de Planta! Tracker';
@@ -162,7 +168,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get message_change_name => '¿Esta seguro de cambiar el nombre?';
 
   @override
-  String get message_change_password => '¿Esta seguro de cambiar su contraseña?';
+  String get message_change_password =>
+      '¿Esta seguro de cambiar su contraseña?';
 
   @override
   String get verify_credentials => 'Credenciales incorrectas';
@@ -219,7 +226,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get edit_plant => 'Editar Planta';
 
   @override
-  String get cancel_edit => '¿Estás segura de cancelar la edición de la planta?';
+  String get cancel_edit =>
+      '¿Estás segura de cancelar la edición de la planta?';
 
   @override
   String get cancel_update => '¿Estás seguro de enviar la actualización?';
@@ -249,10 +257,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lifestage => 'Estado de vida';
 
   @override
-  String get select_lifestage => 'Para completar el registro debe de seleccionar el estado de vida';
+  String get select_lifestage =>
+      'Para completar el registro debe de seleccionar el estado de vida';
 
   @override
-  String get message_plants_empty => 'Para registrar su primera planta presione el botón';
+  String get message_plants_empty =>
+      'Para registrar su primera planta presione el botón';
 
   @override
   String get verify_code => 'Verificar código';
@@ -312,16 +322,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get non_sending => 'Pendientes';
 
   @override
-  String get message_hold_send => 'Mantenga presionado la o las plantas que desee enviar';
+  String get message_hold_send =>
+      'Mantenga presionado la o las plantas que desee enviar';
 
   @override
-  String get non_plant_registered => 'No hay plantas por enviar en este momento.';
+  String get non_plant_registered =>
+      'No hay plantas por enviar en este momento.';
 
   @override
   String get confirm_delete => 'Confirmar eliminación';
 
   @override
-  String get delete_plant_question => '¿Estás seguro de que quieres eliminar esta planta?';
+  String get delete_plant_question =>
+      '¿Estás seguro de que quieres eliminar esta planta?';
 
   @override
   String get delete_plant_confirmed => 'Planta removida';
@@ -333,7 +346,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get buttom_send => 'Enviar';
 
   @override
-  String get location_info => 'Estamos recopilando información de tu ubicación, espera un momento y vuelve a intentarlo.';
+  String get location_info =>
+      'Estamos recopilando información de tu ubicación, espera un momento y vuelve a intentarlo.';
 
   @override
   String get data_location => 'Datos de ubicación';
@@ -348,14 +362,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loading => 'Cargando';
 
   @override
-  String get loading_send_plant => 'Por favor, espera mientras se están enviando las plantas.';
+  String get loading_send_plant =>
+      'Por favor, espera mientras se están enviando las plantas.';
 
   @override
-  String get nSLocationWhenInUseUsageDescription => 'Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa';
+  String get nSLocationWhenInUseUsageDescription =>
+      'Necesitamos acceder a tu ubicación para mostrar tu posición en el mapa';
 
   @override
-  String get nSLocationAlwaysAndWhenInUseUsageDescription => 'Necesitamos acceder a tu ubicación en segundo plano para proporcionar una mejor experiencia';
+  String get nSLocationAlwaysAndWhenInUseUsageDescription =>
+      'Necesitamos acceder a tu ubicación en segundo plano para proporcionar una mejor experiencia';
 
   @override
-  String get nSCameraUsageDescription => 'Esta aplicación necesita acceso a su cámara para poder tomar fotografías.';
+  String get nSCameraUsageDescription =>
+      'Esta aplicación necesita acceso a su cámara para poder tomar fotografías.';
 }

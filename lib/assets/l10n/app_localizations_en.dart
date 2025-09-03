@@ -48,7 +48,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get my_plants => 'My plants';
 
   @override
-  String get name_alert => 'The name will be used to give credit for the photos uploaded.';
+  String get name_alert =>
+      'The name will be used to give credit for the photos uploaded.';
 
   @override
   String get no_elements => 'There are no items to display';
@@ -126,19 +127,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get text_buttom_send => 'Send';
 
   @override
-  String get text_onboarding_first => 'Join Planta! with our mobile app and contribute to plant conservation while exploring cities and countryside!';
+  String get text_onboarding_first =>
+      'Join Planta! with our mobile app and contribute to plant conservation while exploring cities and countryside!';
 
   @override
-  String get text_onboarding_second => 'Join us today and start exploring, learning and contributing to the conservation of the natural environment!';
+  String get text_onboarding_second =>
+      'Join us today and start exploring, learning and contributing to the conservation of the natural environment!';
 
   @override
-  String get text_onboarding_three_00 => 'Record the plants you find during your walks.';
+  String get text_onboarding_three_00 =>
+      'Record the plants you find during your walks.';
 
   @override
-  String get text_onboarding_three_01 => 'Contribute to research and conservation by collecting data on species distribution.';
+  String get text_onboarding_three_01 =>
+      'Contribute to research and conservation by collecting data on species distribution.';
 
   @override
-  String get text_onboarding_three_02 => 'Learn about local plants and discover new species with the help of our community of users.';
+  String get text_onboarding_three_02 =>
+      'Learn about local plants and discover new species with the help of our community of users.';
 
   @override
   String get title_onboarding_second => 'Become a member of Planta! Tracker';
@@ -234,7 +240,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get get_location => 'Getting location...';
 
   @override
-  String get message_cancel_register => 'Are you sure about canceling the registration?';
+  String get message_cancel_register =>
+      'Are you sure about canceling the registration?';
 
   @override
   String get message_send_register => 'Are you sure to send the registration?';
@@ -249,10 +256,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifestage => 'Lifestage';
 
   @override
-  String get select_lifestage => 'To complete the registration you must select the lifestage';
+  String get select_lifestage =>
+      'To complete the registration you must select the lifestage';
 
   @override
-  String get message_plants_empty => 'To register your first plant press the button';
+  String get message_plants_empty =>
+      'To register your first plant press the button';
 
   @override
   String get verify_code => 'Verify code';
@@ -312,16 +321,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get non_sending => 'Earrings';
 
   @override
-  String get message_hold_send => 'Press and hold the plant(s) you want to send';
+  String get message_hold_send =>
+      'Press and hold the plant(s) you want to send';
 
   @override
-  String get non_plant_registered => 'There are no plants to ship at this time.';
+  String get non_plant_registered =>
+      'There are no plants to ship at this time.';
 
   @override
   String get confirm_delete => 'Confirm deletion';
 
   @override
-  String get delete_plant_question => 'Are you sure you want to delete this Plant?';
+  String get delete_plant_question =>
+      'Are you sure you want to delete this Plant?';
 
   @override
   String get delete_plant_confirmed => 'Plant removed';
@@ -333,7 +345,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get buttom_send => 'Send';
 
   @override
-  String get location_info => 'We\'re collecting your location information, please wait a moment and try again.';
+  String get location_info =>
+      'We\'re collecting your location information, please wait a moment and try again.';
 
   @override
   String get data_location => 'Location data';
@@ -348,14 +361,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loading => 'Cargando';
 
   @override
-  String get loading_send_plant => 'Por favor, espera mientras se están enviando las plantas.';
+  String get loading_send_plant =>
+      'Por favor, espera mientras se están enviando las plantas.';
 
   @override
-  String get nSLocationWhenInUseUsageDescription => 'We need access to your location to show your position on the map';
+  String get nSLocationWhenInUseUsageDescription =>
+      'We need access to your location to show your position on the map';
 
   @override
-  String get nSLocationAlwaysAndWhenInUseUsageDescription => 'We need access to your location in the background to provide a better experience';
+  String get nSLocationAlwaysAndWhenInUseUsageDescription =>
+      'We need access to your location in the background to provide a better experience';
 
   @override
-  String get nSCameraUsageDescription => 'This app needs access to your camera in order to take pictures.';
+  String get nSCameraUsageDescription =>
+      'This app needs access to your camera in order to take pictures.';
 }

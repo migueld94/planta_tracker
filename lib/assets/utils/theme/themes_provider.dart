@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'theme_data.dart';
 part 'theme_colors.dart';
 part 'common.dart';
 

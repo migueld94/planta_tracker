@@ -1,9 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:planta_tracker/assets/l10n/l10n.dart';
 import 'package:planta_tracker/assets/utils/assets.dart';
 import 'package:planta_tracker/assets/utils/helpers/sliderightroute.dart';
 import 'package:planta_tracker/assets/utils/methods/utils.dart';
@@ -39,6 +43,8 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final language = L10n.getFlag(locale.languageCode);
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -80,8 +86,10 @@ class _RegisterState extends State<Register> {
                       ),
                       suffix: IconButton(
                         onPressed: () {
-                          alert(context,
-                              AppLocalizations.of(context)!.name_alert);
+                          alert(
+                            context,
+                            AppLocalizations.of(context)!.name_alert,
+                          );
                         },
                         icon: Icon(
                           Ionicons.help_circle_outline,
@@ -144,15 +152,16 @@ class _RegisterState extends State<Register> {
                             visibility = !visibility;
                           });
                         },
-                        icon: visibility
-                            ? Icon(
-                                Ionicons.eye_off_outline,
-                                color: PlantaColors.colorGreen,
-                              )
-                            : Icon(
-                                Ionicons.eye_outline,
-                                color: PlantaColors.colorGreen,
-                              ),
+                        icon:
+                            visibility
+                                ? Icon(
+                                  Ionicons.eye_off_outline,
+                                  color: PlantaColors.colorGreen,
+                                )
+                                : Icon(
+                                  Ionicons.eye_outline,
+                                  color: PlantaColors.colorGreen,
+                                ),
                       ),
                     ),
                     validator: (value) {
@@ -186,15 +195,16 @@ class _RegisterState extends State<Register> {
                             visibilityConfirm = !visibilityConfirm;
                           });
                         },
-                        icon: visibilityConfirm
-                            ? Icon(
-                                Ionicons.eye_off_outline,
-                                color: PlantaColors.colorGreen,
-                              )
-                            : Icon(
-                                Ionicons.eye_outline,
-                                color: PlantaColors.colorGreen,
-                              ),
+                        icon:
+                            visibilityConfirm
+                                ? Icon(
+                                  Ionicons.eye_off_outline,
+                                  color: PlantaColors.colorGreen,
+                                )
+                                : Icon(
+                                  Ionicons.eye_outline,
+                                  color: PlantaColors.colorGreen,
+                                ),
                       ),
                     ),
                     validator: (value) {
@@ -245,8 +255,10 @@ class _RegisterState extends State<Register> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      AutoSizeText(AppLocalizations.of(context)!.account_accept,
-                          style: context.theme.textTheme.text_01),
+                      AutoSizeText(
+                        AppLocalizations.of(context)!.account_accept,
+                        style: context.theme.textTheme.text_01,
+                      ),
                       horizontalMargin8,
                       GestureDetector(
                         onTap: () {
@@ -270,28 +282,32 @@ class _RegisterState extends State<Register> {
 
                         if (valueTerms == false) {
                           EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorDarkOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                // 'Acepte los términos y condiciones',
-                                AppLocalizations.of(context)!.terms,
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: PlantaColors.colorDarkOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  // 'Acepte los términos y condiciones',
+                                  AppLocalizations.of(context)!.terms,
+                                  style: context.theme.textTheme.text_01
+                                      .copyWith(
+                                        color: PlantaColors.colorWhite,
+                                        fontSize: 16.0,
+                                      ),
                                 ),
                               ),
                             ),
-                          ));
+                          );
                         } else if (password.text.toLowerCase() ==
                             passwordConfirm.text.toLowerCase()) {
                           EasyLoading.show();
 
                           var res = await authService.register(
-                            email.text.trim(),
-                            name.text,
-                            password.text,
-                            passwordConfirm.text,
+                            lenguaje: language,
+                            email: email.text.trim(),
+                            name: name.text,
+                            password: password.text,
+                            password2: passwordConfirm.text,
                           );
 
                           switch (res!.statusCode) {
@@ -306,56 +322,62 @@ class _RegisterState extends State<Register> {
                               break;
                             case 400:
                               EasyLoading.dismiss();
-                              // final parsedResponse = json.decode(res.body);
-                              // final successValue = parsedResponse['data']['email'];
-                              // var data = jsonDecode(res.body);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                backgroundColor: PlantaColors.colorDarkOrange,
-                                content: Center(
-                                  child: AutoSizeText(
-                                    'Registro Fallido',
-                                    style: context.theme.textTheme.text_01
-                                        .copyWith(
-                                      color: PlantaColors.colorWhite,
-                                      fontSize: 16.0,
+                              final parsedResponse = json.decode(res.body);
+                              final successValue =
+                                  parsedResponse['data']['email'];
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: PlantaColors.colorDarkOrange,
+                                  content: Center(
+                                    child: AutoSizeText(
+                                      successValue[0],
+                                      style: context.theme.textTheme.text_01
+                                          .copyWith(
+                                            color: PlantaColors.colorWhite,
+                                            fontSize: 16.0,
+                                          ),
                                     ),
                                   ),
                                 ),
-                              ));
+                              );
                               break;
                             default:
                               EasyLoading.dismiss();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                backgroundColor: PlantaColors.colorDarkOrange,
-                                content: Center(
-                                  child: AutoSizeText(
-                                    'Registro Fallido',
-                                    style: context.theme.textTheme.text_01
-                                        .copyWith(
-                                      color: PlantaColors.colorWhite,
-                                      fontSize: 16.0,
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: PlantaColors.colorDarkOrange,
+                                  content: Center(
+                                    child: AutoSizeText(
+                                      'Registro Fallido',
+                                      style: context.theme.textTheme.text_01
+                                          .copyWith(
+                                            color: PlantaColors.colorWhite,
+                                            fontSize: 16.0,
+                                          ),
                                     ),
                                   ),
                                 ),
-                              ));
+                              );
                               break;
                           }
                         } else {
                           EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: PlantaColors.colorDarkOrange,
-                            content: Center(
-                              child: AutoSizeText(
-                                'No coinciden las contraseñas',
-                                style: context.theme.textTheme.text_01.copyWith(
-                                  color: PlantaColors.colorWhite,
-                                  fontSize: 16.0,
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: PlantaColors.colorDarkOrange,
+                              content: Center(
+                                child: AutoSizeText(
+                                  'No coinciden las contraseñas',
+                                  style: context.theme.textTheme.text_01
+                                      .copyWith(
+                                        color: PlantaColors.colorWhite,
+                                        fontSize: 16.0,
+                                      ),
                                 ),
                               ),
                             ),
-                          ));
+                          );
                         }
                       }
                     },
