@@ -546,7 +546,7 @@ class AppFlutterMap extends StatelessWidget {
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+              userAgentPackageName: 'plantango.plantatracker',
               subdomains: const ['a', 'b', 'c'],
             ),
             MarkerLayer(

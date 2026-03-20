@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "plantango.plantatracker"
     compileSdk 36
-    ndkVersion "29.0.13113456"
+    ndkVersion "29.0.14033849"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
